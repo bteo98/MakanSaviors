@@ -1,15 +1,17 @@
 import Vue from "vue";
 import Router from "vue-router";
+import firebase from "firebase";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
+import SignUp from "./views/SignUp.vue";
 import Profile from "./views/Profile.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
 Vue.use(Router);
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: "/",
@@ -38,9 +40,20 @@ export default new Router({
       }
     },
     {
+      path: "/signup",
+      name: "signup",
+      components: { default: SignUp, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
       path: "/profile",
       name: "profile",
       components: { default: Profile, header: MainNavbar, footer: MainFooter },
+      meta: {
+        authRequired: true
+      },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -54,4 +67,22 @@ export default new Router({
       return { x: 0, y: 0 };
     }
   }
+})
+
+// Navigation Guard
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.authRequired)) {
+      if (firebase.auth().currentUser) {
+          next();
+      } else {
+          alert('You must be logged in to see this page');
+          next({
+              path: '/',
+          });
+      }
+  } else {
+      next();
+  }
 });
+
+export default router;

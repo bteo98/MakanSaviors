@@ -7,7 +7,7 @@
                         class="md-layout-item md-size-33 md-small-size-66 md-xsmall-size-100 md-medium-size-40 mx-auto"
                     >
                         <login-card header-color="green">
-                            <h4 slot="title" class="card-title">Login</h4>
+                            <h4 slot="title" class="card-title">Sign Up</h4>
                             <md-button
                                 slot="buttons"
                                 href="javascript:void(0)"
@@ -29,26 +29,26 @@
                             >
                                 <i class="fab fa-google-plus-g"></i>
                             </md-button>
-                                <md-field class="md-form-group" slot="inputs">
-                                    <md-icon>email</md-icon>
-                                    <label>Email...</label>
-                                    <md-input
-                                        v-model="email"
-                                        type="email"
-                                    ></md-input>
-                                </md-field>
-                                <md-field class="md-form-group" slot="inputs">
-                                    <md-icon>lock_outline</md-icon>
-                                    <label>Password...</label>
-                                    <md-input v-model="password"></md-input>
-                                </md-field>
-                                <md-button
-                                    slot="footer"
-                                    class="md-simple md-success md-lg"
-                                    v-on:click="login"
-                                >
-                                    Login
-                                </md-button>
+                            <md-field class="md-form-group" slot="inputs">
+                                <md-icon>email</md-icon>
+                                <label>Email...</label>
+                                <md-input
+                                    v-model="email"
+                                    type="email"
+                                ></md-input>
+                            </md-field>
+                            <md-field class="md-form-group" slot="inputs">
+                                <md-icon>lock_outline</md-icon>
+                                <label>Password...</label>
+                                <md-input v-model="password"></md-input>
+                            </md-field>
+                            <md-button
+                                slot="footer"
+                                class="md-simple md-success md-lg"
+                                v-on:click="signup"
+                            >
+                                Sign Up
+                            </md-button>
                         </login-card>
                     </div>
                 </div>
@@ -79,17 +79,16 @@ export default {
         },
     },
     methods: {
-        login() {
+        signup() {
             firebase
                 .auth()
-                .signInWithEmailAndPassword(this.email, this.password)
-                .then(() => {
-                    alert("Successfully logged in");
-                    this.$router.push("/dashboard");
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
+                .createUserWithEmailAndPassword(this.email, this.password);
+            then(() => {
+                alert("Successfully registered! Please login.");
+                this.$router.push("/");
+            }).catch((error) => {
+                alert(error.message);
+            });
         },
     },
     computed: {

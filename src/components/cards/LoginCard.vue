@@ -6,7 +6,7 @@
         <slot name="buttons"></slot>
       </div>
     </md-card-header>
-
+    
     <md-card-content>
       <slot name="description"></slot>
       <slot name="inputs"></slot>

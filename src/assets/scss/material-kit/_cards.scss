@@ -61,7 +61,7 @@
 
     .md-card-header{
         @include shadow-big();
-        margin: -40px  20px $margin-base;
+        margin: -40px  20px 35px;
         border-radius: $border-radius-base;
         padding: $padding-base + 5 0;
         background-color: $gray-color;
