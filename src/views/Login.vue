@@ -27,7 +27,7 @@
                                 href="javascript:void(0)"
                                 class="md-just-icon md-simple md-white"
                             >
-                                <i class="fab fa-google-plus-g"></i>
+                                <i class="fab fa-google"></i>
                             </md-button>
                                 <md-field class="md-form-group" slot="inputs">
                                     <md-icon>email</md-icon>
