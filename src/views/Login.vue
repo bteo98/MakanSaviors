@@ -13,7 +13,7 @@
                                 href="javascript:void(0)"
                                 class="md-just-icon md-simple md-white"
                             >
-                                <i class="fab fa-facebook"></i>
+                                <i class="fab fa-facebook-square"></i>
                             </md-button>
                             <md-button
                                 slot="buttons"
