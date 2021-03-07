@@ -12,8 +12,9 @@
                                 slot="buttons"
                                 href="javascript:void(0)"
                                 class="md-just-icon md-simple md-white"
+                                v-on:click="facebookLogin"
                             >
-                                <i class="fab fa-facebook-square"></i>
+                                <i class="fab fa-facebook"></i>
                             </md-button>
                             <md-button
                                 slot="buttons"
@@ -52,6 +53,7 @@
 
 <script>
 import { LoginCard } from "@/components";
+import { isMobile } from 'mobile-device-detect';
 import firebase from "../firebase.js";
 
 export default {
@@ -84,6 +86,73 @@ export default {
                     alert(error.message);
                 });
         },
+        facebookLogin() {
+            var provider = new firebase.auth.FacebookAuthProvider();
+
+            if (isMobile) {
+                this.facebookSignInPopup(provider);
+                //firebase.auth().signInWithRedirect(provider);
+            } else {
+                this.facebookSignInPopup(provider);
+            }
+        },
+        facebookSignInPopup(provider) {
+            // [START auth_facebook_signin_popup]
+            firebase
+                .auth()
+                .signInWithPopup(provider)
+                .then((result) => {
+                /** @type {firebase.auth.OAuthCredential} */
+                var credential = result.credential;
+
+                // The signed-in user info.
+                var user = result.user;
+
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                var accessToken = credential.accessToken;
+
+                // ...
+                })
+                .catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+
+                // ...
+                });
+            // [END auth_facebook_signin_popup]
+        },
+        facebookSignInRedirectResult() {
+            // [START auth_facebook_signin_redirect_result]
+            firebase.auth()
+                .getRedirectResult()
+                .then((result) => {
+                if (result.credential) {
+                    /** @type {firebase.auth.OAuthCredential} */
+                    var credential = result.credential;
+
+                    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                    var token = credential.accessToken;
+                    // ...
+                }
+                // The signed-in user info.
+                var user = result.user;
+                }).catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                });
+            // [END auth_facebook_signin_redirect_result]
+            }
     },
     computed: {
         headerStyle() {
