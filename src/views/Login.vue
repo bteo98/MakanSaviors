@@ -10,7 +10,6 @@
                             <h4 slot="title" class="card-title">Login</h4>
                             <md-button
                                 slot="buttons"
-                                href="javascript:void(0)"
                                 class="md-just-icon md-simple md-white"
                                 v-on:click="facebookLogin"
                             >
@@ -18,31 +17,51 @@
                             </md-button>
                             <md-button
                                 slot="buttons"
-                                href="javascript:void(0)"
                                 class="md-just-icon md-simple md-white"
                             >
                                 <i class="fab fa-google"></i>
                             </md-button>
-                                <md-field class="md-form-group" slot="inputs">
-                                    <md-icon>email</md-icon>
-                                    <label>Email...</label>
-                                    <md-input
-                                        v-model="email"
-                                        type="email"
-                                    ></md-input>
-                                </md-field>
-                                <md-field class="md-form-group" slot="inputs">
-                                    <md-icon>lock_outline</md-icon>
-                                    <label>Password...</label>
-                                    <md-input v-model="password"></md-input>
-                                </md-field>
-                                <md-button
-                                    slot="footer"
-                                    class="md-simple md-success md-lg"
-                                    v-on:click="login"
-                                >
-                                    Login
-                                </md-button>
+                            <md-field class="md-form-group" slot="inputs">
+                                <md-icon>email</md-icon>
+                                <label>Email...</label>
+                                <md-input
+                                    v-model="email"
+                                    type="email"
+                                ></md-input>
+                            </md-field>
+                            <md-field class="md-form-group" slot="inputs">
+                                <md-icon>lock_outline</md-icon>
+                                <label>Password...</label>
+                                <md-input
+                                    type="password"
+                                    v-model="password"
+                                ></md-input>
+                            </md-field>
+                            <div
+                                slot="errors"
+                                class="errors"
+                                v-if="errors.length"
+                            >
+                                <br />
+                                <p>
+                                    <b
+                                        >Please correct the following
+                                        error(s):</b
+                                    >
+                                </p>
+                                <ul>
+                                    <li :key="error.id" v-for="error in errors">
+                                        {{ error }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <md-button
+                                slot="footer"
+                                class="md-simple md-success md-lg"
+                                v-on:click="login"
+                            >
+                                Login
+                            </md-button>
                         </login-card>
                     </div>
                 </div>
@@ -53,7 +72,7 @@
 
 <script>
 import { LoginCard } from "@/components";
-import { isMobile } from 'mobile-device-detect';
+import { isMobile } from "mobile-device-detect";
 import firebase from "../firebase.js";
 
 export default {
@@ -63,8 +82,10 @@ export default {
     bodyClass: "login-page",
     data() {
         return {
+            username: null,
             email: null,
             password: null,
+            errors: [],
         };
     },
     props: {
@@ -75,16 +96,24 @@ export default {
     },
     methods: {
         login() {
-            firebase
-                .auth()
-                .signInWithEmailAndPassword(this.email, this.password)
-                .then(() => {
-                    alert("Successfully logged in");
-                    this.$router.push("/dashboard");
-                })
-                .catch((error) => {
-                    alert(error.message);
-                });
+            this.errors = [];
+            if (!this.email) {
+                this.errors.push("Email required");
+            }
+            if (!this.password) {
+                this.errors.push("Password required");
+            }
+            if (!this.errors.length) {
+                firebase
+                    .auth()
+                    .signInWithEmailAndPassword(this.email, this.password)
+                    .then((user) => {
+                        this.$router.push("/ProfilePage");
+                    })
+                    .catch((error) => {
+                        this.errors.push(error);
+                    });
+            }
         },
         facebookLogin() {
             var provider = new firebase.auth.FacebookAuthProvider();
@@ -128,7 +157,8 @@ export default {
         },
         facebookSignInRedirectResult() {
             // [START auth_facebook_signin_redirect_result]
-            firebase.auth()
+            firebase
+                .auth()
                 .getRedirectResult()
                 .then((result) => {
                     if (result.credential) {
@@ -143,18 +173,19 @@ export default {
                     }
                     // The signed-in user info.
                     var user = result.user;
-                    }).catch((error) => {
+                })
+                .catch((error) => {
                     // Handle Errors here.
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        // The email of the user's account used.
-                        var email = error.email;
-                        // The firebase.auth.AuthCredential type that was used.
-                        var credential = error.credential;
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // The email of the user's account used.
+                    var email = error.email;
+                    // The firebase.auth.AuthCredential type that was used.
+                    var credential = error.credential;
                     // ...
                 });
             // [END auth_facebook_signin_redirect_result]
-            }
+        },
     },
     created: function() {
         this.facebookSignInRedirectResult();
