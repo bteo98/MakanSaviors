@@ -18,6 +18,7 @@
                             <md-button
                                 slot="buttons"
                                 class="md-just-icon md-simple md-white"
+                                v-on:click="googleLogin"
                             >
                                 <i class="fab fa-google"></i>
                             </md-button>
@@ -108,12 +109,87 @@ export default {
                     .auth()
                     .signInWithEmailAndPassword(this.email, this.password)
                     .then((user) => {
+                        this.$store.commit('change', true);
                         this.$router.push("/ProfilePage");
                     })
                     .catch((error) => {
                         this.errors.push(error);
                     });
             }
+        },
+        googleLogin() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+
+            if (isMobile) {
+                firebase.auth().signInWithRedirect(provider);
+            } else {
+                this.googleSignInPopup(provider);
+            }
+        },
+        googleSignInPopup(provider) {
+            // [START auth_google_signin_popup]
+            firebase
+                .auth()
+                .signInWithPopup(provider)
+                .then((result) => {
+                    /** @type {firebase.auth.OAuthCredential} */
+                    var credential = result.credential;
+
+                    // The signed-in user info.
+                    var user = result.user;
+
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    var accessToken = credential.accessToken;
+                    this.$store.commit('change', true);
+                    console.log("Pop up");
+                    console.log(user);
+                    console.log(user.email);
+                    // ...
+                })
+                .catch((error) => {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // The email of the user's account used.
+                    var email = error.email;
+                    // The firebase.auth.AuthCredential type that was used.
+                    var credential = error.credential;
+
+                    // ...
+                });
+            // [END auth_google_signin_popup]
+        },
+        googleSignInRedirectResult() {
+            // [START auth_google_signin_redirect_result]
+            firebase
+                .auth()
+                .getRedirectResult()
+                .then((result) => {
+                    if (result.credential) {
+                        /** @type {firebase.auth.OAuthCredential} */
+                        var credential = result.credential;
+
+                        // This gives you a Google Access Token. You can use it to access the Facebook API.
+                        var token = credential.accessToken;
+                        // ...
+                        console.log("Redirect Result");
+                        this.$store.commit('change', true);
+                        console.log(result);
+                    }
+                    // The signed-in user info.
+                    var user = result.user;
+                })
+                .catch((error) => {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // The email of the user's account used.
+                    var email = error.email;
+                    // The firebase.auth.AuthCredential type that was used.
+                    var credential = error.credential;
+                    // ...
+                });
+            // [END auth__signin_redirect_result]
         },
         facebookLogin() {
             var provider = new firebase.auth.FacebookAuthProvider();
@@ -138,6 +214,7 @@ export default {
 
                     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
                     var accessToken = credential.accessToken;
+                    this.$store.commit('change', true);
                     console.log("Pop up");
                     console.log(user);
                     // ...
@@ -169,6 +246,7 @@ export default {
                         var token = credential.accessToken;
                         // ...
                         console.log("Redirect Result");
+                        this.$store.commit('change', true);
                         console.log(result);
                     }
                     // The signed-in user info.
