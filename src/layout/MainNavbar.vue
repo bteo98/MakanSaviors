@@ -166,7 +166,7 @@
                                 href="#/landing"
                                 target="_self"
                                 v-if="this.$store.getters.isAuth"
-                                v-on:click="signOut"
+                                v-on:click="logout"
                             >
                                 <i class="material-icons">logout</i>
                                 <p>Logout</p>
@@ -279,7 +279,7 @@ export default {
                 element_id.scrollIntoView({ block: "end", behavior: "smooth" });
             }
         },
-        signOut() {
+        logout() {
             firebase
                 .auth()
                 .signOut()
