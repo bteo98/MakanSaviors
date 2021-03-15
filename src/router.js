@@ -8,6 +8,7 @@ import SignUp from "./views/SignUp.vue";
 import Profile from "./views/Profile.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
+import CreateAccount from "./views/CreateAccount.vue";
 
 Vue.use(Router);
 
@@ -43,6 +44,14 @@ let router = new Router({
       path: "/signup",
       name: "signup",
       components: { default: SignUp, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/createaccount",
+      name: "createaccount",
+      components: { default: CreateAccount, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 }
       }
