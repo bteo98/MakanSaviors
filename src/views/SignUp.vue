@@ -142,7 +142,7 @@ export default {
                     }
                 })
                 .then(() => {
-                    this.$router.push("/createacccount");
+                    this.$router.push("/createaccount");
                 })
                 .catch(error => {
                     this.errors.push(error);
