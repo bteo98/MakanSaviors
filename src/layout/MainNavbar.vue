@@ -163,6 +163,14 @@
                                 <p>Login</p>
                             </md-list-item>
                             <md-list-item
+                                href="#/signup"
+                                target="_self"
+                                v-if="!this.$store.getters.isAuth"
+                            >
+                                <i class="material-icons">signup</i>
+                                <p>Sign Up</p>
+                            </md-list-item>
+                            <md-list-item
                                 href="#/landing"
                                 target="_self"
                                 v-if="this.$store.getters.isAuth"

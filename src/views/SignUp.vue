@@ -54,7 +54,7 @@
                             </md-field>
                             
                             <p slot="description" class="description">
-                                Have an account? <a href="#">Log In</a>
+                                Have an account? <a href="#/login">Log In</a>
                             </p>
                             
                             <div slot="errors" class="errors" v-if="errors.length">
