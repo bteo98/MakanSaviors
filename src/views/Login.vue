@@ -38,6 +38,11 @@
                                     v-model="password"
                                 ></md-input>
                             </md-field>
+
+                            <p slot="description" class="description">
+                                New to MakanSaviours? <a href="#/signup">Sign Up</a>
+                            </p>
+
                             <div
                                 slot="errors"
                                 class="errors"
