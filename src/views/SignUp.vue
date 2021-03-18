@@ -54,7 +54,7 @@
                             </md-field>
                             
                             <p slot="description" class="description">
-                                Have an account? <a href="#">Log In</a>
+                                Have an account? <a href="#/login">Log In</a>
                             </p>
                             
                             <div slot="errors" class="errors" v-if="errors.length">
@@ -82,7 +82,7 @@
 
 <script>
 import { LoginCard } from "@/components";
-import firebase from "../firebase.js";
+import firebase from "firebase";
 import database from "../firebase.js";
 
 export default {
@@ -142,7 +142,7 @@ export default {
                     }
                 })
                 .then(() => {
-                    this.$router.push("/createacccount");
+                    this.$router.push("/createaccount");
                 })
                 .catch(error => {
                     this.errors.push(error);
