@@ -115,7 +115,8 @@ export default {
                     .signInWithEmailAndPassword(this.email, this.password)
                     .then((user) => {
                         this.$store.commit('change', true);
-                        this.$router.push("/ProfilePage");
+                        this.$router.push("/profile");
+                        console.log("sign in");
                     })
                     .catch((error) => {
                         this.errors.push(error);
