@@ -1,18 +1,12 @@
 <template>
 	<div class="wrapper">
-		<parallax
-			class="section page-header header-filter"
-			:style="headerStyle"
-		>
+		<parallax class="section page-header header-filter" :style="headerStyle">
 			<div class="container">
 				<div class="md-layout">
-					<div
-						class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100"
-					>
+					<div class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100">
 						<h1 class="title">Let us know you better!</h1>
 						<h4>
-							You are just a step away from creating your
-							MakanSaviour account.
+							You are just a step away from creating your MakanSaviour account.
 						</h4>
 					</div>
 				</div>
@@ -24,9 +18,7 @@
 					<div class="features text-center">
 						<h1 class="info-title">Welcome, {{ userName }}!</h1>
 						<div class="md-layout">
-							<div
-								class="md-layout-item md-medium-size-33 md-small-size-100"
-							>
+							<div class="md-layout-item md-medium-size-33 md-small-size-100">
 								<div class="info">
 									<h2 class="info-title">
 										Add a profile picture
@@ -54,9 +46,7 @@
 			<div class="section section-contacts">
 				<div class="container">
 					<div class="md-layout">
-						<div
-							class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto"
-						>
+						<div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
 							<h2 class="text-center title">
 								Personal Information
 							</h2>
@@ -109,10 +99,7 @@
 
 								<md-field maxlength="5">
 									<label>Address</label>
-									<md-textarea
-										v-model="address"
-										required
-									></md-textarea>
+									<md-textarea v-model="address" required></md-textarea>
 								</md-field>
 							</form>
 						</div>
@@ -123,9 +110,7 @@
 			<div class="section section-contacts">
 				<div class="container">
 					<div class="md-layout">
-						<div
-							class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto"
-						>
+						<div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
 							<h2 class="text-center title">
 								Additional Information
 							</h2>
@@ -133,43 +118,23 @@
 								<div class="md-layout">
 									<div class="md-layout-item md-size-50">
 										<md-field>
-											<label
-												>Dietary Restriction(s)</label
-											>
-											<md-select
-												v-model="dietaryRestrictions"
-												multiple
-											>
-												<md-option value="None"
-													>None</md-option
-												>
-												<md-option value="Diabetic"
-													>Diabetic</md-option
-												>
+											<label>Dietary Restriction(s)</label>
+											<md-select v-model="dietaryRestrictions" multiple>
+												<md-option value="None">None</md-option>
+												<md-option value="Diabetic">Diabetic</md-option>
 												<md-option value="Gluten Free"
 													>Gluten Free</md-option
 												>
-												<md-option value="Halal"
-													>Halal</md-option
+												<md-option value="Halal">Halal</md-option>
+												<md-option value="Kosher">Kosher</md-option>
+												<md-option value="Lactose Intolerance"
+													>Lactose Intolerance</md-option
 												>
-												<md-option value="Kosher"
-													>Kosher</md-option
-												>
-												<md-option
-													value="Lactose Intolerance"
-													>Lactose
-													Intolerance</md-option
-												>
-												<md-option
-													value="Peanut Allergy"
+												<md-option value="Peanut Allergy"
 													>Peanut Allergies</md-option
 												>
-												<md-option value="Vegetarian"
-													>Vegetarian</md-option
-												>
-												<md-option value="Others"
-													>Others</md-option
-												>
+												<md-option value="Vegetarian">Vegetarian</md-option>
+												<md-option value="Others">Others</md-option>
 											</md-select>
 										</md-field>
 									</div>
@@ -177,53 +142,34 @@
 									<div class="md-layout-item md-size-50">
 										<md-field>
 											<label>Top 3 Food Categories</label>
-											<md-select
-												v-model="foodCategory"
-												multiple
-											>
+											<md-select v-model="foodCategory" multiple>
 												<md-option value="Baking Needs"
 													>Baking Needs</md-option
 												>
-												<md-option value="Biscuits"
-													>Biscuits</md-option
-												>
-												<md-option
-													value="Buffet/Bento Boxes"
-													>Buffet/Bento
-													Boxes</md-option
+												<md-option value="Biscuits">Biscuits</md-option>
+												<md-option value="Buffet/Bento Boxes"
+													>Buffet/Bento Boxes</md-option
 												>
 												<md-option value="Canned Food"
 													>Canned Food</md-option
 												>
-												<md-option
-													value="Dairy, Chilled, Eggs"
-													>Dairy, Chilled,
-													Eggs</md-option
+												<md-option value="Dairy, Chilled, Eggs"
+													>Dairy, Chilled, Eggs</md-option
 												>
-												<md-option value="Drinks"
-													>Drinks</md-option
-												>
+												<md-option value="Drinks">Drinks</md-option>
 												<md-option value="Frozen Food"
 													>Frozen Food</md-option
 												>
-												<md-option value="Fruits"
-													>Fruits</md-option
-												>
+												<md-option value="Fruits">Fruits</md-option>
 												<md-option value="Meat, Seafood"
 													>Meat, Seafood</md-option
 												>
 												<md-option value="Rice, Noodles"
 													>Rice, Noodles</md-option
 												>
-												<md-option value="Seasonings"
-													>Seasonings</md-option
-												>
-												<md-option value="Vegetables"
-													>Vegetables</md-option
-												>
-												<md-option value="Others"
-													>Others</md-option
-												>
+												<md-option value="Seasonings">Seasonings</md-option>
+												<md-option value="Vegetables">Vegetables</md-option>
+												<md-option value="Others">Others</md-option>
 											</md-select>
 										</md-field>
 									</div>
@@ -231,25 +177,17 @@
 
 								<md-field maxlength="5">
 									<label>Reason to Donate</label>
-									<md-textarea
-										v-model="reasonDonate"
-									></md-textarea>
+									<md-textarea v-model="reasonDonate"></md-textarea>
 								</md-field>
 
 								<md-field maxlength="5">
 									<label>Reason to Save</label>
-									<md-textarea
-										v-model="reasonSave"
-									></md-textarea>
+									<md-textarea v-model="reasonSave"></md-textarea>
 								</md-field>
 
 								<div class="md-layout">
-									<div
-										class="md-layout-item md-size-33 mx-auto text-center"
-									>
-										<md-button
-											class="md-success"
-											v-on:click="addUserData"
+									<div class="md-layout-item md-size-33 mx-auto text-center">
+										<md-button class="md-success" v-on:click="addUserData"
 											>Create Account</md-button
 										>
 									</div>
@@ -345,9 +283,7 @@ export default {
 
 		// when create account button pressed, push profile pic to firebase storage
 		pushProfilePic: function() {
-			var storageRef = firebase
-				.storage()
-				.ref("/profilePictures/" + this.UID);
+			var storageRef = firebase.storage().ref("/profilePictures/" + this.UID);
 			var uploadTask = storageRef.put(this.file);
 		},
 	},
