@@ -203,7 +203,7 @@
 
 <script>
 import firebase from "firebase";
-import database from "../firebase.js";
+var database = firebase.firestore();
 
 export default {
 	bodyClass: "landing-page",
@@ -240,7 +240,6 @@ export default {
 	methods: {
 		getUID: function() {
 			this.UID = firebase.auth().currentUser.uid;
-			console.log(this.UID);
 		},
 		fetchUserName: function() {
 			database
