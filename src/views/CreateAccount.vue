@@ -255,7 +255,7 @@ export default {
 			database
 				.collection("users")
 				.doc(this.UID)
-				.set({
+				.update({
 					firstName: this.firstName,
 					lastName: this.lastName,
 					phoneNumber: this.phoneNumber,
