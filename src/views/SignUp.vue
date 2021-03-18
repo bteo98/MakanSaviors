@@ -82,7 +82,7 @@
 
 <script>
 import { LoginCard } from "@/components";
-import firebase from "../firebase.js";
+import firebase from "firebase";
 import database from "../firebase.js";
 
 export default {

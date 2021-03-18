@@ -18,6 +18,7 @@
       <div class="section">
         <div class="container">
           <div class="features text-center">
+            <h1 class="info-title">Welcome, {{ userName }}!</h1>
             <div class="md-layout">
               <div class="md-layout-item md-medium-size-33 md-small-size-100">
                 <div class="info">
@@ -28,6 +29,8 @@
                     alt="Rounded Image"
                     class="img-raised rounded img-fluid"
                     />
+                    <br><br>
+                    <input id="profilepic" type="file">
                   </div>
                 </div>
               </div>
@@ -94,41 +97,41 @@
                 <div class="md-layout">
 
                   <div class="md-layout-item md-size-50">
-                    <md-input-container>
+                    <md-field>
                       <label>Dietary Restriction(s)</label>
                       <md-select v-model="dietaryRestrictions" multiple>
-                        <md-option value="none">None</md-option>
-                        <md-option value="diabetic">Diabetic</md-option>
-                        <md-option value="glutenFree">Gluten Free</md-option>
-                        <md-option value="halal">Halal</md-option>
-                        <md-option value="kosher">Kosher</md-option>
-                        <md-option value="lactoseIntolerance">Lactose Intolerance</md-option>
-                        <md-option value="peanutAllergy">Peanut Allergies</md-option>
-                        <md-option value="vegetarian">Vegetarian</md-option>
-                        <md-option value="others">Others</md-option>
+                        <md-option value="None">None</md-option>
+                        <md-option value="Diabetic">Diabetic</md-option>
+                        <md-option value="Gluten Free">Gluten Free</md-option>
+                        <md-option value="Halal">Halal</md-option>
+                        <md-option value="Kosher">Kosher</md-option>
+                        <md-option value="Lactose Intolerance">Lactose Intolerance</md-option>
+                        <md-option value="Peanut Allergy">Peanut Allergies</md-option>
+                        <md-option value="Vegetarian">Vegetarian</md-option>
+                        <md-option value="Others">Others</md-option>
                       </md-select>
-                    </md-input-container>
+                    </md-field>
                   </div>
 
                   <div class="md-layout-item md-size-50">
-                    <md-input-container>
+                    <md-field>
                       <label>Top 3 Food Categories</label>
                       <md-select v-model="foodCategory" multiple>
-                        <md-option value="bakingNeeds">Baking Needs</md-option>
-                        <md-option value="biscuits">Biscuits</md-option>
-                        <md-option value="buffet">Buffet/Bento Boxes</md-option>
-                        <md-option value="canned">Canned Food</md-option>
-                        <md-option value="dairy">Dairy, Chilled, Eggs</md-option>
-                        <md-option value="drinks">Drinks</md-option>
-                        <md-option value="frozen">Frozen Food</md-option>
-                        <md-option value="fruits">Fruits</md-option>
-                        <md-option value="meat">Meat, Seafood</md-option>
-                        <md-option value="rice">Rice, Noodles</md-option>
-                        <md-option value="seasonings">Seasonings</md-option>
-                        <md-option value="vegetables">Vegetables</md-option>
-                        <md-option value="others">Others</md-option>
+                        <md-option value="Baking Needs">Baking Needs</md-option>
+                        <md-option value="Biscuits">Biscuits</md-option>
+                        <md-option value="Buffet/Bento Boxes">Buffet/Bento Boxes</md-option>
+                        <md-option value="Canned Food">Canned Food</md-option>
+                        <md-option value="Dairy, Chilled, Eggs">Dairy, Chilled, Eggs</md-option>
+                        <md-option value="Drinks">Drinks</md-option>
+                        <md-option value="Frozen Food">Frozen Food</md-option>
+                        <md-option value="Fruits">Fruits</md-option>
+                        <md-option value="Meat, Seafood">Meat, Seafood</md-option>
+                        <md-option value="Rice, Noodles">Rice, Noodles</md-option>
+                        <md-option value="Seasonings">Seasonings</md-option>
+                        <md-option value="Vegetables">Vegetables</md-option>
+                        <md-option value="Others">Others</md-option>
                       </md-select>
-                    </md-input-container>
+                    </md-field>
                   </div>
 
                 </div>
@@ -145,7 +148,7 @@
 
                 <div class="md-layout">
                   <div class="md-layout-item md-size-33 mx-auto text-center">
-                    <md-button class="md-success">Create Account</md-button>
+                    <md-button class="md-success" v-on:click="addUserData">Create Account</md-button>
                   </div>
                 </div>
               </form>
@@ -158,6 +161,9 @@
 </template>
 
 <script>
+import firebase from "firebase";
+import database from "../firebase.js";
+
 export default {
   bodyClass: "landing-page",
   props: {
@@ -172,6 +178,8 @@ export default {
   },
   data() {
     return {
+      userName: null,
+      UID: null,
       firstName: null,
       lastName: null,
       phoneNumber: null,
@@ -189,6 +197,44 @@ export default {
         backgroundImage: `url(${this.header})`
       };
     }
+  },
+  methods: {
+    getUID: function() {
+      this.UID = firebase.auth().currentUser.uid;
+      console.log(this.UID)
+    },
+    fetchUserName: function() {
+      database
+        .collection("users")
+        .doc(this.UID)
+        .get()
+        .then(doc => {
+          this.userName = doc.data().username;
+        })
+    },
+    addUserData: function() {
+      database
+        .collection("users")
+        .doc(this.UID)
+        .set({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          phoneNumber: this.phoneNumber,
+          telegramHandle: this.telegramHandle,
+          address: this.address,
+          dietaryRestrictions: this.dietaryRestrictions,
+          foodCategory: this.foodCategory,
+          reasonDonate: this.reasonDonate,
+          reasonSave: this.reasonSave,
+        })
+      .then(() => {
+        this.$router.push("/landing");
+      })
+    }
+  },
+  created() {
+    this.getUID();
+    this.fetchUserName();
   }
 };
 </script>
