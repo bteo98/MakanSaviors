@@ -12,17 +12,6 @@
 							</h4>
 
 							<md-field class="md-form-group" slot="inputs">
-								<md-icon>account_circle</md-icon>
-								<label>Username</label>
-								<md-input
-									id="username"
-									v-model="username"
-									type="text"
-									required
-								></md-input>
-							</md-field>
-
-							<md-field class="md-form-group" slot="inputs">
 								<md-icon>email</md-icon>
 								<label>Email</label>
 								<md-input
@@ -94,7 +83,6 @@ export default {
 	bodyClass: "login-page",
 	data() {
 		return {
-			username: null,
 			email: null,
 			password: null,
 			confirmPassword: null,
@@ -110,10 +98,6 @@ export default {
 	methods: {
 		signup: function(e) {
 			this.errors = [];
-
-			if (!this.username) {
-				this.errors.push("Username required.");
-			}
 
 			if (!this.email) {
 				this.errors.push("Email required.");
@@ -137,7 +121,7 @@ export default {
 								.collection("users")
 								.doc(user.user.uid)
 								.set({
-									username: this.username,
+									email: this.email,
 								});
 						} catch (FirebaseAuthException) {
 							this.errors.push(FirebaseAuthException);

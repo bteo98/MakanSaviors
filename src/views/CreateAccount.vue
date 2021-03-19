@@ -16,7 +16,7 @@
 			<div class="section">
 				<div class="container">
 					<div class="features text-center">
-						<h1 class="info-title">Welcome, {{ userName }}!</h1>
+						<h1 class="info-title">Welcome to MakanSaviour!</h1>
 						<div class="md-layout">
 							<div class="md-layout-item md-medium-size-33 md-small-size-100">
 								<div class="info">
@@ -91,10 +91,10 @@
 											<md-input
 												v-model="telegramHandle"
 												type="text"
-												required
 											></md-input>
 										</md-field>
 									</div>
+									
 								</div>
 
 								<md-field maxlength="5">
@@ -241,15 +241,6 @@ export default {
 		getUID: function() {
 			this.UID = firebase.auth().currentUser.uid;
 		},
-		fetchUserName: function() {
-			database
-				.collection("users")
-				.doc(this.UID)
-				.get()
-				.then((doc) => {
-					this.userName = doc.data().username;
-				});
-		},
 		addUserData: function() {
 			database
 				.collection("users")
@@ -288,7 +279,6 @@ export default {
 	},
 	created() {
 		this.getUID();
-		this.fetchUserName();
 	},
 };
 </script>
