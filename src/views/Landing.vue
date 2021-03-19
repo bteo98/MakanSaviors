@@ -24,11 +24,13 @@
       <div class="section">
           <div class="features text-center">
             <div class="md-layout">
-              <div class="md-layout-item md-medium-size-33 md-small-size-100">
-                <h2 id="feature">Featured Stories</h2>
-                <div class="info">
+              <div class="md-layout-item md-medium-size-33 md-small-size-100" id="stories">
+                <div id="feature">
+                <h2>Featured Stories</h2>
+                </div>
+                <div class="feedback">
                   <div>
-                    <img src="https://6.viki.io/image/ec510dd2def049c79c0ab79780b5ca65.jpeg?s=900x600&e=t" alt="User1" 
+                    <img src="https://writestylesonline.com/wp-content/uploads/2016/08/Follow-These-Steps-for-a-Flawless-Professional-Profile-Picture.jpg" alt="User1" 
                     style="width:300px; height:300px; border-radius: 50%; border: 1px solid #ddd; height: 300px; width: 300px; 
                     padding: 5px; background-color: grey">
                   </div>
@@ -36,28 +38,28 @@
                   <p>
                     "Sharing food feels amazing! I love meeting different people
                     who come to pick pick-up my food and the interesting 
-                    conversations that place on the doorstep" -Elizabeth
+                    conversations that place on the doorstep" <br>-Elizabeth
                   </p>
                 </div>
               </div>
               <div class="md-layout-item md-medium-size-33 md-small-size-100">
-                <div class="info">
+                <div class="feedback">
                   <div>
-                    <img backgroud-image: src="https://external-preview.redd.it/gMpJIuCGYpV8VgnnkIG4Utb3bqwpiYJ4Xs2nTnNh1RE.jpg?auto=webp&s=face729cd32341f39ac53a237aa0f4e5ae297456" 
+                    <img backgroud-image: src="https://expertphotography.com/wp-content/uploads/2020/08/social-media-profile-photos-9.jpg" 
                     alt="User2" style="border-radius: 50%; border: 1px solid #ddd; height: 300px; width: 300px; padding: 5px; background-color: grey"/>
                   </div>
                   <br>
                   <p>
                     "MakanSaviour brings people from all walks of life together, 
                     to achieve a common goal - to reduce food waste and build food 
-                    sharing communities!" -Claire
+                    sharing communities!" <br><br>-Claire
                   </p>
                 </div>
               </div>
               <div class="md-layout-item md-medium-size-33 md-small-size-100">
-                <div class="info">
+                <div class="feedback">
                   <div>
-                    <img src="https://www.whitehouse.gov/wp-content/uploads/2021/01/45_donald_trump.jpg" alt="User3"
+                    <img src="https://www.over40datingsite.co.uk/wp-content/uploads/2016/09/shutterstock_341919467.jpg" alt="User3"
                     style="width:300px; height:300px; border-radius: 50%; border: 1px solid #ddd; height: 300px; width: 300px; 
                     padding: 5px; background-color: grey">
                   </div>
@@ -65,11 +67,10 @@
                   <p>
                     "Thanks to MakanSaviour, the unused food items at home did not
                     end up in the trash and are now with someone who needs them more"
-                     -Steven
+                     <br><br>-Steven
                   </p>
                 </div>
               </div>
-              <!--<h3 v-show="item.show">{{item.review}}</h3>-->
             </div>
         </div>
       </div>
@@ -98,6 +99,7 @@ export default {
       default: require("@/assets/img/faces/kendall.jpg")
     }
   },
+  
   data() {
     return {
       reviews: []
@@ -130,4 +132,20 @@ position: absolute;
 left: -90px;
 margin-top: 100px;
 }
+
+#stories {
+  margin-left: 50px
+}
+
+.feedback{
+    max-width: 360px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    //padding-right: 10px;
+    background-color: rgb(236, 233, 233);
+    min-width: auto;
+
+}
+
 </style>
