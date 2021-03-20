@@ -114,7 +114,7 @@ export default {
                     .auth()
                     .signInWithEmailAndPassword(this.email, this.password)
                     .then((user) => {
-                        this.$store.commit('change', true);
+                        this.$store.commit('change');
                         this.$router.push("/profile");
                         console.log("sign in");
                     })
@@ -146,7 +146,7 @@ export default {
 
                     // This gives you a Google Access Token. You can use it to access the Google API.
                     var accessToken = credential.accessToken;
-                    this.$store.commit('change', true);
+                    this.$store.commit('change');
                     console.log("Pop up");
                     console.log(user);
                     console.log(user.email);
@@ -179,7 +179,7 @@ export default {
                         var token = credential.accessToken;
                         // ...
                         console.log("Redirect Result");
-                        this.$store.commit('change', true);
+                        this.$store.commit('change');
                         console.log(result);
                     }
                     // The signed-in user info.
@@ -220,7 +220,7 @@ export default {
 
                     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
                     var accessToken = credential.accessToken;
-                    this.$store.commit('change', true);
+                    this.$store.commit('change');
                     console.log("Pop up");
                     console.log(user);
                     // ...
@@ -252,7 +252,7 @@ export default {
                         var token = credential.accessToken;
                         // ...
                         console.log("Redirect Result");
-                        this.$store.commit('change', true);
+                        this.$store.commit('change');
                         console.log(result);
                     }
                     // The signed-in user info.

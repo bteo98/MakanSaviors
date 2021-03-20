@@ -1,21 +1,33 @@
 import Vuex from "vuex";
 import Vue from "vue";
+import firebase from "./firebase";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store ({
+const store = new Vuex.Store ({
     state: {
-        isAuth: false
+        user: null
     },
     mutations: {
-        change(state, auth) {
+        change(state) {
             console.log("AUTHENICATED");
-            console.log(state.isAuth);
-            state.isAuth = auth;
-            console.log(state.isAuth);
+            console.log(state.user);
+            state.user = firebase.auth().currentUser;
+            console.log(state.user);
         } 
     },
     getters: {
-        isAuth: state => state.isAuth
+        isAuth(state) {
+            console.log(state.user);
+            firebase.auth().onAuthStateChanged(function(user) {
+                console.log(user);
+                state.user = user;
+            });
+            console.log(state.user);
+            return state.user == null ? false : true;
+        }, 
+        user : state => state.user 
     }
-})
+});
+
+export default store;
