@@ -12,7 +12,10 @@ const store = new Vuex.Store ({
         change(state) {
             console.log("AUTHENICATED");
             console.log(state.user);
-            state.user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged(function(user) {
+                console.log(user);
+                state.user = user;
+            });
             console.log(state.user);
         } 
     },

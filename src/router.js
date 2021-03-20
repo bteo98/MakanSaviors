@@ -6,6 +6,7 @@ import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import SignUp from "./views/SignUp.vue";
 import Profile from "./views/Profile.vue";
+import ResetPassword from "./views/ResetPassword.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import CreateAccount from "./views/CreateAccount.vue";
@@ -45,6 +46,17 @@ let router = new Router({
             name: "login",
             components: {
                 default: Login,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
+            },
+        },        {
+            path: "/resetpassword",
+            name: "resetpassword",
+            components: {
+                default: ResetPassword,
                 header: MainNavbar,
                 footer: MainFooter,
             },

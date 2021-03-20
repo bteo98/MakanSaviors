@@ -40,7 +40,8 @@
                             </md-field>
 
                             <p slot="description" class="description">
-                                New to MakanSaviours? <a href="#/signup">Sign Up</a>
+                                New to MakanSaviours?
+                                <a href="#/signup">Sign Up</a>
                             </p>
 
                             <div
@@ -61,6 +62,13 @@
                                     </li>
                                 </ul>
                             </div>
+                            <md-button
+                                slot="footer"
+                                class="md-simple md-success md-lg"
+                                v-on:click="forgetPassword"
+                            >
+                                Forget Password
+                            </md-button>
                             <md-button
                                 slot="footer"
                                 class="md-simple md-success md-lg"
@@ -101,6 +109,9 @@ export default {
         },
     },
     methods: {
+        forgetPassword() {
+            this.$router.push("/resetpassword");
+        },
         login() {
             this.errors = [];
             if (!this.email) {
@@ -114,7 +125,7 @@ export default {
                     .auth()
                     .signInWithEmailAndPassword(this.email, this.password)
                     .then((user) => {
-                        this.$store.commit('change');
+                        this.$store.commit("change");
                         this.$router.push("/profile");
                         console.log("sign in");
                     })
@@ -146,7 +157,7 @@ export default {
 
                     // This gives you a Google Access Token. You can use it to access the Google API.
                     var accessToken = credential.accessToken;
-                    this.$store.commit('change');
+                    this.$store.commit("change");
                     console.log("Pop up");
                     console.log(user);
                     console.log(user.email);
@@ -179,7 +190,7 @@ export default {
                         var token = credential.accessToken;
                         // ...
                         console.log("Redirect Result");
-                        this.$store.commit('change');
+                        this.$store.commit("change");
                         console.log(result);
                     }
                     // The signed-in user info.
@@ -220,7 +231,7 @@ export default {
 
                     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
                     var accessToken = credential.accessToken;
-                    this.$store.commit('change');
+                    this.$store.commit("change");
                     console.log("Pop up");
                     console.log(user);
                     // ...
@@ -252,7 +263,7 @@ export default {
                         var token = credential.accessToken;
                         // ...
                         console.log("Redirect Result");
-                        this.$store.commit('change');
+                        this.$store.commit("change");
                         console.log(result);
                     }
                     // The signed-in user info.
