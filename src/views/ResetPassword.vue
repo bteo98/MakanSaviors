@@ -11,7 +11,7 @@
                                 Reset Password
                             </h4>
 
-                            <md-field class="md-form-group" slot="inputs">
+                            <md-field class="md-form-group" slot="inputs" v-if="!reset">
                                 <md-icon>email</md-icon>
                                 <label>Email...</label>
                                 <md-input
@@ -20,20 +20,18 @@
                                 ></md-input>
                             </md-field>
 
-                            <p slot="description" class="description">
-                                A Verification email has been sent to this email address {{email}}.
-Please verify it.
+                            <p v-if="!reset" slot="description" class="description">
+                                Please input your email address
                             </p>
 
                             <p v-if="reset" slot="footer-description">
-                                Email Sent. Please check your inbox for
-                                instructions.
+                                A verification email has been sent to this email address {{email}}. Please verify it.
                             </p>
 
                             <div
                                 slot="errors"
                                 class="errors"
-                                v-if="errors.length"
+                                v-if="errors.length && !reset"
                             >
                                 <br />
                                 <p>
@@ -52,6 +50,7 @@ Please verify it.
                                 slot="footer"
                                 class="md-simple md-success md-lg"
                                 v-on:click="resetPassword"
+                                v-if="!reset"
                             >
                                 Reset
                             </md-button>
@@ -95,7 +94,7 @@ export default {
 
             auth.sendPasswordResetEmail(emailAddress)
                 .then(function() {
-                    this.reset = true;
+                    self.reset = true;
                 })
                 .catch(function(error) {
                     if (error.code == "auth/invalid-email") {
