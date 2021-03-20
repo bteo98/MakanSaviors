@@ -21,7 +21,8 @@
                             </md-field>
 
                             <p slot="description" class="description">
-                                Please input your email address
+                                A Verification email has been sent to this email address {{email}}.
+Please verify it.
                             </p>
 
                             <p v-if="reset" slot="footer-description">
