@@ -257,7 +257,7 @@ export default {
 					lastName: this.lastName,
 					phoneNumber: this.phoneNumber,
 					telegramHandle: this.telegramHandle,
-					address: this.address,
+					preferredLocation: this.preferredLocation,
 					dietaryRestrictions: this.dietaryRestrictions,
 					foodCategory: this.foodCategory,
 					reasonDonate: this.reasonDonate,
