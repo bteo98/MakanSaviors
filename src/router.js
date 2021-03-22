@@ -10,6 +10,7 @@ import ResetPassword from "./views/ResetPassword.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import CreateAccount from "./views/CreateAccount.vue";
+import CreateListing from "./views/CreateListing.vue";
 
 Vue.use(Router);
 
@@ -102,6 +103,18 @@ let router = new Router({
             props: {
                 header: { colorOnScroll: 400 },
                 footer: { backgroundColor: "black" },
+            },
+        },
+        {
+            path: "/createlisting",
+            name: "createlisting",
+            components: {
+                default: CreateListing,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
             },
         },
     ],

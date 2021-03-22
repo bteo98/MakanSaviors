@@ -4,59 +4,29 @@
 			<div class="container">
 				<div class="md-layout">
 					<div class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100">
-						<h1 class="title">Let us know you better!</h1>
+						<h1 class="title">Create a New Listing</h1>
 						<h4>
-							You are just a step away from creating your MakanSaviour account.
+							Give your food a new life.
 						</h4>
 					</div>
 				</div>
 			</div>
 		</parallax>
 		<div class="main main-raised">
-			<div class="section">
-				<div class="container">
-					<div class="features text-center">
-						<h1 class="info-title">Welcome to MakanSaviour!</h1>
-						<div class="md-layout">
-							<div class="md-layout-item md-medium-size-33 md-small-size-100">
-								<div class="info">
-									<h2 class="info-title">
-										Add a profile picture
-									</h2>
-									<div class="icon icon-info">
-										<img
-											:src="profile"
-											alt="Rounded Image"
-											class="img-raised rounded img-fluid"
-										/>
-										<br /><br />
-										<input
-											id="profilepic"
-											type="file"
-											v-on:change="onFileChange"
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<div class="section section-contacts">
 				<div class="container">
 					<div class="md-layout">
 						<div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
 							<h2 class="text-center title">
-								Personal Information
+								New Listing
 							</h2>
 							<form class="contact-form">
-								<div class="md-layout">
+								<div class="md-layout"> 
 									<div class="md-layout-item md-size-50">
 										<md-field>
-											<label>First Name</label>
+											<label>Listing Name</label>
 											<md-input
-												v-model="firstName"
+												v-model="listingName"
 												type="text"
 												required
 											></md-input>
@@ -65,12 +35,38 @@
 
 									<div class="md-layout-item md-size-50">
 										<md-field>
-											<label>Last Name</label>
+											<label>Quantity Available</label>
 											<md-input
-												v-model="lastName"
+												v-model="quantity"
 												type="text"
 												required
 											></md-input>
+										</md-field>
+									</div>
+
+									<div class="md-layout-item md-size-50">
+										<md-field>
+											<label>Expiry Date & Time</label>
+											<md-input
+												v-model="expiry"
+												type='text' 
+												required='' 
+												onfocus="this.type='datetime-local'" 
+												onblur="if(this.value==='')this.type='text'"
+											></md-input>
+										</md-field>
+									</div>
+
+									<div class="md-layout-item md-size-50">
+										<md-field>
+											<label>Collection Location</label>
+											<md-select v-model="collectionLocation" multiple required>
+												<md-option value="Central">Central</md-option>
+												<md-option value="East">East</md-option>
+												<md-option value="North">North</md-option>
+												<md-option value="South">South</md-option>
+												<md-option value="West">West</md-option>
+											</md-select>
 										</md-field>
 									</div>
 
@@ -95,28 +91,6 @@
 										</md-field>
 									</div>
 									
-								</div>
-								
-								<md-field maxlength="5">
-									<label>Address</label>
-									<md-textarea v-model="address" md-autogrow required></md-textarea>
-								</md-field>
-
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="section section-contacts">
-				<div class="container">
-					<div class="md-layout">
-						<div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
-							<h2 class="text-center title">
-								Additional Information
-							</h2>
-							<form class="contact-form">
-								<div class="md-layout">
 									<div class="md-layout-item md-size-50">
 										<md-field>
 											<label>Dietary Restriction(s)</label>
@@ -141,55 +115,25 @@
 									</div>
 
 									<div class="md-layout-item md-size-50">
-										<md-field>
-											<label>Top 3 Food Categories</label>
-											<md-select v-model="foodCategory" multiple>
-												<md-option value="Baking Needs"
-													>Baking Needs</md-option
-												>
-												<md-option value="Biscuits">Biscuits</md-option>
-												<md-option value="Buffet/Bento Boxes"
-													>Buffet/Bento Boxes</md-option
-												>
-												<md-option value="Canned Food"
-													>Canned Food</md-option
-												>
-												<md-option value="Dairy, Chilled, Eggs"
-													>Dairy, Chilled, Eggs</md-option
-												>
-												<md-option value="Drinks">Drinks</md-option>
-												<md-option value="Frozen Food"
-													>Frozen Food</md-option
-												>
-												<md-option value="Fruits">Fruits</md-option>
-												<md-option value="Meat, Seafood"
-													>Meat, Seafood</md-option
-												>
-												<md-option value="Rice, Noodles"
-													>Rice, Noodles</md-option
-												>
-												<md-option value="Seasonings">Seasonings</md-option>
-												<md-option value="Vegetables">Vegetables</md-option>
-												<md-option value="Others">Others</md-option>
-											</md-select>
-										</md-field>
+										<br>
+										<input
+											id="listingImage"
+											type="file"
+											v-on:change="onFileChange"
+										/>
 									</div>
+
 								</div>
-
+								
 								<md-field maxlength="5">
-									<label>Reason to Donate</label>
-									<md-textarea v-model="reasonDonate" md-autogrow></md-textarea>
-								</md-field>
-
-								<md-field maxlength="5">
-									<label>Reason to Save</label>
-									<md-textarea v-model="reasonSave" md-autogrow></md-textarea>
+									<label>Remarks</label>
+									<md-textarea v-model="description" md-autogrow></md-textarea>
 								</md-field>
 
 								<div class="md-layout">
 									<div class="md-layout-item md-size-33 mx-auto text-center">
 										<md-button class="md-success" v-on:click="addUserData"
-											>Create Account</md-button
+											>Create Listing</md-button
 										>
 									</div>
 								</div>
@@ -216,18 +160,13 @@ export default {
 	},
 	data() {
 		return {
-			UID: null,
-			firstName: null,
-			lastName: null,
+			listingName: null,
+			quantity: null,
+			expiry: null,
+			collectionLocation: null,
 			phoneNumber: null,
 			telegramHandle: null,
-			address: null,
 			dietaryRestrictions: null,
-			foodCategory: null,
-			reasonDonate: null,
-			reasonSave: null,
-			profile: require("@/assets/img/faces/unknown.jpg"),
-			file: null,
 		};
 	},
 	computed: {
@@ -261,21 +200,6 @@ export default {
 					this.$router.push("/landing");
 				});
 		},
-		// when file changes, create image on site
-		onFileChange: function(e) {
-			this.file = e.target.files[0];
-			var reader = new FileReader();
-			reader.onload = (ev) => {
-				this.profile = ev.target.result;
-			};
-			reader.readAsDataURL(this.file);
-		},
-
-		// when create account button pressed, push profile pic to firebase storage
-		pushProfilePic: function() {
-			var storageRef = firebase.storage().ref("/profilePictures/" + this.UID);
-			var uploadTask = storageRef.put(this.file);
-		},
 	},
 	created() {
 		this.getUID();
@@ -294,11 +218,5 @@ export default {
 
 .md-has-textarea + .md-layout {
 	margin-top: 15px;
-}
-
-.md-select {
-	.md-option {
-	font-size: 10px;
-	}
 }
 </style>
