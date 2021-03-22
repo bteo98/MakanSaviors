@@ -213,7 +213,7 @@ export default {
           allListings: this.allListings
 				})
 				.then(() => {
-					this.pushListingImage();
+          this.pushListingImage();
 					this.$router.push("/landing");
 				});
 		},
@@ -258,4 +258,4 @@ export default {
 	font-size: 10px;
 	}
 }
-</style>
+</style> o

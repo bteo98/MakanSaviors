@@ -94,14 +94,21 @@
 											></md-input>
 										</md-field>
 									</div>
+
+									<div class="md-layout-item md-size-50">
+										<md-field>
+											<label>Preferred Location</label>
+											<md-select v-model="preferredLocation" multiple required>
+												<md-option value="Central">Central</md-option>
+												<md-option value="East">East</md-option>
+												<md-option value="North">North</md-option>
+												<md-option value="South">South</md-option>
+												<md-option value="West">West</md-option>
+											</md-select>
+										</md-field>
+									</div>
 									
 								</div>
-								
-								<md-field maxlength="5">
-									<label>Address</label>
-									<md-textarea v-model="address" md-autogrow required></md-textarea>
-								</md-field>
-
 							</form>
 						</div>
 					</div>
@@ -221,7 +228,7 @@ export default {
 			lastName: null,
 			phoneNumber: null,
 			telegramHandle: null,
-			address: null,
+			preferredLocation: null,
 			dietaryRestrictions: null,
 			foodCategory: null,
 			reasonDonate: null,
