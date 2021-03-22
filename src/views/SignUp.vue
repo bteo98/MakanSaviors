@@ -122,6 +122,7 @@ export default {
 								.doc(user.user.uid)
 								.set({
 									email: this.email,
+									allListings: []
 								});
 						} catch (FirebaseAuthException) {
 							this.errors.push(FirebaseAuthException);

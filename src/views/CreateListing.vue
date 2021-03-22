@@ -167,10 +167,12 @@ export default {
       collectionLocation: null,
 			phoneNumber: null,
 			telegramHandle: null,
-			dietaryRestrictions: null,
+      dietaryRestrictions: null,
+      remarks: null,
 			profile: null,
       file: null,
-      listing: {}
+      listing: {},
+      allListings: null,
 		};
 	},
 	computed: {
@@ -182,8 +184,17 @@ export default {
 	},
 	methods: {
 		getUID: function() {
-			this.UID = firebase.auth().currentUser.uid;
-		},
+      this.UID = firebase.auth().currentUser.uid;
+    },
+    getAllListings: function() {
+      database
+        .collection("users")
+        .doc(this.UID)
+        .get()
+        .then(doc => {
+          this.allListings = doc.data().allListings
+        })
+    },
 		createListing: function() {
       this.listing["Name"] = this.listingName;
       this.listing["Quantity"] = this.quantity;
@@ -193,11 +204,13 @@ export default {
       this.listing["TelegramHandle"] = this.telegramHandle;
       this.listing["DietaryRestriction"] = this.dietaryRestrictions;
 
+      this.allListings.push(this.listing);
+
 			database
 				.collection("users")
 				.doc(this.UID)
 				.update({
-          listing: this.listing
+          allListings: this.allListings
 				})
 				.then(() => {
 					this.pushListingImage();
@@ -221,7 +234,8 @@ export default {
 		},
 	},
 	created() {
-		this.getUID();
+    this.getUID();
+    this.getAllListings();
 	},
 };
 </script>
