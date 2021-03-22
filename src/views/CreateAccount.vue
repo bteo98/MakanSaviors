@@ -273,7 +273,7 @@ export default {
 
 		// when create account button pressed, push profile pic to firebase storage
 		pushProfilePic: function() {
-			var storageRef = firebase.storage().ref("/profilePictures/" + this.UID);
+			var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
 			var uploadTask = storageRef.put(this.file);
 		},
 	},
