@@ -12,10 +12,25 @@ import MainFooter from "./layout/MainFooter.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 
+import ExploreCard from "./views/components/ExploreCard.vue"
+
 Vue.use(Router);
 
 let router = new Router({
     routes: [
+        {
+            path: "/card",
+            name: "card",
+            components: {
+                default: ExploreCard,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
+                footer: { backgroundColor: "black" },
+            },
+        },
         {
             path: "/",
             name: "index",
