@@ -95,7 +95,7 @@
 									<div class="md-layout-item md-size-50">
 										<md-field>
 											<label>Dietary Restriction(s)</label>
-											<md-select v-model="dietaryRestrictions" multiple>
+											<md-select v-model="dietaryRestrictions" required multiple>
 												<md-option value="None">None</md-option>
 												<md-option value="Diabetic">Diabetic</md-option>
 												<md-option value="Gluten Free"
@@ -192,7 +192,7 @@ export default {
         .doc(this.UID)
         .get()
         .then(doc => {
-          this.allListings = doc.data().allListings
+          this.allListings = doc.data().allListings;
         })
     },
 		createListing: function() {
