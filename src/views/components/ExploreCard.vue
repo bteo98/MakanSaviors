@@ -47,14 +47,18 @@ export default {
     name: "explore-card",
     data() {
         return {
-            UID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
-            imgID: "lIO4s2eWOluIqeIMmQky",
+            //UID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
+            //imgID: "lIO4s2eWOluIqeIMmQky",
             imgRef: "",
             description: {},
             profile: {},
             expiryDate: "",
             responsive: false,
         };
+    },
+    props: {
+        UID: {type: String},
+        imgID: {type: String}
     },
     methods: {
         fetchItems: function() {

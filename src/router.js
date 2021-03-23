@@ -9,6 +9,7 @@ import Profile from "./views/Profile.vue";
 import ResetPassword from "./views/ResetPassword.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
+import ExploreListing from "./views/ExploreListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 
@@ -18,19 +19,6 @@ Vue.use(Router);
 
 let router = new Router({
     routes: [
-        {
-            path: "/card",
-            name: "card",
-            components: {
-                default: ExploreCard,
-                header: MainNavbar,
-                footer: MainFooter,
-            },
-            props: {
-                header: { colorOnScroll: 400 },
-                footer: { backgroundColor: "black" },
-            },
-        },
         {
             path: "/",
             name: "index",
@@ -130,6 +118,32 @@ let router = new Router({
             },
             props: {
                 header: { colorOnScroll: 400 },
+            },
+        },
+        {
+            path: "/card",
+            name: "card",
+            components: {
+                default: ExploreCard,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
+                footer: { backgroundColor: "black" },
+            },
+        },
+        {
+            path: "/explorelisting",
+            name: "explorelisting",
+            components: {
+                default: ExploreListing,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
+                footer: { backgroundColor: "black" },
             },
         },
     ],
