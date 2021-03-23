@@ -15,38 +15,37 @@
 									/>
 								</div>
 								<div class="name">
-									<h3 class="title">{{ this.firstName }} {{ this.lastName }}</h3>
-									<h6>Designer</h6>
-									<md-button
-										href="javascript:void(0)"
-										class="md-just-icon md-simple md-dribbble"
-										><i class="fab fa-dribbble"></i
-									></md-button>
-									<md-button
-										href="javascript:void(0)"
-										class="md-just-icon md-simple md-twitter"
-										><i class="fab fa-twitter"></i
-									></md-button>
-									<md-button
-										href="javascript:void(0)"
-										class="md-just-icon md-simple md-pinterest"
-										><i class="fab fa-pinterest"></i
-									></md-button>
+									<h3 class="title">
+										{{ this.sentenceCase(this.firstName) }}
+										{{ this.sentenceCase(this.lastName) }}
+										<p>
+											Username: @{{ this.userName }}
+											<br />
+											Rating:
+											<br />
+											Join Date:
+											<br />
+											Region:
+										</p>
+									</h3>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="description text-center">
-						<p>
-							An artist of considerable range, Chet Faker — the name taken by
-							Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and
-							records all of his own music, giving it a warm, intimate feel with a
-							solid groove structure.
-						</p>
+						<h4>
+							What inspires me to donate:
+							<p>{{ this.reasonDonate }}</p>
+						</h4>
+						<br />
+						<h4>
+							What motivates me to save:
+							<p>{{ this.reasonSave }}</p>
+						</h4>
 					</div>
 					<div class="profile-tabs">
 						<tabs
-							:tab-name="['Studio', 'Work', 'Favorite']"
+							:tab-name="['Listings', 'Requests', 'Reviews']"
 							:tab-icon="['camera', 'palette', 'favorite']"
 							plain
 							nav-pills-icons
@@ -188,6 +187,9 @@ export default {
 					this.reasonDonate = data.reasonDonate;
 					this.reasonSave = data.reasonSave;
 				});
+		},
+		sentenceCase: function(word) {
+			return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
 		},
 	},
 	created() {
