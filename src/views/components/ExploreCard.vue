@@ -3,7 +3,7 @@
         <md-card-content>
             <div class="md-layout">
                 <div class="md-layout-item">
-                    <div class="container">
+                    <div>
                         <img
                             v-bind:src="imgRef"
                             v-bind:alt="description['name']"
@@ -47,7 +47,7 @@ export default {
     name: "explore-card",
     data() {
         return {
-            //UID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
+            //UID: "Nt2ExgrXaCcEj9SCn82pVqfZw6S2",
             //imgID: "lIO4s2eWOluIqeIMmQky",
             imgRef: "",
             description: {},
@@ -69,6 +69,7 @@ export default {
 
             imgPath.getDownloadURL().then((url) => {
                 this.imgRef = url;
+                console.log(url);
             });
 
             var database = firebase.firestore();
@@ -88,7 +89,7 @@ export default {
                 });
 
             database
-                .collection(this.UID)
+                .collection("imageData")
                 .doc(this.imgID)
                 .get()
                 .then((items) => {
@@ -101,6 +102,7 @@ export default {
                         data[key] = val;
                     }
                     this.description = data;
+                    console.log(this.description);
                 });
         },
         onResponsiveInverted() {
@@ -131,13 +133,16 @@ div {
 
 img {
     display: inline-block;
-    width: 45% !important; 
+    width: 20% !important;
+    float: left;
+    padding-top: 28px; 
 }
 
 .text {
     display: inline-block;
     width: 45%;
     padding: 26px 0;
+    padding-left: 30px;
 }
 
 #explore-card {

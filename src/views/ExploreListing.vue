@@ -99,7 +99,26 @@
                                     </li>
                                 </div>
                             </div>
-                            <div></div>
+                            <div>
+                                <ul v-if="!processing" id="itemsList">
+                                    <span
+                                        v-for="(imageIDs,
+                                        UID,
+                                        index) in collections"
+                                        :key="index"
+                                    >
+                                        <li
+                                            v-for="(imageID, index) in imageIDs"
+                                            :key="index"
+                                        >
+                                            <ExploreCard
+                                                :UID="UID"
+                                                :imgID="imageID"
+                                            ></ExploreCard>
+                                        </li>
+                                    </span>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <br /><br /><br />
@@ -111,6 +130,7 @@
 
 <script>
 import firebase from "../firebase.js";
+import ExploreCard from "./components/ExploreCard";
 
 export default {
     bodyClass: "quiz-lifestage-page",
@@ -118,7 +138,11 @@ export default {
         return {
             collections: {},
             header: require("@/assets/img/city-profile.jpg"),
+            processing: true,
         };
+    },
+    components: {
+        ExploreCard,
     },
     computed: {
         headerStyle() {
@@ -140,8 +164,8 @@ export default {
                             console.log(doc.id + " => " + list);
                             this.collections[doc.id] = list;
                         }
-                        console.log(this.collections);
                     });
+                    this.processing = false;
                 });
         },
     },
@@ -162,5 +186,24 @@ export default {
 .border {
     border: 2px solid black;
     border-radius: 15px;
+}
+#itemsList {
+    width: 100%;
+    max-width: 70%;
+    margin: 0px;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    flex-grow: 1;
+    flex-basis: 300px;
+    padding: 10px;
+    margin: 10px;
 }
 </style>
