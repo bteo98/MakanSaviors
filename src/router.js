@@ -142,7 +142,7 @@ let router = new Router({
                 footer: MainFooter,
             },
             props: {
-                header: { colorOnScroll: 400 },
+                header: { colorOnScroll: 5 },
                 footer: { backgroundColor: "black" },
             },
         },

@@ -101,22 +101,26 @@
                             </div>
                             <div>
                                 <ul v-if="!processing" id="itemsList">
-                                    <span
+                                    <li
+                                        class="md-layout"
                                         v-for="(imageIDs,
                                         UID,
                                         index) in collections"
                                         :key="index"
                                     >
-                                        <li
+                                        <div
+                                            class="md-layout"
                                             v-for="(imageID, index) in imageIDs"
                                             :key="index"
+                                            style="padding-right: 5%;"
                                         >
                                             <ExploreCard
+                                                class="md-layout-item donoarcard"
                                                 :UID="UID"
                                                 :imgID="imageID"
                                             ></ExploreCard>
-                                        </li>
-                                    </span>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -176,24 +180,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-card-actions.text-center {
-    display: flex;
-    //   justify-content: left !important;
+donorcard {
+    padding: 500px 500px !important;
 }
-.md-has-textarea + .md-layout {
-    margin-top: 20px;
-}
-.border {
-    border: 2px solid black;
-    border-radius: 15px;
-}
-#itemsList {
-    width: 100%;
-    max-width: 70%;
-    margin: 0px;
-    padding: 0 5px;
-    box-sizing: border-box;
-}
+
 ul {
     display: flex;
     flex-wrap: wrap;

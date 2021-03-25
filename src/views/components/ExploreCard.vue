@@ -133,6 +133,7 @@ div {
 
 img {
     display: inline-block;
+    min-width: 95px;
     width: 20% !important;
     float: left;
     padding-top: 28px; 
@@ -140,13 +141,13 @@ img {
 
 .text {
     display: inline-block;
-    width: 45%;
+    max-width: 70%;
     padding: 26px 0;
     padding-left: 30px;
 }
 
 #explore-card {
-    max-width: 580px !important;
-    width: 100%;
+    max-width: 500px !important;
+    min-width: 420px !important;
 }
 </style>
