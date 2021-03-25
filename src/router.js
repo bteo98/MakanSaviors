@@ -13,12 +13,26 @@ import ExploreListing from "./views/ExploreListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 
+import Random from "./views/random.vue";
 import ExploreCard from "./views/components/ExploreCard.vue"
 
 Vue.use(Router);
 
 let router = new Router({
     routes: [
+        {
+            path: "/random",
+            name: "random",
+            components: {
+                default: Random,
+                header: MainNavbar,
+                footer: MainFooter,
+            },
+            props: {
+                header: { colorOnScroll: 400 },
+                footer: { backgroundColor: "black" },
+            },
+        },
         {
             path: "/",
             name: "index",
@@ -41,7 +55,7 @@ let router = new Router({
                 footer: MainFooter,
             },
             props: {
-                header: { colorOnScroll: 400 },
+                header: { colorOnScroll: 5 },
                 footer: { backgroundColor: "black" },
             },
         },
