@@ -5,9 +5,7 @@
     :data-background-color="backgroundColor"
   >
     <div class="container">
-      <div class="copyright">
-        MakanSaviour &copy; {{ year }} 
-      </div>
+      <div class="copyright">MakanSaviour &copy; {{ year }}</div>
     </div>
   </footer>
 </template>

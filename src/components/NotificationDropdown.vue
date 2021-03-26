@@ -16,7 +16,7 @@
       >
         <i :class="icon"></i>
         <p>
-          {{UID + " requested for " + imageID}}
+          {{ UID + " requested for " + imageID }}
         </p>
       </a>
     </slot>
