@@ -2,7 +2,7 @@
   <div class="wrapper">
     <parallax class="section page-header header-filter" :style="headerStyle">
       <div class="container">
-        <div class="md-layout">
+        <div class="md-layout header-section">
           <div
             class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100"
           >
@@ -13,7 +13,7 @@
             </h4>
           </div>
           <img
-            class="head"
+            class="header-image"
             src="https://drjoeclarkblog.files.wordpress.com/2013/09/helping-hands.jpg"
             alt="Sharing Care"
             style="float: right; margin: 0px 0px 100px 100px;"
@@ -245,5 +245,15 @@ export default {
 #carousel-background {
   min-height: 380px !important;
   max-height: 425px !important;
+}
+
+@media screen and (max-width: 992px){
+  .header-section {
+    padding-top: 40% !important;
+  }
+
+  .header-image {
+    background-image: none; //make image disappear 
+  }
 }
 </style>
