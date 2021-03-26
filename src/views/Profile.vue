@@ -19,8 +19,6 @@
 										{{ this.sentenceCase(this.firstName) }}
 										{{ this.sentenceCase(this.lastName) }}
 										<p>
-											Username: @{{ this.userName }}
-											<br />
 											Rating:
 											<br />
 											Join Date:
@@ -130,7 +128,7 @@ export default {
 				{image: require("@/assets/img/examples/olu-eletu.jpg")},
 				{image: require("@/assets/img/examples/studio-1.jpg")},
 			],
-			userName: null,
+			//userName: null,
 			UID: null,
 			firstName: null,
 			lastName: null,
@@ -176,7 +174,7 @@ export default {
 				.get()
 				.then((doc) => {
 					var data = doc.data();
-					this.userName = data.username;
+					//this.userName = data.username;
 					this.firstName = data.firstName;
 					this.lastName = data.lastName;
 					this.phoneNumber = data.phoneNumber;
