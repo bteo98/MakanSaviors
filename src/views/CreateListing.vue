@@ -171,8 +171,8 @@ export default {
       remarks: null,
       profile: null,
       file: null,
-      listing: {},
-      allListings: null
+      currID: null,
+      allIDs: null
     };
   },
   computed: {
@@ -186,33 +186,32 @@ export default {
     getUID: function() {
       this.UID = firebase.auth().currentUser.uid;
     },
-    getAllListings: function() {
+    getAllIDs: function() {
       database
-        .collection("users")
+        .collection("donationIDs")
         .doc(this.UID)
         .get()
         .then(doc => {
-          this.allListings = doc.data().allListings;
+          this.allIDs = doc.data().imageIDs;
         });
     },
     createListing: function() {
-      this.listing["Name"] = this.listingName;
-      this.listing["Quantity"] = this.quantity;
-      this.listing["Expiry"] = this.expiry;
-      this.listing["CollectionLocation"] = this.collectionLocation;
-      this.listing["PhoneNumber"] = this.phoneNumber;
-      this.listing["TelegramHandle"] = this.telegramHandle;
-      this.listing["DietaryRestriction"] = this.dietaryRestrictions;
-
-      this.allListings.push(this.listing);
-
       database
-        .collection("users")
-        .doc(this.UID)
-        .update({
-          allListings: this.allListings
+        .collection("donationData")
+        .add({
+          listingName: this.listingName,
+          quantity: this.quantity,
+          expiry: this.expiry,
+          collectionLocation: this.collectionLocation,
+          phoneNumber: this.phoneNumber,
+          telegramHandle: this.telegramHandle,
+          dietaryRestrictions: this.dietaryRestrictions,
+          remarks: this.remarks
         })
-        .then(() => {
+        .then(doc => {
+          this.currID = doc.id;
+          this.allIDs.push(this.currID);
+          this.updateImageIDs();
           this.pushListingImage();
           this.$router.push("/landing");
         });
@@ -226,18 +225,25 @@ export default {
       };
       reader.readAsDataURL(this.file);
     },
-
     // when create listing button pressed, push listing image to firebase storage
     pushListingImage: function() {
       var storageRef = firebase
         .storage()
-        .ref(this.UID + "/listingImages/" + this.listingName);
+        .ref(this.UID + "/donationImages/" + this.currID);
       var uploadTask = storageRef.put(this.file);
+    },
+    updateImageIDs: function() {
+      database
+        .collection("donationIDs")
+        .doc(this.UID)
+        .update({
+          imageIDs: this.allIDs
+        });
     }
   },
   created() {
     this.getUID();
-    this.getAllListings();
+    this.getAllIDs();
   }
 };
 </script>
@@ -247,6 +253,7 @@ export default {
   display: flex;
   justify-content: center !important;
 }
+
 .contact-form {
   margin-top: 30px;
 }
@@ -261,4 +268,3 @@ export default {
   }
 }
 </style>
-o

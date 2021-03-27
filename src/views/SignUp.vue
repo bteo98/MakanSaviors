@@ -75,7 +75,6 @@
 import { LoginCard } from "@/components";
 import firebase from "firebase";
 var database = firebase.firestore();
-
 export default {
   components: {
     LoginCard
@@ -98,19 +97,15 @@ export default {
   methods: {
     signup: function(e) {
       this.errors = [];
-
       if (!this.email) {
         this.errors.push("Email required.");
       }
-
       if (!this.password) {
         this.errors.push("Password required");
       }
-
       if (this.confirmPassword != this.password) {
         this.errors.push("Confirm password does not match");
       }
-
       if (!this.errors.length) {
         firebase
           .auth()
@@ -121,8 +116,7 @@ export default {
                 .collection("users")
                 .doc(user.user.uid)
                 .set({
-                  email: this.email,
-                  allListings: []
+                  email: this.email
                 });
             } catch (FirebaseAuthException) {
               this.errors.push(FirebaseAuthException);
@@ -138,7 +132,6 @@ export default {
       e.preventDefault();
     }
   },
-
   computed: {
     headerStyle() {
       return {

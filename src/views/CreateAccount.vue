@@ -254,6 +254,7 @@ export default {
           reasonSave: this.reasonSave
         })
         .then(() => {
+          this.createIDCollection();
           this.pushProfilePic();
           this.$router.push("/landing");
         });
@@ -267,11 +268,18 @@ export default {
       };
       reader.readAsDataURL(this.file);
     },
-
     // when create account button pressed, push profile pic to firebase storage
     pushProfilePic: function() {
       var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
       var uploadTask = storageRef.put(this.file);
+    },
+    createIDCollection: function() {
+      database
+        .collection("donationIDs")
+        .doc(this.UID)
+        .set({
+          imageIDs: []
+        });
     }
   },
   created() {
@@ -285,6 +293,7 @@ export default {
   display: flex;
   justify-content: center !important;
 }
+
 .contact-form {
   margin-top: 30px;
 }
