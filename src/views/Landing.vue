@@ -247,13 +247,9 @@ export default {
   max-height: 425px !important;
 }
 
-@media screen and (max-width: 992px){
-  .header-section {
-    padding-top: 40% !important;
-  }
-
+@media screen and (max-width: 992px) {
   .header-image {
-    background-image: none; //make image disappear 
+    display: none;
   }
 }
 </style>
