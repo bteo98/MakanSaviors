@@ -10,7 +10,7 @@ import ResetPassword from "./views/ResetPassword.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 import ExploreListing from "./views/ExploreListing.vue";
-import MatchListing from "./views/MatchListing.vue";
+import DonorRequestListing from "./views/DonorRequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import Authentication from "./views/Authentication.vue";
@@ -176,10 +176,10 @@ let router = new Router({
       }
     },
     {
-      path: "/matchlisting",
-      name: "matchlisting",
+      path: "/donorrequestlisting",
+      name: "donorrequestlisting",
       components: {
-        default: MatchListing,
+        default: DonorRequestListing,
         header: MainNavbar,
         footer: MainFooter
       },
