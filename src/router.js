@@ -13,7 +13,7 @@ import ExploreListing from "./views/ExploreListing.vue";
 import MatchListing from "./views/MatchListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
-
+import Authentication from "./views/Authentication.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
@@ -75,6 +75,18 @@ let router = new Router({
       name: "signup",
       components: {
         default: SignUp,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/authentication",
+      name: "authentication",
+      components: {
+        default: Authentication,
         header: MainNavbar,
         footer: MainFooter
       },

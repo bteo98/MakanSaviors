@@ -123,7 +123,7 @@ export default {
             }
           })
           .then(() => {
-            this.$router.push("/createaccount");
+            this.$router.push("/authentication");
           })
           .catch(error => {
             this.errors.push(error);
