@@ -12,21 +12,17 @@
             />
             <div class="text">
               <small>Food Description:</small>
-              {{ description["name"] }}<br />
+              {{ description["foodName"] }}<br />
               <small>Donor Name:</small>
               {{
-                profile["firstName"].charAt(0).toUpperCase() +
-                  profile["firstName"].slice(1).toLowerCase() +
+                  firstName.charAt(0).toUpperCase() +
+                  firstName.slice(1).toLowerCase() +
                   " " +
-                  profile["lastName"].charAt(0).toUpperCase() +
-                  profile["lastName"].slice(1).toLowerCase()
+                  lastName.charAt(0).toUpperCase() +
+                  lastName.slice(1).toLowerCase()
               }}<br />
-              <small>Collection Location:</small>
-              {{ profile["address"] }}<br />
-              <small>Quantity Avaliable:</small>
-              {{ description["quantity"] }}<br />
-              <small>Expiry Date:</small>
-              {{ description["expiryDate"].toLocaleString("en-US") }}
+              <small>Time Requested:</small>
+              {{ description['timeRequested'] }}<br />
             </div>
           </div>
         </div>
@@ -43,24 +39,30 @@ export default {
   name: "explore-card",
   data() {
     return {
-      //UID: "Nt2ExgrXaCcEj9SCn82pVqfZw6S2",
-      //imgID: "lIO4s2eWOluIqeIMmQky",
       imgRef: "",
-      description: {},
-      profile: {},
-      expiryDate: "",
+      UID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
+      description: {
+        foodID: "r8MTer5iLadyXtjMCjCX",
+        foodName: "Cheese Baked Beans",
+        saviorID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
+        status: "pending",
+        timeRequested: "March 29, 8pm"
+      },
+      firstName: "",
+      lastName: "",
       responsive: false
     };
   },
-  props: {
+  /*props: {
     UID: { type: String },
     imgID: { type: String }
-  },
+  },*/
   methods: {
     fetchItems: function() {
+      // get image
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.UID + "/listingImages/" + this.imgID + ".jpg"
+        this.UID + "/donationImages/" + this.description.foodID
       );
 
       imgPath.getDownloadURL().then(url => {
@@ -70,34 +72,17 @@ export default {
 
       var database = firebase.firestore();
 
+      // get user info
       database
         .collection("users")
-        .doc(this.UID)
+        .doc(this.description.saviorID)
         .get()
         .then(items => {
-          var data = {};
-
-          for (let [key, val] of Object.entries(items.data())) {
-            data[key] = val;
-          }
-          this.profile = data;
-          console.log(this.profile);
-        });
-
-      database
-        .collection("imageData")
-        .doc(this.imgID)
-        .get()
-        .then(items => {
-          var data = {};
-
-          for (let [key, val] of Object.entries(items.data())) {
-            console.log(key + " " + val);
-            val = key == "expiryDate" ? new Date(val.toDate()) : val;
-            data[key] = val;
-          }
-          this.description = data;
-          console.log(this.description);
+          let data = items.data();
+          console.log(data);
+          this.firstName = data['firstName'];
+          this.lastName = data['lastName'];
+          console.log(this.lastName);
         });
     },
     onResponsiveInverted() {
@@ -131,7 +116,7 @@ img {
   min-width: 95px;
   width: 20% !important;
   float: left;
-  padding-top: 28px;
+  padding-top: 12px;
 }
 
 .text {
