@@ -25,6 +25,10 @@
               {{ description['timeRequested'] }}<br />
             </div>
           </div>
+          <md-button class="md-success first-button" v-on:click="accept" v-if="!clicked">Accept</md-button>
+          <md-button class="md-success" v-on:click="decline" v-if="!clicked">Decline</md-button>
+          <badge type="success first-button status" v-if="clicked && accepted">Accepted</badge>
+          <badge type="rose first-button status" v-if="clicked && !accepted">Declined</badge>
         </div>
       </div>
       <slot name="content"></slot>
@@ -34,14 +38,15 @@
 
 <script>
 import firebase from "../../firebase";
+import { Badge } from "@/components";
 
 export default {
   name: "explore-card",
   data() {
     return {
       imgRef: "",
-      UID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
       description: {
+        donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
         foodID: "r8MTer5iLadyXtjMCjCX",
         foodName: "Cheese Baked Beans",
         saviorID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
@@ -50,19 +55,25 @@ export default {
       },
       firstName: "",
       lastName: "",
+      clicked: false,
+      accepted: false,
       responsive: false
     };
   },
-  /*props: {
-    UID: { type: String },
-    imgID: { type: String }
-  },*/
+  props: {
+    donorID: {type: String},
+    foodID: {type: String},
+    foodName: {type: String},
+    saviorID: {type: String},
+    status: {type: String},
+    timeRequested: {type: String},
+  },
   methods: {
     fetchItems: function() {
       // get image
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.UID + "/donationImages/" + this.description.foodID
+        this.description.donorID + "/donationImages/" + this.description.foodID
       );
 
       imgPath.getDownloadURL().then(url => {
@@ -85,6 +96,37 @@ export default {
           console.log(this.lastName);
         });
     },
+    accept() {
+      var database = firebase.firestore();
+
+      let fieldName = this.description.foodID + ".status";
+
+      database.collection('donorRequest')
+        .doc(this.description.donorID)
+        .update({
+          [fieldName]: "true"
+        })
+        .then(() => {
+          this.clicked = true;
+          this.accepted = true;
+          console.log('Document status updated to true!');
+        });
+    },
+    decline() {
+      var database = firebase.firestore();
+
+      let fieldName = this.description.foodID + ".status";
+
+      database.collection('donorRequest')
+        .doc(this.description.donorID)
+        .update({
+          [fieldName]: "false"
+        })
+        .then(() => {
+          this.clicked = true;
+          console.log('Document status updated to false!');
+        });
+    },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
         this.responsive = true;
@@ -92,6 +134,9 @@ export default {
         this.responsive = false;
       }
     }
+  },
+  components: {
+    Badge
   },
   created() {
     this.fetchItems();
@@ -117,6 +162,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 12px;
+  margin-bottom: 37px;
 }
 
 .text {
@@ -129,5 +175,18 @@ img {
 #explore-card {
   max-width: 500px !important;
   min-width: 420px !important;
+}
+
+.status {
+  font-size: small;
+  padding: 8px 10px;
+}
+
+.md-success {
+  margin: 0 10px !important;
+}
+
+.first-button {
+  margin-left: 30px !important;
 }
 </style>
