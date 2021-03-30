@@ -25,10 +25,10 @@
               {{ data['timeRequested'] }}<br />
             </div>
           </div>
-          <md-button class="md-success first-button" v-on:click="accept" v-if="!clicked">Accept</md-button>
-          <md-button class="md-success" v-on:click="decline" v-if="!clicked">Decline</md-button>
-          <badge type="success first-button status" v-if="clicked && accepted">Accepted</badge>
-          <badge type="rose first-button status" v-if="clicked && !accepted">Declined</badge>
+          <md-button class="md-success first-button" v-on:click="accept" v-if="data.status == 'pending'">Accept</md-button>
+          <md-button class="md-success" v-on:click="decline" v-if="data.status == 'pending'">Decline</md-button>
+          <badge type="success first-button status" v-if="data.status == 'true'">Accepted</badge>
+          <badge type="rose first-button status" v-if="data.status == 'false'">Declined</badge>
         </div>
       </div>
       <slot name="content"></slot>
@@ -47,8 +47,6 @@ export default {
       imgRef: "",
       firstName: "",
       lastName: "",
-      clicked: false,
-      accepted: false,
       responsive: false
     };
   },
@@ -81,12 +79,6 @@ export default {
           this.lastName = item['lastName'];
         });
     },
-    updateStatus() {
-      if (this.data.status != 'pending') {
-        this.clicked = true;
-        this.accepted = this.data.status == 'true' ? true : false;
-      } 
-    },
     accept() {
       var database = firebase.firestore();
       let collect = 'donorRequest/' + this.data.donorID + '/foodDonated';
@@ -97,8 +89,6 @@ export default {
           status: "true"
         })
         .then(() => {
-          this.clicked = true;
-          this.accepted = true;
           console.log('Document status updated to true!');
         });
     },
@@ -112,7 +102,6 @@ export default {
           status: "false"
         })
         .then(() => {
-          this.clicked = true;
           console.log('Document status updated to false!');
         });
     },
@@ -129,7 +118,6 @@ export default {
   },
   created() {
     this.fetchItems();
-    this.updateStatus();
   },
   mounted() {
     this.onResponsiveInverted();
