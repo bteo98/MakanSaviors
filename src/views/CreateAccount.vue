@@ -238,7 +238,8 @@ export default {
 			reasonSave: null,
 			profile: require("@/assets/img/faces/unknown.jpg"),
 			file: null,
-			rating: null,
+			totalRatings: 0,
+			numRatings: 0,
 			joinDate: new Date(),
 		};
 	},
@@ -267,7 +268,8 @@ export default {
 					foodCategory: this.foodCategory,
 					reasonDonate: this.reasonDonate,
 					reasonSave: this.reasonSave,
-					rating: this.rating,
+					totalRatings: this.totalRatings,
+					numRatings: this.numRatings,
 					joinDate: this.joinDate,
 				})
 				.then(() => {
