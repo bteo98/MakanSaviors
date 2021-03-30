@@ -21,12 +21,11 @@ const store = new Vuex.Store({
   },
   getters: {
     isAuth(state) {
-      console.log(state.user);
       firebase.auth().onAuthStateChanged(function(user) {
         console.log(user);
         state.user = user;
       });
-      console.log(state.user);
+ 
       return state.user == null ? false : true;
     },
     user: state => state.user

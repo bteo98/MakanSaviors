@@ -6,13 +6,13 @@
           <div>
             <img
               v-bind:src="imgRef"
-              v-bind:alt="description['name']"
+              v-bind:alt="data['foodName']"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text">
               <small>Food Description:</small>
-              {{ description["foodName"] }}<br />
+              {{ data["foodName"] }}<br />
               <small>Donor Name:</small>
               {{
                   firstName.charAt(0).toUpperCase() +
@@ -22,7 +22,7 @@
                   lastName.slice(1).toLowerCase()
               }}<br />
               <small>Time Requested:</small>
-              {{ description['timeRequested'] }}<br />
+              {{ data['timeRequested'] }}<br />
             </div>
           </div>
           <md-button class="md-success first-button" v-on:click="accept" v-if="!clicked">Accept</md-button>
@@ -45,14 +45,6 @@ export default {
   data() {
     return {
       imgRef: "",
-      description: {
-        donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
-        foodID: "r8MTer5iLadyXtjMCjCX",
-        foodName: "Cheese Baked Beans",
-        saviorID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
-        status: "pending",
-        timeRequested: "March 29, 8pm"
-      },
       firstName: "",
       lastName: "",
       clicked: false,
@@ -61,24 +53,18 @@ export default {
     };
   },
   props: {
-    donorID: {type: String},
-    foodID: {type: String},
-    foodName: {type: String},
-    saviorID: {type: String},
-    status: {type: String},
-    timeRequested: {type: String},
+    data: {type: Object}
   },
   methods: {
     fetchItems: function() {
       // get image
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.description.donorID + "/donationImages/" + this.description.foodID
+        this.data.donorID + "/donationImages/" + this.data.foodID
       );
 
       imgPath.getDownloadURL().then(url => {
         this.imgRef = url;
-        console.log(url);
       });
 
       var database = firebase.firestore();
@@ -86,25 +72,29 @@ export default {
       // get user info
       database
         .collection("users")
-        .doc(this.description.saviorID)
+        .doc(this.data.saviorID)
         .get()
         .then(items => {
-          let data = items.data();
-          console.log(data);
-          this.firstName = data['firstName'];
-          this.lastName = data['lastName'];
-          console.log(this.lastName);
+          let item = items.data();
+
+          this.firstName = item['firstName'];
+          this.lastName = item['lastName'];
         });
+    },
+    updateStatus() {
+      if (this.data.status != 'pending') {
+        this.clicked = true;
+        this.accepted = this.data.status == 'true' ? true : false;
+      } 
     },
     accept() {
       var database = firebase.firestore();
+      let collect = 'donorRequest/' + this.data.donorID + '/foodDonated';
 
-      let fieldName = this.description.foodID + ".status";
-
-      database.collection('donorRequest')
-        .doc(this.description.donorID)
+      database.collection(collect)
+        .doc(this.data.foodID)
         .update({
-          [fieldName]: "true"
+          status: "true"
         })
         .then(() => {
           this.clicked = true;
@@ -114,13 +104,12 @@ export default {
     },
     decline() {
       var database = firebase.firestore();
-
-      let fieldName = this.description.foodID + ".status";
-
-      database.collection('donorRequest')
-        .doc(this.description.donorID)
+      let collect = 'donorRequest/' + this.data.donorID + '/foodDonated';
+ 
+      database.collection(collect)
+        .doc(this.data.foodID)
         .update({
-          [fieldName]: "false"
+          status: "false"
         })
         .then(() => {
           this.clicked = true;
@@ -140,6 +129,7 @@ export default {
   },
   created() {
     this.fetchItems();
+    this.updateStatus();
   },
   mounted() {
     this.onResponsiveInverted();
@@ -161,8 +151,7 @@ img {
   min-width: 95px;
   width: 20% !important;
   float: left;
-  padding-top: 12px;
-  margin-bottom: 37px;
+  padding-top: 45px;
 }
 
 .text {
@@ -174,7 +163,7 @@ img {
 
 #explore-card {
   max-width: 500px !important;
-  min-width: 420px !important;
+  min-width: 450px !important;
 }
 
 .status {
@@ -183,10 +172,10 @@ img {
 }
 
 .md-success {
-  margin: 0 10px !important;
+  margin: 0 5px !important;
 }
 
 .first-button {
-  margin-left: 30px !important;
+  margin-left: 125px !important;
 }
 </style>
