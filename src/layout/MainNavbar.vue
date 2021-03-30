@@ -8,7 +8,7 @@
     >
         <div class="md-toolbar-row md-collapse-lateral">
             <div class="md-toolbar-section-start">
-                <md-list-item href="#/landing" target="_self">
+                <md-list-item href="#/" target="_self">
                     <h3 class="md-title">MakanSaviour</h3>
                 </md-list-item>
             </div>
@@ -171,6 +171,14 @@
                                 <p>Sign Up</p>
                             </md-list-item>
                             <md-list-item
+                                href="#/donorrequestlisting"
+                                target="_self"
+                                v-if="this.$store.getters.isAuth"
+                            >
+                                <i class="material-icons">notifications</i>
+                                <p>Notification</p>
+                            </md-list-item>
+                            <md-list-item
                                 href="#/landing"
                                 target="_self"
                                 v-if="this.$store.getters.isAuth"
@@ -306,21 +314,30 @@ export default {
                         "donorRequest/" +
                         this.$store.getters.user.uid +
                         "/foodDonated";
-                    
+
                     db.collection(collect)
+                        .where("status", "==", "pending")
+                        .orderBy("timeRequested", "desc")
+                        .limit(4)
                         .onSnapshot((snapshot) => {
                             snapshot.docChanges().forEach((change) => {
                                 console.log(change.type);
+                                let data = change.doc.data();
+
                                 if (change.type === "added") {
-                                  let data = change.doc.data();
-                                  let saviorName = db.collection('users')
-                                                        .doc(data.saviorID)
-                                                        .get()
-                                                        .firstName;
-                                  console.log(saviorName);
-                                  let msg = saviorName + " has requested for your donation of " + data.foodName;
-                                  console.log(msg);
-                                  his.$toaster.success(msg);
+                                    db.collection("users")
+                                        .doc("XshMJZpnoCXwCXmj2mFvddMrEEm1")
+                                        .get()
+                                        .then((doc) => {
+                                            doc = doc.data();
+
+                                            let msg =
+                                                doc.firstName +
+                                                " has requested for your donation of " +
+                                                data.foodName;
+
+                                            this.$toaster.success(msg);
+                                        });
                                 }
                             });
                         });

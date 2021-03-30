@@ -36,7 +36,7 @@ let router = new Router({
       }
     },
     {
-      path: "/",
+      path: "/index",
       name: "index",
       components: {
         default: Index,
@@ -49,7 +49,7 @@ let router = new Router({
       }
     },
     {
-      path: "/landing",
+      path: "/",
       name: "landing",
       components: {
         default: Landing,
