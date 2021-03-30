@@ -242,7 +242,7 @@ export default {
   min-width: auto;
 }
 
-#carousel-background {
+.carousel-background {
   min-height: 380px !important;
   max-height: 425px !important;
 }

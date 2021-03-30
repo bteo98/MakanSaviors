@@ -78,33 +78,34 @@ export default {
                     this.processing = false;
                 });
         },
+        liveFetch: function() {
+            var db = firebase.firestore();
+            let collect = "donorRequest/" + this.user + "/foodDonated";
+
+            db.collection(collect)
+                .orderBy("timeRequested", "desc")
+                .onSnapshot((snapshot) => {
+                    this.collections = [];
+
+                    snapshot.forEach((doc) => {
+                        let data = {};
+                        data["foodID"] = doc.id;
+                        doc = doc.data();
+                        data["foodName"] = doc.foodName;
+                        data["saviorID"] = doc.saviorID;
+                        data["status"] = doc.status;
+                        data["timeRequested"] = new Date(
+                            doc.timeRequested.toDate().toLocaleString("en-US")
+                        );
+                        data["donorID"] = this.user;
+                        this.collections.push(data);
+                        console.log(this.collections);
+                    });
+                });
+        }
     },
     mounted() {
-        var self = this;
-        var db = firebase.firestore();
-        let collect = "donorRequest/" + this.user + "/foodDonated";
-        console.log("hi");
-
-        db.collection(collect)
-            .orderBy("timeRequested", "asc")
-            .onSnapshot((snapshot) => {
-                this.collections = [];
-
-                snapshot.forEach((doc) => {
-                    let data = {};
-                    data["foodID"] = doc.id;
-                    doc = doc.data();
-                    data["foodName"] = doc.foodName;
-                    data["saviorID"] = doc.saviorID;
-                    data["status"] = doc.status;
-                    data["timeRequested"] = new Date(
-                        doc.timeRequested.toDate().toLocaleString("en-US")
-                    );
-                    data["donorID"] = this.user;
-                    this.collections.push(data);
-                    console.log(this.collections);
-                });
-            });
+        this.liveFetch();
     },
     created() {
         this.fetchItems();
