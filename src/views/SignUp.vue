@@ -116,14 +116,15 @@ export default {
                 .collection("users")
                 .doc(user.user.uid)
                 .set({
-                  email: this.email
+                  email: this.email,
+                  UID: user.user.uid
                 });
             } catch (FirebaseAuthException) {
               this.errors.push(FirebaseAuthException);
             }
           })
           .then(() => {
-            this.$router.push("/authentication");
+            this.$router.push("/createaccount");
           })
           .catch(error => {
             this.errors.push(error);
