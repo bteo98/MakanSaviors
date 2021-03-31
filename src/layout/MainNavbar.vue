@@ -8,7 +8,7 @@
   >
     <div class="md-toolbar-row md-collapse-lateral">
       <div class="md-toolbar-section-start">
-        <md-list-item href="#/landing" target="_self">
+        <md-list-item href="#/" target="_self">
           <h3 class="md-title">MakanSaviour</h3>
         </md-list-item>
       </div>
@@ -148,7 +148,15 @@
                 <p>Sign Up</p>
               </md-list-item>
               <md-list-item
-                href="#/landing"
+                href="#/requestlisting"
+                target="_self"
+                v-if="this.$store.getters.isAuth"
+              >
+                <i class="material-icons">notifications</i>
+                <p>Notification</p>
+              </md-list-item>
+              <md-list-item
+                href="#/"
                 target="_self"
                 v-if="this.$store.getters.isAuth"
                 v-on:click="logout"
@@ -209,8 +217,7 @@ export default {
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false,
-      auth: false
+      toggledClass: false
     };
   },
   computed: {
@@ -275,10 +282,86 @@ export default {
         .catch(error => {
           console.log("ERROR Signing Out");
         });
+    },
+    notify() {
+      setTimeout(() => {
+        if (this.$store.getters.isAuth) {
+          var db = firebase.firestore();
+          console.log("notify");
+          this.donorNotify(db);
+          this.saviorNotify(db);
+        }
+      }, 2000);
+    },
+    donorNotify(db) {
+      let donorCollect =
+        "donorRequest/" + this.$store.getters.user.uid + "/foodDonated";
+
+      db.collection(donorCollect)
+        .where("status", "==", "pending")
+        .orderBy("timeRequested", "desc")
+        .limit(3)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            console.log(change.type);
+            let data = change.doc.data();
+
+            if (change.type === "added") {
+              db.collection("users")
+                .doc(data.saviorID)
+                .get()
+                .then(doc => {
+                  doc = doc.data();
+
+                  let msg =
+                    doc.firstName + " has requested for your " + data.foodName;
+
+                  this.$toaster.info(msg);
+                });
+            }
+          });
+        });
+    },
+    saviorNotify(db) {
+      let saviorCollect =
+        "donorRequest/" + this.$store.getters.user.uid + "/foodRequested";
+
+      db.collection(saviorCollect)
+        .orderBy("timeRequested", "desc")
+        .limit(3)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            console.log(change.type);
+            let data = change.doc.data();
+
+            if (change.type === "modified") {
+              db.collection("users")
+                .doc(data.donorID)
+                .get()
+                .then(doc => {
+                  doc = doc.data();
+
+                  let msg =
+                    doc.firstName +
+                    " has " +
+                    data.status +
+                    " your request for " +
+                    data.foodName;
+
+                  if (data.status === "accepted") {
+                    this.$toaster.success(msg);
+                  } else if (data.status === "declined") {
+                    this.$toaster.warning(msg);
+                  }
+                });
+            }
+          });
+        });
     }
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    this.notify();
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);

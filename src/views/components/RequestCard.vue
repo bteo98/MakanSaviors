@@ -6,29 +6,52 @@
           <div>
             <img
               v-bind:src="imgRef"
-              v-bind:alt="description['name']"
+              v-bind:alt="data['foodName']"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text">
               <small>Food Description:</small>
-              {{ description["foodName"] }}<br />
+              {{ data["foodName"] }}<br />
               <small>Donor Name:</small>
               {{
-                  firstName.charAt(0).toUpperCase() +
+                firstName.charAt(0).toUpperCase() +
                   firstName.slice(1).toLowerCase() +
                   " " +
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
               <small>Time Requested:</small>
-              {{ description['timeRequested'] }}<br />
+              {{ data["timeRequested"] }}<br />
             </div>
           </div>
-          <md-button class="md-success first-button" v-on:click="accept" v-if="!clicked">Accept</md-button>
-          <md-button class="md-success" v-on:click="decline" v-if="!clicked">Decline</md-button>
-          <badge type="success first-button status" v-if="clicked && accepted">Accepted</badge>
-          <badge type="rose first-button status" v-if="clicked && !accepted">Declined</badge>
+          <md-button
+            class="md-success first-button"
+            v-on:click="accept"
+            v-if="data.status == 'pending' && requestView == false"
+            >Accept</md-button
+          >
+          <md-button
+            class="md-success"
+            v-on:click="decline"
+            v-if="data.status == 'pending' && requestView == false"
+            >Decline</md-button
+          >
+          <badge
+            type="success first-button status"
+            v-if="data.status == 'accepted'"
+            >Accepted</badge
+          >
+          <badge
+            type="warning first-button status"
+            v-if="data.status == 'pending' && requestView == true"
+            >Pending</badge
+          >
+          <badge
+            type="rose first-button status"
+            v-if="data.status == 'declined'"
+            >Declined</badge
+          >
         </div>
       </div>
       <slot name="content"></slot>
@@ -45,40 +68,25 @@ export default {
   data() {
     return {
       imgRef: "",
-      description: {
-        donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
-        foodID: "r8MTer5iLadyXtjMCjCX",
-        foodName: "Cheese Baked Beans",
-        saviorID: "1XSR7CKQnQR92zI1FGf7ajhqWo13",
-        status: "pending",
-        timeRequested: "March 29, 8pm"
-      },
       firstName: "",
       lastName: "",
-      clicked: false,
-      accepted: false,
       responsive: false
     };
   },
   props: {
-    donorID: {type: String},
-    foodID: {type: String},
-    foodName: {type: String},
-    saviorID: {type: String},
-    status: {type: String},
-    timeRequested: {type: String},
+    data: { type: Object },
+    requestView: { type: Boolean }
   },
   methods: {
     fetchItems: function() {
       // get image
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.description.donorID + "/donationImages/" + this.description.foodID
+        this.data.donorID + "/donationImages/" + this.data.foodID
       );
 
       imgPath.getDownloadURL().then(url => {
         this.imgRef = url;
-        console.log(url);
       });
 
       var database = firebase.firestore();
@@ -86,45 +94,67 @@ export default {
       // get user info
       database
         .collection("users")
-        .doc(this.description.saviorID)
+        .doc(this.data.saviorID)
         .get()
         .then(items => {
-          let data = items.data();
-          console.log(data);
-          this.firstName = data['firstName'];
-          this.lastName = data['lastName'];
-          console.log(this.lastName);
+          let item = items.data();
+
+          this.firstName = item["firstName"];
+          this.lastName = item["lastName"];
         });
     },
     accept() {
       var database = firebase.firestore();
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
 
-      let fieldName = this.description.foodID + ".status";
-
-      database.collection('donorRequest')
-        .doc(this.description.donorID)
+      database
+        .collection(donorCollect)
+        .doc(this.data.foodID)
         .update({
-          [fieldName]: "true"
+          status: "accepted"
         })
         .then(() => {
-          this.clicked = true;
-          this.accepted = true;
-          console.log('Document status updated to true!');
+          console.log("Document status updated to true!");
+        });
+
+      let saviorCollect =
+        "donorRequest/" + this.data.donorID + "/foodRequested";
+
+      database
+        .collection(saviorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: "accepted"
+        })
+        .then(() => {
+          console.log("Document status updated to true!");
         });
     },
     decline() {
       var database = firebase.firestore();
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
 
-      let fieldName = this.description.foodID + ".status";
-
-      database.collection('donorRequest')
-        .doc(this.description.donorID)
+      database
+        .collection(donorCollect)
+        .doc(this.data.foodID)
         .update({
-          [fieldName]: "false"
+          status: "declined"
         })
         .then(() => {
-          this.clicked = true;
-          console.log('Document status updated to false!');
+          console.log("Document status updated to false!");
+        });
+
+      let saviorCollect =
+        "donorRequest/" + this.data.donorID + "/foodRequested";
+
+      database
+        .collection(saviorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: "declined"
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
         });
     },
     onResponsiveInverted() {
@@ -161,8 +191,7 @@ img {
   min-width: 95px;
   width: 20% !important;
   float: left;
-  padding-top: 12px;
-  margin-bottom: 37px;
+  padding-top: 45px;
 }
 
 .text {
@@ -174,7 +203,7 @@ img {
 
 #explore-card {
   max-width: 500px !important;
-  min-width: 420px !important;
+  min-width: 450px !important;
 }
 
 .status {
@@ -183,10 +212,10 @@ img {
 }
 
 .md-success {
-  margin: 0 10px !important;
+  margin: 0 5px !important;
 }
 
 .first-button {
-  margin-left: 30px !important;
+  margin-left: 125px !important;
 }
 </style>

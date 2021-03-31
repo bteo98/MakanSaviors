@@ -6,7 +6,8 @@
           <div
             class="md-layout-item md-size-33 md-small-size-66 md-xsmall-size-100 md-medium-size-40 mx-auto"
           >
-            <div id="recaptcha-container"></div><br>
+            <div id="recaptcha-container"></div>
+            <br />
             <login-card header-color="green">
               <h4 slot="title" class="card-title">
                 Account Authentication
@@ -80,7 +81,7 @@ export default {
     }
   },
   methods: {
-    sendCode: function() { 
+    sendCode: function() {
       if (this.phoneNumber.length != 8) {
         alert("Invalid Phone Number Format!");
       } else {
@@ -95,46 +96,52 @@ export default {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
-            alert("SMS sent")
+            alert("SMS sent");
           })
           .catch(error => {
-            alert("Error ! SMS not sent")
+            alert("Error ! SMS not sent");
           });
       }
     },
     verifyCode: function() {
-      if(this.phoneNumber.length != 8 || this.verificationCode.length != 6) {
+      if (this.phoneNumber.length != 8 || this.verificationCode.length != 6) {
         alert("Invalid Phone Number/OTP Format!");
       } else {
         let vm = this;
         let code = this.verificationCode;
-        window.confirmationResult.confirm(code).then(result => {
-          // User signed in successfully.
-          var user = result.user;
-          vm.$router.push({ path:"/createaccount" })
-        }).catch(error => {
+        window.confirmationResult
+          .confirm(code)
+          .then(result => {
+            // User signed in successfully.
+            var user = result.user;
+            vm.$router.push({ path: "/createaccount" });
+          })
+          .catch(error => {
             // User couldn't sign in (bad verification code?)
             // ...
-        });
+          });
       }
     },
     initReCaptcha: function() {
       setTimeout(() => {
         let vm = this;
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
-          "size": "invisible",
-          "callback": function(response) {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            // ...
-          },
-          "expired-callback": function() {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            // ...
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+          "recaptcha-container",
+          {
+            size: "invisible",
+            callback: function(response) {
+              // reCAPTCHA solved, allow signInWithPhoneNumber.
+              // ...
+            },
+            "expired-callback": function() {
+              // Response expired. Ask user to solve reCAPTCHA again.
+              // ...
+            }
           }
-        });
+        );
         //
-        this.appVerifier =  window.recaptchaVerifier
-      }, 1000)
+        this.appVerifier = window.recaptchaVerifier;
+      }, 1000);
     }
   },
   created() {

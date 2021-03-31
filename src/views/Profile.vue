@@ -22,11 +22,12 @@
                     {{ this.sentenceCase(this.firstName) }}
                     {{ this.sentenceCase(this.lastName) }}
                     <p>
-                      Rating:
+                      Rating: {{ this.avgRatings }} ({{ this.numRatings }}
+                      Reviews)
                       <br />
-                      Join Date:
+                      Join Date: {{ this.joinDate }}
                       <br />
-                      Region:
+                      Region: {{ this.preferredLocation }}
                     </p>
                   </h3>
                 </div>
@@ -46,8 +47,8 @@
           </div>
           <div class="profile-tabs">
             <tabs
-              :tab-name="['Listings', 'Requests', 'Reviews']"
-              :tab-icon="['camera', 'palette', 'favorite']"
+              :tab-name="['Reviews']"
+              :tab-icon="['favorite']"
               plain
               nav-pills-icons
               color-button="success"
@@ -62,32 +63,6 @@
                   <div class="md-layout-item md-size-25 mr-auto">
                     <img :src="tabPane1[3].image" class="rounded" />
                     <img :src="tabPane1[2].image" class="rounded" />
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-2">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane2[0].image" class="rounded" />
-                    <img :src="tabPane2[1].image" class="rounded" />
-                    <img :src="tabPane2[2].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane2[3].image" class="rounded" />
-                    <img :src="tabPane2[4].image" class="rounded" />
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-3">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane3[0].image" class="rounded" />
-                    <img :src="tabPane3[1].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane3[2].image" class="rounded" />
-                    <img :src="tabPane3[3].image" class="rounded" />
-                    <img :src="tabPane3[4].image" class="rounded" />
                   </div>
                 </div>
               </template>
@@ -117,20 +92,6 @@ export default {
         { image: require("@/assets/img/examples/studio-4.jpg") },
         { image: require("@/assets/img/examples/studio-5.jpg") }
       ],
-      tabPane2: [
-        { image: require("@/assets/img/examples/olu-eletu.jpg") },
-        { image: require("@/assets/img/examples/clem-onojeghuo.jpg") },
-        { image: require("@/assets/img/examples/cynthia-del-rio.jpg") },
-        { image: require("@/assets/img/examples/mariya-georgieva.jpg") },
-        { image: require("@/assets/img/examples/clem-onojegaw.jpg") }
-      ],
-      tabPane3: [
-        { image: require("@/assets/img/examples/mariya-georgieva.jpg") },
-        { image: require("@/assets/img/examples/studio-3.jpg") },
-        { image: require("@/assets/img/examples/clem-onojeghuo.jpg") },
-        { image: require("@/assets/img/examples/olu-eletu.jpg") },
-        { image: require("@/assets/img/examples/studio-1.jpg") }
-      ],
       //userName: null,
       UID: null,
       firstName: null,
@@ -142,7 +103,13 @@ export default {
       foodCategory: null,
       reasonDonate: null,
       reasonSave: null,
-      profilePic: require("@/assets/img/faces/unknown.jpg")
+      profilePic: require("@/assets/img/faces/unknown.jpg"),
+      preferredLocation: null,
+      joinDate: null,
+      rating: null,
+      totalRatings: null,
+      numRatings: null,
+      avgRatings: null
     };
   },
   props: {
@@ -165,7 +132,7 @@ export default {
       this.UID = firebase.auth().currentUser.uid;
     },
     getProfilePic: function() {
-      var storageRef = firebase.storage().ref("/profilePictures/" + this.UID);
+      var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
       storageRef.getDownloadURL().then(url => {
         this.profilePic = url;
       });
@@ -177,7 +144,6 @@ export default {
         .get()
         .then(doc => {
           var data = doc.data();
-          //this.userName = data.username;
           this.firstName = data.firstName;
           this.lastName = data.lastName;
           this.phoneNumber = data.phoneNumber;
@@ -187,10 +153,38 @@ export default {
           this.foodCategory = data.foodCategory;
           this.reasonDonate = data.reasonDonate;
           this.reasonSave = data.reasonSave;
+          var locArray = data.preferredLocation;
+          var locString = "";
+          for (let i = 0; i < locArray.length; i++) {
+            locString = locString + locArray[i] + "/ ";
+          }
+          this.preferredLocation = locString.substring(0, locString.length - 2);
+          this.totalRatings = data.totalRatings;
+          this.numRatings = data.numRatings;
+          this.joinDate = this.getDate(data.joinDate);
+          this.avgRatings = this.getAvgRatings(
+            this.totalRatings,
+            this.numRatings
+          );
         });
     },
     sentenceCase: function(word) {
-      return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+      if (word != null) {
+        return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+      }
+    },
+    getDate: function(joinDate) {
+      var milliseconds = joinDate.seconds * 1000;
+      var dateObj = new Date(milliseconds);
+      var date = dateObj.toLocaleDateString("en-GB");
+      return date;
+    },
+    getAvgRatings: function(total, num) {
+      if (num == 0) {
+        return "";
+      } else {
+        return (total / num).toFixed(1);
+      }
     }
   },
   created() {
