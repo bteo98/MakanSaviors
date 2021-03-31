@@ -25,6 +25,9 @@
 											Join Date: {{ this.joinDate }}
 											<br />
 											Region: {{ this.preferredLocation }}
+											<md-button class="md-success" v-on:click="test"
+												>test</md-button
+											>
 										</p>
 									</h3>
 								</div>
@@ -44,8 +47,8 @@
 					</div>
 					<div class="profile-tabs">
 						<tabs
-							:tab-name="['Reviews']"
-							:tab-icon="['favorite']"
+							:tab-name="['Donations', 'Requests', 'Reviews']"
+							:tab-icon="['camera', 'palette', 'favorite']"
 							plain
 							nav-pills-icons
 							color-button="success"
@@ -53,13 +56,36 @@
 							<!-- here you can add your content for tab-content -->
 							<template slot="tab-pane-1">
 								<div class="md-layout">
+									<div class="md-layout-item">
+										<div class="md-layout-item md-size-25 mx-auto text-center">
+											<img :src="this.donations[0].image" class="rounded" />
+										</div>
+									</div>
+								</div>
+							</template>
+							<template slot="tab-pane-2">
+								<div class="md-layout">
 									<div class="md-layout-item md-size-25 ml-auto">
-										<img :src="tabPane1[0].image" class="rounded" />
-										<img :src="tabPane1[1].image" class="rounded" />
+										<img :src="tabPane2[0].image" class="rounded" />
+										<img :src="tabPane2[1].image" class="rounded" />
+										<img :src="tabPane2[2].image" class="rounded" />
 									</div>
 									<div class="md-layout-item md-size-25 mr-auto">
-										<img :src="tabPane1[3].image" class="rounded" />
-										<img :src="tabPane1[2].image" class="rounded" />
+										<img :src="tabPane2[3].image" class="rounded" />
+										<img :src="tabPane2[4].image" class="rounded" />
+									</div>
+								</div>
+							</template>
+							<template slot="tab-pane-3">
+								<div class="md-layout">
+									<div class="md-layout-item md-size-25 ml-auto">
+										<img :src="tabPane3[0].image" class="rounded" />
+										<img :src="tabPane3[1].image" class="rounded" />
+									</div>
+									<div class="md-layout-item md-size-25 mr-auto">
+										<img :src="tabPane3[2].image" class="rounded" />
+										<img :src="tabPane3[3].image" class="rounded" />
+										<img :src="tabPane3[4].image" class="rounded" />
 									</div>
 								</div>
 							</template>
@@ -89,6 +115,20 @@ export default {
 				{image: require("@/assets/img/examples/studio-4.jpg")},
 				{image: require("@/assets/img/examples/studio-5.jpg")},
 			],
+			tabPane2: [
+				{image: require("@/assets/img/examples/olu-eletu.jpg")},
+				{image: require("@/assets/img/examples/clem-onojeghuo.jpg")},
+				{image: require("@/assets/img/examples/cynthia-del-rio.jpg")},
+				{image: require("@/assets/img/examples/mariya-georgieva.jpg")},
+				{image: require("@/assets/img/examples/clem-onojegaw.jpg")},
+			],
+			tabPane3: [
+				{image: require("@/assets/img/examples/mariya-georgieva.jpg")},
+				{image: require("@/assets/img/examples/studio-3.jpg")},
+				{image: require("@/assets/img/examples/clem-onojeghuo.jpg")},
+				{image: require("@/assets/img/examples/olu-eletu.jpg")},
+				{image: require("@/assets/img/examples/studio-1.jpg")},
+			],
 			//userName: null,
 			UID: null,
 			firstName: null,
@@ -107,6 +147,8 @@ export default {
 			totalRatings: null,
 			numRatings: null,
 			avgRatings: null,
+			imageIDs: [],
+			donations: [],
 		};
 	},
 	props: {
@@ -160,6 +202,7 @@ export default {
 					this.numRatings = data.numRatings;
 					this.joinDate = this.getDate(data.joinDate);
 					this.avgRatings = this.getAvgRatings(this.totalRatings, this.numRatings);
+					this.getImageIDs();
 				});
 		},
 		sentenceCase: function(word) {
@@ -179,6 +222,41 @@ export default {
 			} else {
 				return (total / num).toFixed(1);
 			}
+		},
+		getImageIDs: function() {
+			database
+				.collection("donationIDs")
+				.doc(this.UID)
+				.get()
+				.then((doc) => {
+					var data = doc.data();
+					this.imageIDs = data.imageIDs;
+					this.getDonationDetails();
+				});
+		},
+
+		getDonationDetails: function() {
+			for (let index = 0; index < this.imageIDs.length; index++) {
+				var donationDict = {};
+				var imageID = this.imageIDs[index];
+				donationDict["imageID"] = imageID;
+				var storageRef = firebase.storage().ref(this.UID + "/donationImages/" + imageID);
+				storageRef.getDownloadURL().then((url) => {
+					donationDict["image"] = url;
+				});
+				database
+					.collection("donationData")
+					.doc(imageID)
+					.get()
+					.then((doc) => {
+						var data = doc.data();
+						donationDict["details"] = data;
+						this.donations.push(donationDict);
+					});
+			}
+		},
+		test: function() {
+			console.log(this.donations);
 		},
 	},
 	created() {
