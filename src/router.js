@@ -14,8 +14,12 @@ import RequestListing from "./views/RequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import Authentication from "./views/Authentication.vue";
-
+<<<<<<< HEAD
 import DonorRequestCard from "./views/components/DonorRequestCard.vue";
+=======
+
+import RequestCard from "./views/components/RequestCard.vue";
+>>>>>>> dda672905922de0e7b408a4b3e118e4797c5f01e
 import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
@@ -26,7 +30,7 @@ let router = new Router({
       path: "/noticard",
       name: "noticard",
       components: {
-        default: DonorRequestCard,
+        default: RequestCard,
         header: MainNavbar,
         footer: MainFooter
       },

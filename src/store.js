@@ -25,7 +25,7 @@ const store = new Vuex.Store({
         console.log(user);
         state.user = user;
       });
- 
+
       return state.user == null ? false : true;
     },
     user: state => state.user

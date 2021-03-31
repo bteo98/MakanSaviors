@@ -2,8 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import Toaster from 'v-toaster'
-import 'v-toaster/dist/v-toaster.css'
+import Toaster from "v-toaster";
+import "v-toaster/dist/v-toaster.css";
 
 import MaterialKit from "./plugins/material-kit";
 
@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 
 Vue.use(MaterialKit);
 
-Vue.use(Toaster, {timeout: 4000})
+Vue.use(Toaster, { timeout: 4000 });
 
 Vue.config.productionTip = false;
 
