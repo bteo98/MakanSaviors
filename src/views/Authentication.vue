@@ -111,6 +111,9 @@ export default {
         window.confirmationResult.confirm(code).then(result => {
           // User signed in successfully.
           var user = result.user;
+          user.delete();
+          //console.log(user.uid);
+          //firebase.auth().deleteUser(user.uid);
           vm.$router.push({ path:"/createaccount" })
         }).catch(error => {
             // User couldn't sign in (bad verification code?)

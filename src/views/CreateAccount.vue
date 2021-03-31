@@ -78,17 +78,6 @@
 
                   <div class="md-layout-item md-size-50">
                     <md-field>
-                      <label>Phone Number</label>
-                      <md-input
-                        v-model="phoneNumber"
-                        type="number"
-                        required
-                      ></md-input>
-                    </md-field>
-                  </div>
-
-                  <div class="md-layout-item md-size-50">
-                    <md-field>
                       <label>Telegram Handle</label>
                       <md-input v-model="telegramHandle" type="text"></md-input>
                     </md-field>
@@ -105,6 +94,57 @@
                         <md-option value="West">West</md-option>
                       </md-select>
                     </md-field>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="recaptcha-container"></div><br>
+
+      <div class="section section-contacts">
+        <div class="container">
+          <div class="md-layout">
+            <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
+              <h2 class="text-center title">
+                Account Verification
+              </h2>
+              <p class="text-center"> 
+                In order to protect the security of your account, please add your phone number.
+                We will send you a text message with a verification code.
+              </p>
+              <form class="contact-form">
+                <div class="md-layout">
+                  <div class="md-layout-item md-size-50">
+                    <md-field>
+                      <label>Phone Number</label>
+                      <md-input
+                        v-model="phoneNumber"
+                        type="number"
+                        required
+                      ></md-input>
+                    </md-field>
+                  </div>
+                
+                  <div class="md-layout-item md-size-50">
+                    <md-field>
+                      <label>Verification Code</label>
+                      <md-input
+                        v-model="verificationCode"
+                        type="text"
+                        required
+                      ></md-input>
+                    </md-field>
+                  </div>
+                </div>
+
+                <div class="md-layout">
+                  <div class="md-layout-item md-size-33 mx-auto text-center">
+                    <md-button class="md-success" v-on:click="sendCode"
+                      >Send Verification Code</md-button
+                    >
                   </div>
                 </div>
               </form>
@@ -185,7 +225,7 @@
 
                 <div class="md-layout">
                   <div class="md-layout-item md-size-33 mx-auto text-center">
-                    <md-button class="md-success" v-on:click="addUserData"
+                    <md-button class="md-success" v-on:click="verifyCode"
                       >Create Account</md-button
                     >
                   </div>
@@ -224,7 +264,9 @@ export default {
       reasonDonate: null,
       reasonSave: null,
       profile: require("@/assets/img/faces/unknown.jpg"),
-      file: null
+      file: null,
+      verificationCode: null,
+      appVerifier: ""
     };
   },
   computed: {
@@ -237,8 +279,9 @@ export default {
   methods: {
     getUID: function() {
       this.UID = firebase.auth().currentUser.uid;
+      console.log(this.UID)
     },
-    addUserData: function() {
+    /*addUserData: function() {
       database
         .collection("users")
         .doc(this.UID)
@@ -258,7 +301,7 @@ export default {
           this.pushProfilePic();
           this.$router.push("/landing");
         });
-    },
+    },*/
     // when file changes, create image on site
     onFileChange: function(e) {
       this.file = e.target.files[0];
@@ -280,10 +323,88 @@ export default {
         .set({
           imageIDs: []
         });
+    },
+    sendCode: function() { 
+      if (this.phoneNumber.length != 8) {
+        alert("Invalid Phone Number Format!");
+      } else {
+        let countryCode = "+65"; //Singapore
+        let phoneNumber = countryCode + this.phoneNumber;
+        let appVerifier = this.appVerifier;
+
+        firebase
+          .auth()
+          .signInWithPhoneNumber(phoneNumber, appVerifier)
+          .then(confirmationResult => {
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            window.confirmationResult = confirmationResult;
+            alert("SMS sent")
+          })
+          .catch(error => {
+            alert("Error ! SMS not sent")
+          });
+      }
+    },
+    verifyCode: function() {
+      if(this.phoneNumber.length != 8 || this.verificationCode.length != 6) {
+        alert("Invalid Phone Number/OTP Format!");
+      } else {
+        let vm = this;
+        let code = this.verificationCode;
+        window.confirmationResult.confirm(code).then(result => {
+          // User signed in successfully.
+          var user = result.user;
+          user.delete();
+          //console.log(user.uid);
+          //firebase.auth().deleteUser(user.uid);
+          //vm.$router.push({ path:"/createaccount" })
+          database
+          .collection("users")
+          .doc(this.UID)
+          .update({
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNumber: this.phoneNumber,
+            telegramHandle: this.telegramHandle,
+            preferredLocation: this.preferredLocation,
+            dietaryRestrictions: this.dietaryRestrictions,
+            foodCategory: this.foodCategory,
+            reasonDonate: this.reasonDonate,
+            reasonSave: this.reasonSave
+          })
+          .then(() => {
+            this.createIDCollection();
+            this.pushProfilePic();
+            this.$router.push("/landing");
+          });
+        }).catch(error => {
+            alert("Wrong verification code!")
+        });
+      }
+    },
+    initReCaptcha: function() {
+      setTimeout(() => {
+        let vm = this;
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
+          "size": "invisible",
+          "callback": function(response) {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            // ...
+          },
+          "expired-callback": function() {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            // ...
+          }
+        });
+        //
+        this.appVerifier =  window.recaptchaVerifier
+      }, 1000)
     }
   },
   created() {
     this.getUID();
+    this.initReCaptcha();
   }
 };
 </script>
