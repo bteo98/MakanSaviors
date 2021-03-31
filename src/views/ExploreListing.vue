@@ -2,13 +2,26 @@
   <div class="wrapper">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised">
+    <div class="filterPanel">
+      <strong>Filter By</strong>
+      <div>
+        <p>Location</p>
+        <div class="flex-column">
+            <md-checkbox value="East" v-model="checkedBox">East</md-checkbox> <span>
+            <md-checkbox value="North" v-model="checkedBox">North</md-checkbox> </span><br>
+            <md-checkbox value="South" v-model="checkedBox">South</md-checkbox> <span>
+            <md-checkbox value="West" v-model="checkedBox">West</md-checkbox> </span><br>
+            <md-checkbox value="Central" v-model="checkedBox">Central</md-checkbox>
+        </div>
+      </div>
+    </div>
       <div class="section">
         <div class="container">
           <div class="md-layout">
             <div class="md-layout-item">
               <div class="vertical-center header">
                 <md-button class="md-success" style="margin-top: 17px;"
-                  >Create Listing</md-button
+                  ><router-link to="/CreateListing" exact> Create Listing</router-link></md-button
                 >
                 <div
                   class="md-list"
@@ -76,12 +89,14 @@
                     v-for="(imageIDs, UID, index) in collections"
                     :key="index"
                   >
+                  
                     <div
                       class="md-layout"
                       v-for="(imageID, index) in imageIDs"
                       :key="index"
                       style="padding-right: 5%;"
                     >
+
                       <ExploreCard
                         class="md-layout-item donoarcard"
                         :UID="UID"
@@ -96,7 +111,7 @@
           <br /><br /><br />
         </div>
       </div>
-    </div>
+  </div>
   </div>
 </template>
 
@@ -110,8 +125,12 @@ export default {
     return {
       collections: {},
       header: require("@/assets/img/city-profile.jpg"),
-      processing: true
+      processing: true,
     };
+  },
+  props: {
+    checkedBox: String
+
   },
   components: {
     ExploreCard
@@ -126,9 +145,25 @@ export default {
   methods: {
     fetchItems: function() {
       var database = firebase.firestore();
+      /*
+      const loc = db.collection('donationIDs');
+      const snapshot = await loc.where('collectionLocation' == 'North').get();
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      }  
 
+      snapshot.forEach(doc => {
+        for (let [name, list] of Object.entries(doc.data())) {
+          console.log(doc.id+ '=>'+ list);
+          this.collections[doc.id] = list;
+        }
+      });
+      this.processing = false;
+  }},
+*/
       database
-        .collection("donorImageIDs")
+        .collection("donationIDs")
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
@@ -141,6 +176,9 @@ export default {
         });
     }
   },
+
+
+
   created() {
     this.fetchItems();
   }

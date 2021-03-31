@@ -4,15 +4,16 @@
       <div class="md-layout">
         <div class="md-layout-item">
           <div>
+
             <img
-              v-bind:src="imgRef"
-              v-bind:alt="description['name']"
+              v-bind:src="this.imgRef"
+              v-bind:alt="description['listingName']"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text">
               <small>Food Description:</small>
-              {{ description["name"] }}<br />
+              {{ description["listingName"] }}<br />
               <small>Donor Name:</small>
               {{
                 profile["firstName"].charAt(0).toUpperCase() +
@@ -22,11 +23,15 @@
                   profile["lastName"].slice(1).toLowerCase()
               }}<br />
               <small>Collection Location:</small>
-              {{ profile["address"] }}<br />
+            
+                <div v-for="(loc, index) in description.collectionLocation" :key="index">
+                  {{loc}}  
+                </div>           
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
               <small>Expiry Date:</small>
-              {{ description["expiryDate"].toLocaleString("en-US") }}
+              {{ description["expiry"].toLocaleString("en-US") }}
+              {{test}}
             </div>
           </div>
         </div>
@@ -49,18 +54,20 @@ export default {
       description: {},
       profile: {},
       expiryDate: "",
-      responsive: false
+      responsive: false,
+      test: {}
     };
   },
   props: {
     UID: { type: String },
-    imgID: { type: String }
+    imgID: { type: String },
+    filter: { type: Array}
   },
   methods: {
     fetchItems: function() {
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.UID + "/listingImages/" + this.imgID + ".jpg"
+        this.UID + "/donationImages/" + this.imgID + ".jpg"
       );
 
       imgPath.getDownloadURL().then(url => {
@@ -76,7 +83,6 @@ export default {
         .get()
         .then(items => {
           var data = {};
-
           for (let [key, val] of Object.entries(items.data())) {
             data[key] = val;
           }
@@ -85,20 +91,36 @@ export default {
         });
 
       database
-        .collection("imageData")
+        .collection("donationData")
         .doc(this.imgID)
         .get()
         .then(items => {
           var data = {};
-
           for (let [key, val] of Object.entries(items.data())) {
+
             console.log(key + " " + val);
-            val = key == "expiryDate" ? new Date(val.toDate()) : val;
+            //eval = key == "expiry" ? new Date(val.toDate()) : val;
             data[key] = val;
           }
           this.description = data;
           console.log(this.description);
         });
+
+        database.collection("donationData").doc().where("collectionLocation", "array-contains", "Central")
+        .get()
+        .then((querySnapshot) => {
+          var data = {};
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            data = doc()
+        });
+        this.test = data;
+        console.log(this.test);
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -106,7 +128,7 @@ export default {
       } else {
         this.responsive = false;
       }
-    }
+    },
   },
   created() {
     this.fetchItems();
