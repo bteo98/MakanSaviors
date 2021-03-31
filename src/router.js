@@ -14,7 +14,6 @@ import DonorRequestListing from "./views/DonorRequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import Authentication from "./views/Authentication.vue";
-import Filter from "./views/components/Filter.vue";
 import DonorRequestCard from "./views/components/DonorRequestCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
@@ -173,13 +172,6 @@ let router = new Router({
       props: {
         header: { colorOnScroll: 5 },
         footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/filter",
-      name: "filter",
-      components: {
-        default: Filter
       }
     },
     {
