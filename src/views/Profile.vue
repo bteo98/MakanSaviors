@@ -25,9 +25,6 @@
 											Join Date: {{ this.joinDate }}
 											<br />
 											Region: {{ this.preferredLocation }}
-											<md-button class="md-success" v-on:click="test"
-												>test</md-button
-											>
 										</p>
 									</h3>
 								</div>
