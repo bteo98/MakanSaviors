@@ -1,0 +1,179 @@
+<template>
+  <div class="wrapper">
+    <parallax class="section header-filter" :style="headerStyle"> </parallax>
+    <div class="main main-raised">
+      <div class="section">
+        <div class="container">
+          <div class="md-layout">
+            <div class="md-layout-item">
+              <div class="title">
+                <h3>Request</h3>
+              </div>
+              <div class="md-layout">
+                <div class="md-layout-item md-small-size-100">
+                  <tabs
+                    :tab-name="['Donor', 'Savior']"
+                    :tab-icon="['dashboard', 'schedule']"
+                    plain
+                    flex-column
+                    nav-pills-icons
+                    color-button="success"
+                  >
+                    <!-- here you can add your content for tab-content -->
+                    <template slot="tab-pane-1">
+                      <div>
+                        <ul v-if="!processing" id="itemsList">
+                          <li
+                            class="md-layout"
+                            v-for="(item, index) in donorCollections"
+                            :key="index"
+                          >
+                            <div class="md-layout" style="padding-right: 5%;">
+                              <RequestCard
+                                class="md-layout-item requestcard"
+                                :data="item"
+                                :requestView="false"
+                              ></RequestCard>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+                    <template slot="tab-pane-2">
+                      <div>
+                        <ul v-if="!processing" id="itemsList">
+                          <li
+                            class="md-layout"
+                            v-for="(item, index) in requestCollections"
+                            :key="index"
+                          >
+                            <div class="md-layout" style="padding-right: 5%;">
+                              <RequestCard
+                                class="md-layout-item requestcard"
+                                :data="item"
+                                :requestView="true"
+                              ></RequestCard>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
+                  </tabs>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br /><br /><br />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import firebase from "../firebase.js";
+import RequestCard from "./components/RequestCard";
+import { Tabs } from "@/components";
+
+export default {
+  bodyClass: "quiz-lifestage-page",
+  data() {
+    return {
+      donorCollections: [],
+      requestCollections: [],
+      processing: true,
+      header: require("@/assets/img/city-profile.jpg"),
+      user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
+    };
+  },
+  components: {
+    RequestCard,
+    Tabs
+  },
+  computed: {
+    headerStyle() {
+      return {
+        backgroundImage: `url(${this.header})`
+      };
+    }
+  },
+  methods: {
+    donorLiveFetch: function() {
+      var db = firebase.firestore();
+      let collect = "donorRequest/" + this.user + "/foodDonated";
+
+      db.collection(collect)
+        .orderBy("timeRequested", "desc")
+        .onSnapshot(snapshot => {
+          this.donorCollections = [];
+
+          snapshot.forEach(doc => {
+            let data = {};
+            data["foodID"] = doc.id;
+            doc = doc.data();
+            data["foodName"] = doc.foodName;
+            data["saviorID"] = doc.saviorID;
+            data["status"] = doc.status;
+            data["timeRequested"] = new Date(
+              doc.timeRequested.toDate().toLocaleString("en-US")
+            );
+            data["donorID"] = this.user;
+            this.donorCollections.push(data);
+            console.log(this.donorCollections);
+          });
+          this.processing = false;
+        });
+    },
+    requestLiveFetch: function() {
+      var db = firebase.firestore();
+      let collect = "donorRequest/" + this.user + "/foodRequested";
+
+      db.collection(collect)
+        .orderBy("timeRequested", "desc")
+        .onSnapshot(snapshot => {
+          this.requestCollections = [];
+
+          snapshot.forEach(doc => {
+            let data = {};
+            data["foodID"] = doc.id;
+            console.log(doc.id);
+            doc = doc.data();
+            data["foodName"] = doc.foodName;
+            data["saviorID"] = this.user;
+            data["status"] = doc.status;
+            data["timeRequested"] = new Date(
+              doc.timeRequested.toDate().toLocaleString("en-US")
+            );
+            data["donorID"] = doc.donorID;
+            this.requestCollections.push(data);
+            console.log(this.requestCollections);
+          });
+          this.processing = false;
+        });
+    }
+  },
+  mounted() {
+    this.donorLiveFetch();
+    this.requestLiveFetch();
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+requestcard {
+  padding: 500px 500px !important;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  flex-grow: 1;
+  flex-basis: 300px;
+  padding: 10px;
+  margin: 10px;
+}
+</style>

@@ -266,7 +266,10 @@ export default {
       profile: require("@/assets/img/faces/unknown.jpg"),
       file: null,
       verificationCode: null,
-      appVerifier: ""
+      appVerifier: "",
+      totalRatings: 0,
+      numRatings: 0,
+      joinDate: new Date()
     };
   },
   computed: {
@@ -294,7 +297,10 @@ export default {
           dietaryRestrictions: this.dietaryRestrictions,
           foodCategory: this.foodCategory,
           reasonDonate: this.reasonDonate,
-          reasonSave: this.reasonSave
+          reasonSave: this.reasonSave,
+          totalRatings: this.totalRatings,
+          numRatings: this.numRatings,
+          joinDate: this.joinDate
         })
         .then(() => {
           this.createIDCollection();

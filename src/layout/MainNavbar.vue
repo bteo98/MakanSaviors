@@ -8,7 +8,7 @@
   >
     <div class="md-toolbar-row md-collapse-lateral">
       <div class="md-toolbar-section-start">
-        <md-list-item href="#/landing" target="_self">
+        <md-list-item href="#/" target="_self">
           <h3 class="md-title">MakanSaviour</h3>
         </md-list-item>
       </div>
@@ -148,6 +148,14 @@
                 <p>Sign Up</p>
               </md-list-item>
               <md-list-item
+                href="#/requestlisting"
+                target="_self"
+                v-if="this.$store.getters.isAuth"
+              >
+                <i class="material-icons">notifications</i>
+                <p>Notification</p>
+              </md-list-item>
+              <md-list-item
                 href="#/landing"
                 target="_self"
                 v-if="this.$store.getters.isAuth"
@@ -209,8 +217,7 @@ export default {
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false,
-      auth: false
+      toggledClass: false
     };
   },
   computed: {
@@ -275,10 +282,47 @@ export default {
         .catch(error => {
           console.log("ERROR Signing Out");
         });
+    },
+    notify() {
+      setTimeout(() => {
+        if (this.$store.getters.isAuth) {
+          var db = firebase.firestore();
+          let collect =
+            "donorRequest/" + this.$store.getters.user.uid + "/foodDonated";
+
+          db.collection(collect)
+            .where("status", "==", "pending")
+            .orderBy("timeRequested", "desc")
+            .limit(4)
+            .onSnapshot(snapshot => {
+              snapshot.docChanges().forEach(change => {
+                console.log(change.type);
+                let data = change.doc.data();
+
+                if (change.type === "added") {
+                  db.collection("users")
+                    .doc("XshMJZpnoCXwCXmj2mFvddMrEEm1")
+                    .get()
+                    .then(doc => {
+                      doc = doc.data();
+
+                      let msg =
+                        doc.firstName +
+                        " has requested for your donation of " +
+                        data.foodName;
+
+                      this.$toaster.success(msg);
+                    });
+                }
+              });
+            });
+        }
+      }, 2000);
     }
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    this.notify();
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
