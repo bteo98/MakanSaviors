@@ -15,20 +15,43 @@
               {{ data["foodName"] }}<br />
               <small>Donor Name:</small>
               {{
-                  firstName.charAt(0).toUpperCase() +
+                firstName.charAt(0).toUpperCase() +
                   firstName.slice(1).toLowerCase() +
                   " " +
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
               <small>Time Requested:</small>
-              {{ data['timeRequested'] }}<br />
+              {{ data["timeRequested"] }}<br />
             </div>
           </div>
-          <md-button class="md-success first-button" v-on:click="accept" v-if="data.status == 'pending'">Accept</md-button>
-          <md-button class="md-success" v-on:click="decline" v-if="data.status == 'pending'">Decline</md-button>
-          <badge type="success first-button status" v-if="data.status == 'true'">Accepted</badge>
-          <badge type="rose first-button status" v-if="data.status == 'false'">Declined</badge>
+          <md-button
+            class="md-success first-button"
+            v-on:click="accept"
+            v-if="data.status == 'pending' && requestView == false"
+            >Accept</md-button
+          >
+          <md-button
+            class="md-success"
+            v-on:click="decline"
+            v-if="data.status == 'pending' && requestView == false"
+            >Decline</md-button
+          >
+          <badge
+            type="success first-button status"
+            v-if="data.status == 'accepted'"
+            >Accepted</badge
+          >
+          <badge
+            type="warning first-button status"
+            v-if="data.status == 'pending' && requestView == true"
+            >Pending</badge
+          >
+          <badge
+            type="rose first-button status"
+            v-if="data.status == 'declined'"
+            >Declined</badge
+          >
         </div>
       </div>
       <slot name="content"></slot>
@@ -51,7 +74,8 @@ export default {
     };
   },
   props: {
-    data: {type: Object}
+    data: { type: Object },
+    requestView: { type: Boolean }
   },
   methods: {
     fetchItems: function() {
@@ -75,34 +99,62 @@ export default {
         .then(items => {
           let item = items.data();
 
-          this.firstName = item['firstName'];
-          this.lastName = item['lastName'];
+          this.firstName = item["firstName"];
+          this.lastName = item["lastName"];
         });
     },
     accept() {
       var database = firebase.firestore();
-      let collect = 'donorRequest/' + this.data.donorID + '/foodDonated';
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
 
-      database.collection(collect)
+      database
+        .collection(donorCollect)
         .doc(this.data.foodID)
         .update({
-          status: "true"
+          status: "accepted"
         })
         .then(() => {
-          console.log('Document status updated to true!');
+          console.log("Document status updated to true!");
+        });
+
+      let saviorCollect =
+        "donorRequest/" + this.data.donorID + "/foodRequested";
+
+      database
+        .collection(saviorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: "accepted"
+        })
+        .then(() => {
+          console.log("Document status updated to true!");
         });
     },
     decline() {
       var database = firebase.firestore();
-      let collect = 'donorRequest/' + this.data.donorID + '/foodDonated';
- 
-      database.collection(collect)
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
+
+      database
+        .collection(donorCollect)
         .doc(this.data.foodID)
         .update({
-          status: "false"
+          status: "declined"
         })
         .then(() => {
-          console.log('Document status updated to false!');
+          console.log("Document status updated to false!");
+        });
+
+      let saviorCollect =
+        "donorRequest/" + this.data.donorID + "/foodRequested";
+
+      database
+        .collection(saviorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: "declined"
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
         });
     },
     onResponsiveInverted() {

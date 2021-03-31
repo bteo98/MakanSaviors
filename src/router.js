@@ -15,7 +15,7 @@ import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import Authentication from "./views/Authentication.vue";
 
-import DonorRequestCard from "./views/components/DonorRequestCard.vue";
+import RequestCard from "./views/components/RequestCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
@@ -26,7 +26,7 @@ let router = new Router({
       path: "/noticard",
       name: "noticard",
       components: {
-        default: DonorRequestCard,
+        default: RequestCard,
         header: MainNavbar,
         footer: MainFooter
       },
