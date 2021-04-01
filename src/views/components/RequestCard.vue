@@ -27,13 +27,13 @@
           </div>
           <md-button
             class="md-success first-button"
-            v-on:click="accept"
+            v-on:click="updateStatus('accepted')"
             v-if="data.status == 'pending' && requestView == false"
             >Accept</md-button
           >
           <md-button
             class="md-success"
-            v-on:click="decline"
+            v-on:click="updateStatus('declined')"
             v-if="data.status == 'pending' && requestView == false"
             >Decline</md-button
           >
@@ -54,7 +54,6 @@
           >
         </div>
       </div>
-      <slot name="content"></slot>
     </md-card-content>
   </md-card>
 </template>
@@ -103,58 +102,40 @@ export default {
           this.lastName = item["lastName"];
         });
     },
-    accept() {
+    updateStatus(statusMsg) {
       var database = firebase.firestore();
       let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
+      let saviorCollect =
+        "donorRequest/" + this.data.donorID + "/foodRequested";
 
       database
         .collection(donorCollect)
         .doc(this.data.foodID)
         .update({
-          status: "accepted"
-        })
-        .then(() => {
-          console.log("Document status updated to true!");
-        });
-
-      let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
-
-      database
-        .collection(saviorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: "accepted"
-        })
-        .then(() => {
-          console.log("Document status updated to true!");
-        });
-    },
-    decline() {
-      var database = firebase.firestore();
-      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
-
-      database
-        .collection(donorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: "declined"
+          status: statusMsg
         })
         .then(() => {
           console.log("Document status updated to false!");
         });
 
-      let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
-
       database
         .collection(saviorCollect)
         .doc(this.data.foodID)
         .update({
-          status: "declined"
+          status: statusMsg
         })
         .then(() => {
           console.log("Document status updated to false!");
+        });
+
+      database
+        .collection("donationData")
+        .doc(this.data.foodID)
+        .update({
+          status: "Unavailable"
+        })
+        .then(() => {
+          console.log("Document status updated to unavailable!");
         });
     },
     onResponsiveInverted() {

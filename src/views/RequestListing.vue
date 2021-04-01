@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" style="min-width: 840px;">
+  <div class="wrapper" style="min-width: 875px;">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised" style="min-width: 820px;">
       <div class="section">

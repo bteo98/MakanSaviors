@@ -102,7 +102,8 @@
         </div>
       </div>
 
-      <div id="recaptcha-container"></div><br>
+      <div id="recaptcha-container"></div>
+      <br />
 
       <div class="section section-contacts">
         <div class="container">
@@ -111,9 +112,10 @@
               <h2 class="text-center title">
                 Account Verification
               </h2>
-              <p class="text-center"> 
-                In order to protect the security of your account, please add your phone number.
-                We will send you a text message with a verification code.
+              <p class="text-center">
+                In order to protect the security of your account, please add
+                your phone number. We will send you a text message with a
+                verification code.
               </p>
               <form class="contact-form">
                 <div class="md-layout">
@@ -127,7 +129,7 @@
                       ></md-input>
                     </md-field>
                   </div>
-                
+
                   <div class="md-layout-item md-size-50">
                     <md-field>
                       <label>Verification Code</label>
@@ -282,7 +284,7 @@ export default {
   methods: {
     getUID: function() {
       this.UID = firebase.auth().currentUser.uid;
-      console.log(this.UID)
+      console.log(this.UID);
     },
     /*addUserData: function() {
       database
@@ -330,7 +332,7 @@ export default {
           imageIDs: []
         });
     },
-    sendCode: function() { 
+    sendCode: function() {
       if (this.phoneNumber.length != 8) {
         alert("Invalid Phone Number Format!");
       } else {
@@ -345,67 +347,73 @@ export default {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
-            alert("SMS sent")
+            alert("SMS sent");
           })
           .catch(error => {
-            alert("Error ! SMS not sent")
+            alert("Error ! SMS not sent");
           });
       }
     },
     verifyCode: function() {
-      if(this.phoneNumber.length != 8 || this.verificationCode.length != 6) {
+      if (this.phoneNumber.length != 8 || this.verificationCode.length != 6) {
         alert("Invalid Phone Number/OTP Format!");
       } else {
         let vm = this;
         let code = this.verificationCode;
-        window.confirmationResult.confirm(code).then(result => {
-          // User signed in successfully.
-          var user = result.user;
-          user.delete();
-          //console.log(user.uid);
-          //firebase.auth().deleteUser(user.uid);
-          //vm.$router.push({ path:"/createaccount" })
-          database
-          .collection("users")
-          .doc(this.UID)
-          .update({
-            firstName: this.firstName,
-            lastName: this.lastName,
-            phoneNumber: this.phoneNumber,
-            telegramHandle: this.telegramHandle,
-            preferredLocation: this.preferredLocation,
-            dietaryRestrictions: this.dietaryRestrictions,
-            foodCategory: this.foodCategory,
-            reasonDonate: this.reasonDonate,
-            reasonSave: this.reasonSave
+        window.confirmationResult
+          .confirm(code)
+          .then(result => {
+            // User signed in successfully.
+            var user = result.user;
+            user.delete();
+            //console.log(user.uid);
+            //firebase.auth().deleteUser(user.uid);
+            //vm.$router.push({ path:"/createaccount" })
+            database
+              .collection("users")
+              .doc(this.UID)
+              .update({
+                firstName: this.firstName,
+                lastName: this.lastName,
+                phoneNumber: this.phoneNumber,
+                telegramHandle: this.telegramHandle,
+                preferredLocation: this.preferredLocation,
+                dietaryRestrictions: this.dietaryRestrictions,
+                foodCategory: this.foodCategory,
+                reasonDonate: this.reasonDonate,
+                reasonSave: this.reasonSave
+              })
+              .then(() => {
+                this.createIDCollection();
+                this.pushProfilePic();
+                this.$router.push("/landing");
+              });
           })
-          .then(() => {
-            this.createIDCollection();
-            this.pushProfilePic();
-            this.$router.push("/landing");
+          .catch(error => {
+            alert("Wrong verification code!");
           });
-        }).catch(error => {
-            alert("Wrong verification code!")
-        });
       }
     },
     initReCaptcha: function() {
       setTimeout(() => {
         let vm = this;
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
-          "size": "invisible",
-          "callback": function(response) {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            // ...
-          },
-          "expired-callback": function() {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            // ...
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+          "recaptcha-container",
+          {
+            size: "invisible",
+            callback: function(response) {
+              // reCAPTCHA solved, allow signInWithPhoneNumber.
+              // ...
+            },
+            "expired-callback": function() {
+              // Response expired. Ask user to solve reCAPTCHA again.
+              // ...
+            }
           }
-        });
+        );
         //
-        this.appVerifier =  window.recaptchaVerifier
-      }, 1000)
+        this.appVerifier = window.recaptchaVerifier;
+      }, 1000);
     }
   },
   created() {

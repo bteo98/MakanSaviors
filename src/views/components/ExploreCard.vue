@@ -22,16 +22,19 @@
                   profile["lastName"].slice(1).toLowerCase()
               }}<br />
               <small>Collection Location:</small>
-            
-                <div v-for="(loc, index) in description.collectionLocation" :key="index">
-                  {{loc}}  
-                </div>           
+
+              <div
+                v-for="(loc, index) in description.collectionLocation"
+                :key="index"
+              >
+                {{ loc }}
+              </div>
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
               <small>Expiry Date:</small>
               {{ description["expiry"].toLocaleString("en-US") }}
 
-              {{this.test}}
+              {{ this.test }}
             </div>
           </div>
         </div>
@@ -66,9 +69,7 @@ export default {
   methods: {
     fetchItems: function() {
       var storage = firebase.storage();
-      let imgPath = storage.ref(
-        this.UID + "/donationImages/" + this.imgID
-      );
+      let imgPath = storage.ref(this.UID + "/donationImages/" + this.imgID);
 
       imgPath.getDownloadURL().then(url => {
         this.imgRef = url;
@@ -97,7 +98,6 @@ export default {
         .then(items => {
           var data = {};
           for (let [key, val] of Object.entries(items.data())) {
-
             console.log(key + " " + val);
             //eval = key == "expiry" ? new Date(val.toDate()) : val;
             data[key] = val;
@@ -105,7 +105,7 @@ export default {
           this.description = data;
           console.log(this.description);
         });
-/*        
+      /*        
       database.collection("donationData")
         .doc(this.imgID)
         .where("collectionLocation", "array-contains", "Central")
@@ -118,8 +118,8 @@ export default {
           }
           this.filter = data;
           console.log(this.filter)
-*/        
-            /*
+*/
+      /*
           querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data());
             data = doc()
@@ -128,22 +128,21 @@ export default {
           console.log(this.filter);
           
       });*/
-      
     },
     filterLocation: function() {
-			var db = firebase.firestore();
-			db.collection("donationData")
-			.where("collectionLocation", "array-contains", "Central")
-			.onSnapshot(snapshot => {
-        this.test = {};
-        snapshot.forEach(doc => {
-          let data={};
-          data = doc.data();
-        })
+      var db = firebase.firestore();
+      db.collection("donationData")
+        .where("collectionLocation", "array-contains", "Central")
+        .onSnapshot(snapshot => {
+          this.test = {};
+          snapshot.forEach(doc => {
+            let data = {};
+            data = doc.data();
+          });
           this.test = data;
           console.log(this.test);
           this.processing = false;
-      });
+        });
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -151,7 +150,7 @@ export default {
       } else {
         this.responsive = false;
       }
-    },
+    }
   },
   created() {
     this.fetchItems();

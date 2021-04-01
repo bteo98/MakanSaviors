@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" style="min-width: 780px;">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised" style="min-width: 720px;">
       <div class="section">
@@ -11,13 +11,74 @@
               </div>
               <div class="md-layout">
                 <div class="md-layout-item md-small-size-100">
+                  <div v-if="!processing">
+                    <img
+                      v-bind:src="data['imgRef']"
+                      v-bind:alt="data['foodName']"
+                      class="rounded"
+                      :class="{
+                        'responsive-image': responsive
+                      }"
+                    />
+                    <div class="text text-description">
+                      <small class="text-description">Food Description:</small>
+                      {{ data["foodName"] }}<br />
+                      <small class="text-description">Donor Name:</small>
+                      {{
+                        data["firstName"].charAt(0).toUpperCase() +
+                          data["firstName"].slice(1).toLowerCase() +
+                          " " +
+                          data["lastName"].charAt(0).toUpperCase() +
+                          data["lastName"].slice(1).toLowerCase()
+                      }}<br />
+                      <small class="text-description"
+                        >Collection Locaction:</small
+                      >
+                      {{ data["location"] }}<br />
+                      <small class="text-description">Donor Ratings:</small>
+                      {{ data["rating"] }}<br />
+                      <small class="text-description"
+                        >Quantity Avaliable:</small
+                      >
+                      {{ data["quantity"] }}<br />
+                      <small class="text-description">Expiry Date/Time:</small>
+                      {{ data["expiry"].toString().slice(0, 21) }}<br />
+                    </div>
+                  </div>
+                  <md-button
+                    class="md-success first-button"
+                    v-on:click="accept"
+                    v-if="data.status == 'pending' && requestView == false"
+                    >Accept</md-button
+                  >
+                  <md-button
+                    class="md-success"
+                    v-on:click="decline"
+                    v-if="data.status == 'pending' && requestView == false"
+                    >Decline</md-button
+                  >
+                  <badge
+                    type="success first-button status"
+                    v-if="data.status == 'accepted'"
+                    >Accepted</badge
+                  >
+                  <badge
+                    type="warning first-button status"
+                    v-if="data.status == 'pending' && requestView == true"
+                    >Pending</badge
+                  >
+                  <badge
+                    type="rose first-button status"
+                    v-if="data.status == 'declined'"
+                    >Declined</badge
+                  >
                 </div>
               </div>
             </div>
           </div>
-          <br /><br /><br />
         </div>
       </div>
+      <br /><br /><br />
     </div>
   </div>
 </template>
@@ -29,15 +90,15 @@ export default {
   bodyClass: "food-detail",
   data() {
     return {
-      donorCollections: [],
-      requestCollections: [],
+      donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
+      foodID: "r8MTer5iLadyXtjMCjCX",
+      data: {},
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
       user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
     };
   },
-  components: {
-  },
+  components: {},
   computed: {
     headerStyle() {
       return {
@@ -46,82 +107,94 @@ export default {
     }
   },
   methods: {
-    donorLiveFetch: function() {
-      var db = firebase.firestore();
-      let collect = "donorRequest/" + this.user + "/foodDonated";
+    fetchImgData(storage) {
+      var storage = firebase.storage();
+      let imgPath = storage.ref(
+        this.donorID + "/donationImages/" + this.foodID
+      );
 
-      db.collection(collect)
-        .orderBy("timeRequested", "desc")
-        .onSnapshot(snapshot => {
-          this.donorCollections = [];
+      imgPath.getDownloadURL().then(url => {
+        this.data.imgRef = url;
+      });
+    },
+    fetchUserData(db) {
+      db.collection("users")
+        .doc(this.donorID)
+        .get()
+        .then(items => {
+          let item = items.data();
 
-          snapshot.forEach(doc => {
-            let data = {};
-            data["foodID"] = doc.id;
-            doc = doc.data();
-            data["foodName"] = doc.foodName;
-            data["saviorID"] = doc.saviorID;
-            data["status"] = doc.status;
-            data["timeRequested"] = new Date(
-              doc.timeRequested.toDate().toLocaleString("en-US")
-            );
-            data["donorID"] = this.user;
-            this.donorCollections.push(data);
-            console.log(this.donorCollections);
-          });
+          this.data["firstName"] = item["firstName"];
+          this.data["lastName"] = item["lastName"];
+          this.data["rating"] = item["totalRatings"];
+          console.log(this.data);
           this.processing = false;
         });
     },
-    requestLiveFetch: function() {
-      var db = firebase.firestore();
-      let collect = "donorRequest/" + this.user + "/foodRequested";
-
-      db.collection(collect)
-        .orderBy("timeRequested", "desc")
-        .onSnapshot(snapshot => {
-          this.requestCollections = [];
-
-          snapshot.forEach(doc => {
-            let data = {};
-            data["foodID"] = doc.id;
-            console.log(doc.id);
-            doc = doc.data();
-            data["foodName"] = doc.foodName;
-            data["saviorID"] = this.user;
-            data["status"] = doc.status;
-            data["timeRequested"] = new Date(
-              doc.timeRequested.toDate().toLocaleString("en-US")
-            );
-            data["donorID"] = doc.donorID;
-            this.requestCollections.push(data);
-            console.log(this.requestCollections);
-          });
-          this.processing = false;
+    fetchFoodData: function(db) {
+      db.collection("donationData")
+        .doc(this.foodID)
+        .onSnapshot(doc => {
+          doc = doc.data();
+          this.data["foodName"] = doc.listingName;
+          this.data["status"] = doc.status;
+          this.data["expiry"] = new Date(
+            doc.expiry.toDate().toLocaleString("en-US")
+          );
+          this.data["donorID"] = doc.donorID;
+          this.data["quantity"] = doc.quantity;
+          this.data["location"] = doc.collectionLocation; // array
+          this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
+          this.data["remarks"] = doc.remarks;
         });
     }
   },
   mounted() {
-    this.donorLiveFetch();
-    this.requestLiveFetch();
+    var db = firebase.firestore();
+    var storage = firebase.storage();
+
+    this.fetchFoodData(db);
+    this.fetchImgData(storage);
+    this.fetchUserData(db);
   }
 };
 </script>
 
 <style lang="scss" scoped>
-requestcard {
-  padding: 500px 500px !important;
+.text-description {
+  font-size: 15px;
 }
 
-ul {
-  display: flex;
-  flex-wrap: wrap;
-  list-style-type: none;
-  padding: 0;
+img {
+  display: inline-block;
+  min-width: 200px;
+  width: 20% !important;
+  float: left;
+  padding-top: 45px;
 }
-li {
-  flex-grow: 1;
-  flex-basis: 300px;
-  padding: 10px;
-  margin: 10px;
+
+.text {
+  display: inline-block;
+  max-width: 70%;
+  padding: 26px 0;
+  padding-left: 30px;
+}
+
+#explore-card {
+  max-width: 500px !important;
+  min-width: 450px !important;
+}
+
+.status {
+  font-size: small;
+  padding: 8px 10px;
+}
+
+.md-success {
+  margin: 0 5px !important;
+}
+
+.first-button {
+  margin-left: 125px !important;
 }
 </style>
