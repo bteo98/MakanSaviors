@@ -4,7 +4,6 @@
       <div class="md-layout">
         <div class="md-layout-item">
           <div>
-
             <img
               v-bind:src="this.imgRef"
               v-bind:alt="description['listingName']"
@@ -31,7 +30,8 @@
               {{ description["quantity"] }}<br />
               <small>Expiry Date:</small>
               {{ description["expiry"].toLocaleString("en-US") }}
-              {{test}}
+
+              {{this.test}}
             </div>
           </div>
         </div>
@@ -60,14 +60,14 @@ export default {
   },
   props: {
     UID: { type: String },
-    imgID: { type: String },
-    filter: { type: Array}
+    imgID: { type: String }
+    //filter: { type: Array}
   },
   methods: {
     fetchItems: function() {
       var storage = firebase.storage();
       let imgPath = storage.ref(
-        this.UID + "/donationImages/" + this.imgID + ".jpg"
+        this.UID + "/donationImages/" + this.imgID
       );
 
       imgPath.getDownloadURL().then(url => {
@@ -105,21 +105,44 @@ export default {
           this.description = data;
           console.log(this.description);
         });
-
-        database.collection("donationData").doc().where("collectionLocation", "array-contains", "Central")
+/*        
+      database.collection("donationData")
+        .doc(this.imgID)
+        .where("collectionLocation", "array-contains", "Central")
         .get()
-        .then((querySnapshot) => {
+        .then(querySnapshot => {
           var data = {};
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
+          for (let [key, val] of Object.entries(querySnapshot.data())) {
+            console.log(key + " " + val);
+            data[key] = val;
+          }
+          this.filter = data;
+          console.log(this.filter)
+*/        
+            /*
+          querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data());
             data = doc()
-        });
-        this.test = data;
-        console.log(this.test);
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
+          });
+          this.filter = data;
+          console.log(this.filter);
+          
+      });*/
+      
+    },
+    filterLocation: function() {
+			var db = firebase.firestore();
+			db.collection("donationData")
+			.where("collectionLocation", "array-contains", "Central")
+			.onSnapshot(snapshot => {
+        this.test = {};
+        snapshot.forEach(doc => {
+          let data={};
+          data = doc.data();
+        })
+          this.test = data;
+          console.log(this.test);
+          this.processing = false;
       });
     },
     onResponsiveInverted() {
@@ -136,6 +159,7 @@ export default {
   mounted() {
     this.onResponsiveInverted();
     window.addEventListener("resize", this.onResponsiveInverted);
+    this.filterLocation();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResponsiveInverted);

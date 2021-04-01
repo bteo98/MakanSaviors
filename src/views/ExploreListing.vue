@@ -2,36 +2,18 @@
 	<div class="wrapper">
 		<parallax class="section header-filter" :style="headerStyle"> </parallax>
 		<div class="main main-raised">
-			<div class="filterPanel">
-				<strong>Filter By</strong>
-				<div>
-					<p>Location</p>
-					<div class="flex-column">
-						<md-checkbox value="East" v-model="checkedBox">East</md-checkbox>
-						<span>
-							<md-checkbox value="North" v-model="checkedBox"
-								>North</md-checkbox
-							> </span
-						><br />
-						<md-checkbox value="South" v-model="checkedBox">South</md-checkbox>
-						<span>
-							<md-checkbox value="West" v-model="checkedBox">West</md-checkbox> </span
-						><br />
-						<md-checkbox value="Central" v-model="checkedBox">Central</md-checkbox>
-					</div>
-				</div>
-			</div>
 			<div class="section">
 				<div class="container">
 					<div class="md-layout">
 						<div class="md-layout-item">
 							<div class="vertical-center header">
-								<md-button class="md-success" style="margin-top: 17px;"
+								<md-button class="md-success md-top-left" style="margin-top: 17px;"
 									><router-link to="/CreateListing" exact>
 										Create Listing</router-link
 									></md-button
 								>
-								<div class="md-list" style="display: inline-block; float: right;">
+							
+								<div class="md-list " style="display: inline-block; float: right;">
 									<li class="md-list-item">
 										<a
 											href="javascript:void(0)"
@@ -93,34 +75,75 @@
 									</li>
 								</div>
 							</div>
-							<div>
-								<ul v-if="!processing" id="itemsList">
-									<li
-										class="md-layout"
-										v-for="(imageIDs, UID, index) in collections"
-										:key="index"
-									>
-										<div
-											class="md-layout"
-											v-for="(imageID, index) in imageIDs"
-											:key="index"
-											style="padding-right: 5%;"
-										>
-											<ExploreCard
-												class="md-layout-item donoarcard"
-												:UID="UID"
-												:imgID="imageID"
-											></ExploreCard>
-										</div>
-									</li>
-								</ul>
-							</div>
+					
+			<div class="md-layout">
+				<div>
+				<div class="md-layout md-gutter">
+				<div class = "md-layout-item md-size-25 filter">
+
+				<header><strong>Filter By</strong></header>
+				<div>
+					<p>Location</p>
+					<div class="flex-column">
+						<md-checkbox value="East" v-model="location">East</md-checkbox><span>
+					
+						<md-checkbox value="North" v-model="location">North</md-checkbox></span>
+
+						<md-checkbox value="South" v-model="location">South</md-checkbox><span>
+						
+						<md-checkbox value="West" v-model="location">West</md-checkbox></span>
+						<md-checkbox value="Central" v-model="location">Central</md-checkbox>
+					</div>
+				</div>
+				<div>
+					<p>Food Preference</p>
+						<md-checkbox value="Vegan" v-model="food">Vegan</md-checkbox>
+						<span>
+							<md-checkbox value="Vegetarian" v-model="food"
+								>Vegetarian</md-checkbox
+							> </span
+						><br />
+						<md-checkbox value="Halal" v-model="food">Halal</md-checkbox>
+						<span>
+							<md-checkbox value="No Peanuts" v-model="food">No Peanuts</md-checkbox> </span
+						><br />
+						<md-checkbox value="No Eggs" v-model="food">No Eggs</md-checkbox>
+						<md-checkbox value="No Shellfish" v-model="food">No Shellfish</md-checkbox>
+
+					</div>					
+
+				</div>
+				<div class="md-layout-item">
+					<ul v-if="!processing" id="itemsList">
+						<li
+							class="md-layout"
+							v-for="(imageIDs, UID, index) in collections"
+							:key="index"
+						>
+						<div
+							class="md-layout"
+							v-for="(imageID, index) in imageIDs"
+							:key="index"
+							style="padding-right: 5%; "
+						>
+						<ExploreCard
+							class="md-layout-item donoarcard"
+							:UID="UID"
+							:imgID="imageID"
+						></ExploreCard>
 						</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+				</div>
+			</div>
 					</div>
 					<br /><br /><br />
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 </template>
 
@@ -135,10 +158,9 @@ export default {
 			collections: {},
 			header: require("@/assets/img/city-profile.jpg"),
 			processing: true,
+			location: [],
+			food: []
 		};
-	},
-	props: {
-		checkedBox: String,
 	},
 	components: {
 		ExploreCard,
@@ -183,6 +205,7 @@ export default {
 					this.processing = false;
 				});
 		},
+
 	},
 
 	created() {
@@ -208,4 +231,18 @@ li {
 	padding: 10px;
 	margin: 10px;
 }
+
+.filter {
+	width: 300px;
+	padding: 30px;
+	padding: 10px 50px 100px 50px;
+	//margin-top: 5%;
+	color: black;
+	//margin-right: 80%;
+	float: left;
+	margin-left: 10px;
+	margin-top: 25px;
+	margin: 20px 100px 100px 0px;
+}
+
 </style>
