@@ -152,7 +152,7 @@ import firebase from "../firebase.js";
 import ExploreCard from "./components/ExploreCard";
 
 export default {
-	bodyClass: "quiz-lifestage-page",
+	bodyClass: "explore-listing",
 	data() {
 		return {
 			collections: {},

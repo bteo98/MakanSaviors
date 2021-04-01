@@ -14,6 +14,8 @@ import RequestListing from "./views/RequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import Authentication from "./views/Authentication.vue";
+import FoodDetail from "./views/FoodDetail.vue";
+
 import RequestCard from "./views/components/RequestCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
@@ -179,6 +181,19 @@ let router = new Router({
       name: "requestlisting",
       components: {
         default: RequestListing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 5 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/fooddetail",
+      name: "fooddetail",
+      components: {
+        default: FoodDetail,
         header: MainNavbar,
         footer: MainFooter
       },

@@ -1,64 +1,16 @@
 <template>
-  <div class="wrapper" style="min-width: 840px;">
+  <div class="wrapper">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
-    <div class="main main-raised" style="min-width: 820px;">
+    <div class="main main-raised" style="min-width: 720px;">
       <div class="section">
         <div class="container">
           <div class="md-layout">
             <div class="md-layout-item">
               <div class="title">
-                <h3>Request</h3>
+                <h3>Food Information</h3>
               </div>
               <div class="md-layout">
                 <div class="md-layout-item md-small-size-100">
-                  <tabs
-                    :tab-name="['Donor', 'Savior']"
-                    :tab-icon="['dashboard', 'schedule']"
-                    plain
-                    flex-column
-                    nav-pills-icons
-                    color-button="success"
-                  >
-                    <!-- here you can add your content for tab-content -->
-                    <template slot="tab-pane-1">
-                      <div>
-                        <ul v-if="!processing" id="itemsList">
-                          <li
-                            class="md-layout"
-                            v-for="(item, index) in donorCollections"
-                            :key="index"
-                          >
-                            <div class="md-layout" style="padding-right: 5%;">
-                              <RequestCard
-                                class="md-layout-item requestcard"
-                                :data="item"
-                                :requestView="false"
-                              ></RequestCard>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </template>
-                    <template slot="tab-pane-2">
-                      <div>
-                        <ul v-if="!processing" id="itemsList">
-                          <li
-                            class="md-layout"
-                            v-for="(item, index) in requestCollections"
-                            :key="index"
-                          >
-                            <div class="md-layout" style="padding-right: 5%;">
-                              <RequestCard
-                                class="md-layout-item requestcard"
-                                :data="item"
-                                :requestView="true"
-                              ></RequestCard>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </template>
-                  </tabs>
                 </div>
               </div>
             </div>
@@ -72,11 +24,9 @@
 
 <script>
 import firebase from "../firebase.js";
-import RequestCard from "./components/RequestCard";
-import { Tabs } from "@/components";
 
 export default {
-  bodyClass: "request-listing",
+  bodyClass: "food-detail",
   data() {
     return {
       donorCollections: [],
@@ -87,8 +37,6 @@ export default {
     };
   },
   components: {
-    RequestCard,
-    Tabs
   },
   computed: {
     headerStyle() {

@@ -10,10 +10,10 @@
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
-            <div class="text">
-              <small>Food Description:</small>
+            <div class="text text-description">
+              <small class="text-description">Food Description:</small>
               {{ data["foodName"] }}<br />
-              <small>Donor Name:</small>
+              <small class="text-description">Donor Name:</small>
               {{
                 firstName.charAt(0).toUpperCase() +
                   firstName.slice(1).toLowerCase() +
@@ -21,8 +21,8 @@
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
-              <small>Time Requested:</small>
-              {{ data["timeRequested"] }}<br />
+              <small class="text-description">Time Requested:</small>
+              {{ data["timeRequested"].toString().slice(0, 21) }}<br />
             </div>
           </div>
           <md-button
@@ -181,6 +181,10 @@ export default {
 };
 </script>
 <style scoped>
+.text-description {
+  font-size: 15px !important;
+}
+
 small,
 div {
   font-size: medium;
