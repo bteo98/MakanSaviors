@@ -132,7 +132,7 @@ export default {
         .collection("donationData")
         .doc(this.data.foodID)
         .update({
-          status: "Unavailable"
+          status: "unavailable"
         })
         .then(() => {
           console.log("Document status updated to unavailable!");

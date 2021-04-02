@@ -21,9 +21,8 @@
                       }"
                     />
                     <div class="text text-description">
-                      <small class="text-description">Food Description:</small>
-                      {{ data["foodName"] }}<br />
-                      <small class="text-description">Donor Name:</small>
+                      <h4><strong>{{ data["foodName"] }}</strong></h4>
+                      <small class="text-description">Donor Name:        </small>
                       {{
                         data["firstName"].charAt(0).toUpperCase() +
                           data["firstName"].slice(1).toLowerCase() +
@@ -44,35 +43,50 @@
                       <small class="text-description">Expiry Date/Time:</small>
                       {{ data["expiry"].toString().slice(0, 21) }}<br />
                     </div>
+                    <div class="text text-description">
+                      <h4>Dietary Restrictions</h4>
+                      <ul v-if="!processing" id="itemsList">
+                          <li
+                            class="md-layout"
+                            v-for="(restriction, index) in data.dietaryRestrictions"
+                            :key="index"
+                          >
+                            <div class="md-layout" style="padding-bottom: 10px;">
+                              <badge
+                                type="info status"
+                                >{{ restriction }}</badge
+                              >
+                            </div>
+                          </li>
+                        </ul>
+                    </div>
                   </div>
                   <md-button
                     class="md-success first-button"
-                    v-on:click="accept"
-                    v-if="data.status == 'pending' && requestView == false"
-                    >Accept</md-button
+                    style="font-size: 15px;"
+                    v-if="isAvailable"
+                    >Request</md-button
                   >
                   <md-button
                     class="md-success"
-                    v-on:click="decline"
-                    v-if="data.status == 'pending' && requestView == false"
-                    >Decline</md-button
-                  >
-                  <badge
-                    type="success first-button status"
-                    v-if="data.status == 'accepted'"
-                    >Accepted</badge
-                  >
-                  <badge
-                    type="warning first-button status"
-                    v-if="data.status == 'pending' && requestView == true"
-                    >Pending</badge
+                    style="font-size: 15px;"
+                    v-if="isAvailable"
+                    >Save</md-button
                   >
                   <badge
                     type="rose first-button status"
-                    v-if="data.status == 'declined'"
-                    >Declined</badge
+                    v-if="!isAvailable"
+                    >unavailable</badge
                   >
                 </div>
+              </div>
+              <div class="details">
+              <div class="subtitle">
+                <h4>Details</h4>
+              </div>
+              <p class="text-description">
+                {{ data.remarks }}
+              </p>
               </div>
             </div>
           </div>
@@ -85,6 +99,7 @@
 
 <script>
 import firebase from "../firebase.js";
+import { Badge } from "@/components";
 
 export default {
   bodyClass: "food-detail",
@@ -93,12 +108,15 @@ export default {
       donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
       foodID: "r8MTer5iLadyXtjMCjCX",
       data: {},
+      isAvailable: false,
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
       user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
     };
   },
-  components: {},
+  components: {
+    Badge
+  },
   computed: {
     headerStyle() {
       return {
@@ -146,29 +164,43 @@ export default {
           this.data["location"] = doc.collectionLocation; // array
           this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
           this.data["remarks"] = doc.remarks;
+          this.isAvailable = doc.status == 'available' ? true : false;
+          console.log(this.data);
         });
+    },
+    onResponsiveInverted() {
+      if (window.innerWidth < 600) {
+        this.responsive = true;
+      } else {
+        this.responsive = false;
+      }
     }
   },
   mounted() {
     var db = firebase.firestore();
     var storage = firebase.storage();
 
-    this.fetchFoodData(db);
+    this.onResponsiveInverted();
     this.fetchImgData(storage);
+    this.fetchFoodData(db);
     this.fetchUserData(db);
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResponsiveInverted);
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .text-description {
-  font-size: 15px;
+  font-size: 17px;
 }
 
 img {
   display: inline-block;
   min-width: 200px;
-  width: 20% !important;
+  width: 25% !important;
   float: left;
   padding-top: 45px;
 }
@@ -177,7 +209,7 @@ img {
   display: inline-block;
   max-width: 70%;
   padding: 26px 0;
-  padding-left: 30px;
+  padding-left: 80px;
 }
 
 #explore-card {
@@ -191,10 +223,10 @@ img {
 }
 
 .md-success {
-  margin: 0 5px !important;
+  margin: 0 15px !important;
 }
 
 .first-button {
-  margin-left: 125px !important;
+  margin-left: 80px !important;
 }
 </style>
