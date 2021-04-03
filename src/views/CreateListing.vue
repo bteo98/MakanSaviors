@@ -1,26 +1,13 @@
 <template>
   <div class="wrapper">
-    <parallax class="section page-header header-filter" :style="headerStyle">
-      <div class="container">
-        <div class="md-layout">
-          <div
-            class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100"
-          >
-            <h1 class="title">Create a New Listing</h1>
-            <h4>
-              Give your food a new life.
-            </h4>
-          </div>
-        </div>
-      </div>
-    </parallax>
+    <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised">
       <div class="section">
         <div class="container">
           <div class="md-layout">
             <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
               <h2 class="text-center title">
-                New Listing
+                Create a New Listing
               </h2>
               <form class="contact-form">
                 <div class="md-layout">
