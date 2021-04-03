@@ -13,7 +13,6 @@ import ExploreListing from "./views/ExploreListing.vue";
 import RequestListing from "./views/RequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
-import Authentication from "./views/Authentication.vue";
 import FoodDetail from "./views/FoodDetail.vue";
 
 import RequestCard from "./views/components/RequestCard.vue";
@@ -91,18 +90,6 @@ let router = new Router({
       name: "signup",
       components: {
         default: SignUp,
-        header: MainNavbar,
-        footer: MainFooter
-      },
-      props: {
-        header: { colorOnScroll: 400 }
-      }
-    },
-    {
-      path: "/authentication",
-      name: "authentication",
-      components: {
-        default: Authentication,
         header: MainNavbar,
         footer: MainFooter
       },
