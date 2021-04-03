@@ -14,7 +14,6 @@ import RequestListing from "./views/RequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import FoodDetail from "./views/FoodDetail.vue";
-
 import RequestCard from "./views/components/RequestCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 

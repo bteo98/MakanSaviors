@@ -366,6 +366,12 @@ export default {
             // User signed in successfully.
             var user = result.user;
             user.delete();
+            firebase
+              .auth()
+              .signInWithEmailAndPassword(
+                this.$route.params.email,
+                this.$route.params.uniqueNo
+              );
             //console.log(user.uid);
             //firebase.auth().deleteUser(user.uid);
             //vm.$router.push({ path:"/createaccount" })
@@ -386,11 +392,12 @@ export default {
               .then(() => {
                 this.createIDCollection();
                 this.pushProfilePic();
-                this.$router.push("/landing");
+                this.$router.push("/");
               });
           })
           .catch(error => {
-            alert("Wrong verification code!");
+            alert(error.message)
+            //alert("Wrong verification code!");
           });
       }
     },

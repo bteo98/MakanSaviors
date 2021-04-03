@@ -74,6 +74,7 @@
 <script>
 import { LoginCard } from "@/components";
 import firebase from "firebase";
+
 var database = firebase.firestore();
 export default {
   components: {
@@ -116,15 +117,17 @@ export default {
                 .collection("users")
                 .doc(user.user.uid)
                 .set({
-                  email: this.email,
-                  UID: user.user.uid
+                  email: this.email
                 });
             } catch (FirebaseAuthException) {
               this.errors.push(FirebaseAuthException);
             }
           })
           .then(() => {
-            this.$router.push("/createaccount");
+            this.$router.push({
+              name: "createaccount",
+              params: { email: this.email, uniqueNo: this.password }
+            });
           })
           .catch(error => {
             this.errors.push(error);
