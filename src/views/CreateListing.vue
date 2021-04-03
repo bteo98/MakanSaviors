@@ -200,7 +200,7 @@ export default {
           this.allIDs.push(this.currID);
           this.updateImageIDs();
           this.pushListingImage();
-          this.$router.push("/landing");
+          this.$router.push("/");
         });
     },
     // when file changes, create image on site
