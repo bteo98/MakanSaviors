@@ -286,30 +286,6 @@ export default {
       this.UID = firebase.auth().currentUser.uid;
       console.log(this.UID);
     },
-    /*addUserData: function() {
-      database
-        .collection("users")
-        .doc(this.UID)
-        .update({
-          firstName: this.firstName,
-          lastName: this.lastName,
-          phoneNumber: this.phoneNumber,
-          telegramHandle: this.telegramHandle,
-          preferredLocation: this.preferredLocation,
-          dietaryRestrictions: this.dietaryRestrictions,
-          foodCategory: this.foodCategory,
-          reasonDonate: this.reasonDonate,
-          reasonSave: this.reasonSave,
-          totalRatings: this.totalRatings,
-          numRatings: this.numRatings,
-          joinDate: this.joinDate
-        })
-        .then(() => {
-          this.createIDCollection();
-          this.pushProfilePic();
-          this.$router.push("/landing");
-        });
-    },*/
     // when file changes, create image on site
     onFileChange: function(e) {
       this.file = e.target.files[0];
@@ -372,9 +348,6 @@ export default {
                 this.$route.params.email,
                 this.$route.params.uniqueNo
               );
-            //console.log(user.uid);
-            //firebase.auth().deleteUser(user.uid);
-            //vm.$router.push({ path:"/createaccount" })
             database
               .collection("users")
               .doc(this.UID)
@@ -396,8 +369,7 @@ export default {
               });
           })
           .catch(error => {
-            alert(error.message)
-            //alert("Wrong verification code!");
+            alert("Wrong verification code!");
           });
       }
     },
