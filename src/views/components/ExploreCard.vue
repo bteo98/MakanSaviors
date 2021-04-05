@@ -33,11 +33,8 @@
               {{ description["quantity"] }}<br />
               <small>Expiry Date:</small>
               {{ description["expiry"].toLocaleString("en-US") }}
-<<<<<<< HEAD
-=======
 
               {{ this.test }}
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
             </div>
           </div>
         </div>
@@ -130,13 +127,10 @@ export default {
           console.log(this.filter);
           
       });*/
-<<<<<<< HEAD
       
   
     /*
-=======
     },
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
     filterLocation: function() {
       var db = firebase.firestore();
       db.collection("donationData")
@@ -150,12 +144,8 @@ export default {
           this.test = data;
           console.log(this.test);
           this.processing = false;
-<<<<<<< HEAD
       });
       */
-=======
-        });
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {

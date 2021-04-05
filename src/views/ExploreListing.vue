@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
 	<div class="wrapper">
 		<parallax class="section header-filter" :style="headerStyle"> </parallax>
 		<div class="main main-raised">
@@ -132,8 +131,7 @@
 			</div>
 		</div>
 	</div>
-=======
-  <div class="wrapper">
+  <!--<div class="wrapper">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised">
       <div class="section">
@@ -294,8 +292,7 @@
         </div>
       </div>
     </div>
-  </div>
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
+  </div>-->
 </template>
 
 <script>
@@ -343,7 +340,6 @@ export default {
       this.processing = false;
   }},
 */
-<<<<<<< HEAD
 			database
 				.collection("donationIDs")
 				.get()
@@ -399,8 +395,9 @@ export default {
 	created() {
 		this.fetchItems();
 		this.refresh();
-	},
-=======
+  }
+}
+  /*
       database
         .collection("donationIDs")
         .get()
@@ -419,8 +416,8 @@ export default {
   created() {
     this.fetchItems();
   }
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
 };
+*/
 </script>
 
 <style lang="scss" scoped>
@@ -442,26 +439,9 @@ li {
 }
 
 .filter {
-<<<<<<< HEAD
-	width: 300px;
-	padding: 30px;
-	padding: 0px 50px 100px 50px;
+  width: 300px;
 	color: black;
 	float: left;
-	margin-left: 10px;
-	margin-top: 25px;
-	margin: 20px 100px 100px 0px;
-=======
-  width: 300px;
-  padding: 30px;
-  padding: 10px 50px 100px 50px;
-  //margin-top: 5%;
-  color: black;
-  //margin-right: 80%;
-  float: left;
-  margin-left: 10px;
-  margin-top: 25px;
-  margin: 20px 100px 100px 0px;
->>>>>>> 8296a36e5f4c6978eef5ecb46d71a34e80972284
 }
+
 </style>
