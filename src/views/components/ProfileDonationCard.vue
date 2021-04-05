@@ -5,14 +5,14 @@
         <div class="md-layout-item">
           <div>
             <img
-              v-bind:src="imgRef"
-              v-bind:alt="data['foodName']"
+              v-bind:src="this.imgRef"
+              v-bind:alt="this.data['data'].listingName"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
-              {{ data["foodName"] }}<br />
+              {{ this.data["data"].listingName }}<br />
               <small class="text-description">Donor Name:</small>
               {{
                 firstName.charAt(0).toUpperCase() +
@@ -21,36 +21,17 @@
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
-              <small class="text-description">Time Requested:</small>
-              {{ data["timeRequested"].toString().slice(0, 21) }}<br />
+              <small class="text-description">Date Posted:</small>
+              {{ this.getDate(this.data["data"]["datePosted"]) }}<br />
+
+              <small class="text-description">Expiry Date:</small>
+              {{ this.dateFromString(this.data["data"]["expiry"]) }}<br />
             </div>
           </div>
-          <md-button
-            class="md-success first-button"
-            v-on:click="updateStatus('accepted')"
-            v-if="data.status == 'pending' && requestView == false"
-            >Accept</md-button
-          >
-          <md-button
-            class="md-success"
-            v-on:click="updateStatus('declined')"
-            v-if="data.status == 'pending' && requestView == false"
-            >Decline</md-button
-          >
-          <badge
-            type="success first-button status"
-            v-if="data.status == 'accepted'"
-            >Accepted</badge
-          >
-          <badge
-            type="warning first-button status"
-            v-if="data.status == 'pending' && requestView == true"
-            >Pending</badge
-          >
           <badge
             type="rose first-button status"
-            v-if="data.status == 'declined'"
-            >Declined</badge
+            v-if="this.checkExpiry(this.data['data']['expiry']) == 'expired'"
+            >Expired</badge
           >
         </div>
       </div>
@@ -79,70 +60,54 @@ export default {
   methods: {
     fetchItems: function() {
       // get image
-      var storage = firebase.storage();
-      let imgPath = storage.ref(
-        this.data.donorID + "/donationImages/" + this.data.foodID
-      );
-
-      imgPath.getDownloadURL().then(url => {
-        this.imgRef = url;
-      });
-
+      this.imgRef = this.data["url"];
       var database = firebase.firestore();
-
       // get user info
       database
         .collection("users")
-        .doc(this.data.saviorID)
+        .doc(this.data["uid"])
         .get()
         .then(items => {
           let item = items.data();
-
           this.firstName = item["firstName"];
           this.lastName = item["lastName"];
         });
     },
-    updateStatus(statusMsg) {
-      var database = firebase.firestore();
-      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
-      let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
 
-      database
-        .collection(donorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
-        });
-
-      database
-        .collection(saviorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
-        });
-
-      database
-        .collection("donationData")
-        .doc(this.data.foodID)
-        .update({
-          status: "unavailable"
-        })
-        .then(() => {
-          console.log("Document status updated to unavailable!");
-        });
-    },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
         this.responsive = true;
       } else {
         this.responsive = false;
+      }
+    },
+    getDate: function(inputDate) {
+      var milliseconds = inputDate.seconds * 1000;
+      var dateObj = new Date(milliseconds);
+      var date = dateObj.toLocaleDateString("en-GB");
+      return date;
+    },
+    dateFromString: function(string) {
+      var yy = string.slice(2, 4);
+      var mm = string.slice(5, 7);
+      var dd = string.slice(8, 10);
+      return dd + "/" + mm + "/" + yy;
+    },
+    checkExpiry: function(expiryDate) {
+      var today = new Date();
+      var yy = parseInt(expiryDate.slice(0, 4));
+      var mm = parseInt(expiryDate.slice(5, 7)) - 1;
+      var dd = parseInt(expiryDate.slice(8, 10));
+      var hh = parseInt(expiryDate.slice(11, 13));
+      var min = parseInt(expiryDate.slice(14, 16));
+      var expiry = new Date(yy, mm, dd, hh, min);
+      console.log(expiry);
+      console.log(today);
+      if (expiry < today) {
+        console.log("expired");
+        return "expired";
+      } else {
+        return "safe";
       }
     }
   },

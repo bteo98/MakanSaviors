@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" style="min-width: 875px;">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
-    <div class="main main-raised">
+    <div class="main main-raised" style="min-width: 820px;">
       <div class="section">
         <div class="container">
           <div class="md-layout">
@@ -76,7 +76,7 @@ import RequestCard from "./components/RequestCard";
 import { Tabs } from "@/components";
 
 export default {
-  bodyClass: "quiz-lifestage-page",
+  bodyClass: "request-listing",
   data() {
     return {
       donorCollections: [],
