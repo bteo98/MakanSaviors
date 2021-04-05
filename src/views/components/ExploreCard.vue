@@ -30,8 +30,6 @@
               {{ description["quantity"] }}<br />
               <small>Expiry Date:</small>
               {{ description["expiry"].toLocaleString("en-US") }}
-
-              {{this.test}}
             </div>
           </div>
         </div>
@@ -55,7 +53,6 @@ export default {
       profile: {},
       expiryDate: "",
       responsive: false,
-      test: {}
     };
   },
   props: {
@@ -129,7 +126,8 @@ export default {
           
       });*/
       
-    },
+  
+    /*
     filterLocation: function() {
 			var db = firebase.firestore();
 			db.collection("donationData")
@@ -144,6 +142,7 @@ export default {
           console.log(this.test);
           this.processing = false;
       });
+      */
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -155,11 +154,11 @@ export default {
   },
   created() {
     this.fetchItems();
+
   },
   mounted() {
     this.onResponsiveInverted();
     window.addEventListener("resize", this.onResponsiveInverted);
-    this.filterLocation();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResponsiveInverted);
@@ -188,7 +187,8 @@ img {
 }
 
 #explore-card {
-  max-width: 500px !important;
-  min-width: 420px !important;
+  max-width: 450px !important;
+  min-width: 320px !important; 
+  padding-left: 0%;
 }
 </style>
