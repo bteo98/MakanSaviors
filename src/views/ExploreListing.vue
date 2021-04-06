@@ -322,99 +322,6 @@ export default {
     fetchItems: function() {
       var database = firebase.firestore();
 
-<<<<<<< HEAD
-      snapshot.forEach(doc => {
-        for (let [name, list] of Object.entries(doc.data())) {
-          console.log(doc.id+ '=>'+ list);
-          this.collections[doc.id] = list;
-        }
-      });
-      this.processing = false;
-  }},
-*/
-      database
-        .collection("donationIDs")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            for (let [name, list] of Object.entries(doc.data())) {
-              console.log(doc.id + " => " + list);
-              this.collections[doc.id] = list;
-            }
-          });
-          this.processing = false;
-        });
-    },
-    refresh: function() {
-      var db = firebase.firestore();
-      var imagIDs = [];
-      var newCollections = {};
-      if (this.location.length != 0) {
-        var filteredData = db
-          .collection("donationData")
-          .where("collectionLocation", "array-contains-any", this.location);
-        filteredData.onSnapshot(snapshot => {
-          snapshot.forEach(doc => {
-            console.log(doc.id + "=>" + doc.data());
-            imagIDs.push(doc.id);
-          });
-          console.log(imagIDs);
-        });
-      }
-
-      if (this.imagIDs.length != 0) {
-        for (iid in imagIDs) {
-          var getUID = db
-            .collection("donationIDs")
-            .where("imageIDs", "array-contains", iid);
-          getUID.onSnapshot(snapshot => {
-            this.collections = {};
-            snapshot.forEach(doc => {
-              for (let [name, list] of Object.entries(doc.data())) {
-                console.log(doc.id + " => " + list);
-                if (this.collections.hasOwnProperty("doc.id")) {
-                  this.collections[doc.id].push(iid);
-                } else {
-                  this.collections[doc.id] = [];
-                  this.collections[doc.id].push(iid);
-                }
-              }
-            });
-            console.log(this.collections);
-          });
-          this.processing = false;
-        }
-      }
-    }
-  },
-
-  created() {
-    this.fetchItems();
-    this.refresh();
-  }
-};
-/*
-      database
-        .collection("donationIDs")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            for (let [name, list] of Object.entries(doc.data())) {
-              console.log(doc.id + " => " + list);
-              this.collections[doc.id] = list;
-            }
-          });
-          this.processing = false;
-        });
-    }
-  },
-
-  created() {
-    this.fetchItems();
-  }
-};
-*/
-=======
       //To fetch all data  
       
 			database
@@ -526,7 +433,6 @@ export default {
   }
 }
   
->>>>>>> 5e427eabd7b036f114bd8669633356745d315f25
 </script>
 
 <style lang="scss" scoped>
