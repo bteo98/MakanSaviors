@@ -201,6 +201,24 @@ img {
 }
 
 .first-button {
-  margin-left: 125px !important;
+  margin-left: 35px !important;
+}
+
+@media screen and (min-width: 576px) {
+  .first-button {
+    margin-left: 125px !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .first-button {
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .first-button {
+    margin-left: 125px !important;
+  }
 }
 </style>

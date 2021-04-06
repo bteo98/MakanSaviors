@@ -176,28 +176,27 @@ export default {
       var db = firebase.firestore();
       let collect = "donorRequest/" + this.user + "/foodSaved";
 
-      db.collection(collect)
-        .onSnapshot(snapshot => {
-          this.savedCollections = [];
+      db.collection(collect).onSnapshot(snapshot => {
+        this.savedCollections = [];
 
-          snapshot.forEach(doc => {
-            let data = {};
-            data["foodID"] = doc.id;
-            console.log(doc.id);
-            doc = doc.data();
-            data["foodName"] = doc.foodName;
-            data["saviorID"] = this.user;
-            data["location"] = doc.location;
-            data["quantity"] = doc.quantity;
-            data["donorID"] = doc.donorID;
-            data["status"] = doc.status;
-            data["expiry"] = doc.expiry;
+        snapshot.forEach(doc => {
+          let data = {};
+          data["foodID"] = doc.id;
+          console.log(doc.id);
+          doc = doc.data();
+          data["foodName"] = doc.foodName;
+          data["saviorID"] = this.user;
+          data["location"] = doc.location;
+          data["quantity"] = doc.quantity;
+          data["donorID"] = doc.donorID;
+          data["status"] = doc.status;
+          data["expiry"] = doc.expiry;
 
-            this.savedCollections.push(data);
-            console.log(this.savedCollections);
-          });
-          this.processing = false;
+          this.savedCollections.push(data);
+          console.log(this.savedCollections);
         });
+        this.processing = false;
+      });
     }
   },
   mounted() {
