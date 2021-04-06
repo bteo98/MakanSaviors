@@ -26,6 +26,7 @@
 												data-toggle="dropdown"
 											>
 											<i class="material-icons">apps</i>
+                      {{this.collections}}
 											<p>Sort By</p>
 											</md-button>
 											<ul class="dropdown-menu dropdown-with-icons">
@@ -74,10 +75,7 @@
 								<div class="md-layout md-gutter">
 									<div class = "md-layout-item md-size-15 filter">
 										<span class="md-title">Filter By</span> 
-										<div>
-
-											{{this.location.length}}
-											{{this.collections}}											
+										<div>											
 											<p>Location</p>
 											<div class="flex-column">
 												<md-checkbox value="East" v-model="location">East</md-checkbox><span>
@@ -323,23 +321,9 @@ export default {
   methods: {
     fetchItems: function() {
       var database = firebase.firestore();
-      /*
-      const loc = db.collection('donationIDs');
-      const snapshot = await loc.where('collectionLocation' == 'North').get();
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }  
 
-      snapshot.forEach(doc => {
-        for (let [name, list] of Object.entries(doc.data())) {
-          console.log(doc.id+ '=>'+ list);
-          this.collections[doc.id] = list;
-        }
-      });
-      this.processing = false;
-  }},
-*/
+      //To fetch all data  
+      
 			database
 				.collection("donationIDs")
 				.get()
@@ -352,7 +336,58 @@ export default {
 					});
 					this.processing = false;
 				});
-		},
+    },
+    
+
+    
+    //to fetch the donationID and userID of the donation that meet the filter condition
+    refresh: function() {
+			var db = firebase.firestore();
+			var newCollections = {};
+			if (this.location.length!=0) {
+				var filteredData = db.collection("donationData").where("collectionLocation", "array-contains-any", this.location)
+				filteredData.onSnapshot(snapshot => {
+					snapshot.forEach(doc => {
+            console.log(doc.id + "=>" + doc.data());
+            var imagIDs = [];
+            if (doc.data().userID in newCollections) {
+              newCollections[doc.data().userID].push(doc.id)
+            }
+            else {
+              imagIDs.push(doc.id)
+              newCollections[doc.data().userID] = imagIDs 
+            }
+          });
+          this.collections = newCollections;
+					console.log(this.collections)
+				})
+      /*} if (this.location.length!=0 && this.food.length!=0) {
+        var filteredData = db.collection("donationData").where("collectionLocation", "array-contains-any", this.location);
+        var filteredData2 = filteredData.where("dietaryRestriction", "array-contains-any", "Halal")
+				filteredData.onSnapshot(snapshot => {
+					snapshot.forEach(doc => {
+            console.log(doc.id + "=>" + doc.data());
+            var imagIDs = [];
+            if (doc.data().userID in newCollections) {
+              newCollections[doc.data().userID].push(doc.id)
+            }
+            else {
+              imagIDs.push(doc.id)
+              newCollections[doc.data().userID] = imagIDs 
+            }
+          });
+          this.collections = newCollections;
+					console.log(this.collections)
+        })*/
+      } else {
+        this.fetchItems();
+        console.log(this.collections)
+      }
+    }
+  },
+
+
+/*
 		refresh: function() {
 			var db = firebase.firestore();
 			var imagIDs = [];
@@ -391,33 +426,13 @@ export default {
 			}
 		},
 	},
-
+*/
 	created() {
 		this.fetchItems();
 		this.refresh();
   }
 }
-  /*
-      database
-        .collection("donationIDs")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            for (let [name, list] of Object.entries(doc.data())) {
-              console.log(doc.id + " => " + list);
-              this.collections[doc.id] = list;
-            }
-          });
-          this.processing = false;
-        });
-    }
-  },
-
-  created() {
-    this.fetchItems();
-  }
-};
-*/
+  
 </script>
 
 <style lang="scss" scoped>

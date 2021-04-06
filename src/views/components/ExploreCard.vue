@@ -31,10 +31,9 @@
               </div>
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
-              <small>Expiry Date:</small>
-              {{ description["expiry"].toLocaleString("en-US") }}
+              <small class="text-description">Expiry Date:</small>
+              {{description["expiry"].toLocaleString("en-US")}}
 
-              {{ this.test }}
             </div>
           </div>
         </div>
@@ -193,5 +192,9 @@ img {
   max-width: 450px !important;
   min-width: 320px !important; 
   padding-left: 0%;
+}
+
+.text-description {
+  font-size: 15px !important;
 }
 </style>
