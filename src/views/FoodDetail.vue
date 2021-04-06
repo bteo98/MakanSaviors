@@ -47,15 +47,39 @@
                       <md-button
                         class="md-success first-button"
                         v-if="isAvailable && !expired"
+                        v-on:click="request"
                         >Request</md-button
                       >
                       <md-button
                         class="md-success"
                         v-if="isAvailable && !expired"
+                        v-on:click="saveFood"
                         >Save</md-button
                       >
-                      <badge type="rose first-button status" v-if="!isAvailable"
+                      <badge 
+                        type="rose first-button status" 
+                        v-if="!isAvailable && userRequest == null &&
+                        !expired"
                         >unavailable</badge
+                      >
+                      <badge 
+                        type="success first-button status" 
+                        v-if="!isAvailable && !expired && 
+                        userRequest == 'accepted'"
+                        >accepted</badge
+                      >
+                      <badge 
+                        type="rose first-button status" 
+                        v-if="!isAvailable && !expired && 
+                        userRequest == 'declined'"
+                        >declined</badge
+                      >
+                      <md-button
+                        class="md-warning first-button cancel-status"
+                        v-if="!isAvailable && !expired && 
+                        userRequest == 'pending'"
+                        v-on:click="cancelRequest"
+                        >Cancel Request</md-button
                       >
                       <badge
                         type="rose first-button status"
@@ -121,6 +145,7 @@ export default {
       foodID: "r8MTer5iLadyXtjMCjCX",
       data: {},
       isAvailable: false,
+      userRequest: null,
       processing: true,
       expired: false,
       header: require("@/assets/img/city-profile.jpg"),
@@ -163,6 +188,7 @@ export default {
         });
     },
     fetchFoodData: function(db) {
+
       db.collection("donationData")
         .doc(this.foodID)
         .onSnapshot(doc => {
@@ -172,7 +198,7 @@ export default {
           this.data["expiry"] = new Date(
             doc.expiry.toDate().toLocaleString("en-US")
           );
-          this.data["donorID"] = doc.donorID;
+          this.data["donorID"] = doc.userID;
           this.data["quantity"] = doc.quantity;
           this.data["location"] = doc.collectionLocation; // array
           this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
@@ -180,6 +206,97 @@ export default {
           this.isAvailable = doc.status == "available" ? true : false;
           this.expired =
             new Date(doc.expiry.toDate().toLocaleString("en-US")) <= new Date();
+          
+          if (this.isAvailable == false) {
+            console.log("PENDING");
+            let collect = "donorRequest/" + this.user + "/foodRequested";
+
+            db.collection(collect)
+              .doc(this.foodID)
+              .onSnapshot(snapshot => {
+                console.log("PENDING!!");
+                this.userRequest = snapshot.data().status;
+              });
+          }
+        });
+    },
+    saveFood() {
+      let collectSave = "donorRequest/" + this.user + "/foodSaved";
+      var db = firebase.firestore();
+
+      db.collection(collectSave)
+          .doc(this.foodID)
+          .set({
+            foodName: this.data.foodName,
+            donorID: this.data.donorID,
+            quantity: this.data.quantity,
+            location: this.data.location,
+            status: this.data.status,
+            expiry: this.data.expiry
+          })
+          .then(() => {
+            this.$toaster.info(this.data.foodName + " has been saved!");
+          });
+    },
+    cancelRequest() {
+      var db = firebase.firestore();
+
+      let collectDonate = "donorRequest/" + this.user + "/foodDonated";
+
+      db.collection(collectDonate)
+          .doc(this.foodID)
+          .delete();
+      
+      let collectRequest = "donorRequest/" + this.user + "/foodRequested";
+
+      db.collection(collectRequest)
+          .doc(this.foodID)
+          .delete();
+      
+      db.collection("donationData")
+        .doc(this.foodID)
+        .update({
+            status: "available" 
+        })
+        .then(() => {
+            this.$toaster.info("Your request for " + this.data.foodName + " has been cancelled!");
+          });
+    },
+    request() {
+      var db = firebase.firestore();
+
+      let collectDonate = "donorRequest/" + this.user + "/foodDonated";
+
+      db.collection(collectDonate)
+          .doc(this.foodID)
+          .set({
+            listingName: this.data.foodName,
+            saviorId: this.user,
+            status: "pending",
+            timeRequested: firebase.firestore.Timestamp.now()
+          });
+      
+      let collectRequest = "donorRequest/" + this.user + "/foodRequested";
+
+      db.collection(collectRequest)
+          .doc(this.foodID)
+          .set({
+            listingName: this.data.foodName,
+            donorID: this.data.donorID,
+            status: "pending",
+            timeRequested: firebase.firestore.Timestamp.now()
+          });
+      
+      let saveRequest = "donorRequest/" + this.user + "/foodSaved";
+
+      db.collection(saveRequest)
+          .doc(this.foodID)
+          .delete();
+      
+      db.collection("donationData")
+        .doc(this.foodID)
+        .update({
+            status: "unavailable" 
         });
     },
     onResponsiveInverted() {
@@ -245,6 +362,11 @@ small {
 #explore-card {
   max-width: 500px !important;
   min-width: 450px !important;
+  font-size: 15px;
+}
+
+.cancel-status {
+  margin-top: 40px;
   font-size: 15px;
 }
 
