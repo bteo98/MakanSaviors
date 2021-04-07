@@ -7,6 +7,7 @@
             <img
               v-bind:src="imgRef"
               v-bind:alt="data['foodName']"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
@@ -106,7 +107,7 @@ export default {
       var database = firebase.firestore();
       let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
       let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
 
       database
         .collection(donorCollect)
@@ -137,6 +138,12 @@ export default {
         .then(() => {
           console.log("Document status updated to unavailable!");
         });
+    },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -179,6 +186,10 @@ img {
   padding-top: 45px;
 }
 
+img:hover {
+  cursor: pointer;
+}
+
 .text {
   display: inline-block;
   max-width: 70%;
@@ -187,8 +198,7 @@ img {
 }
 
 #explore-card {
-  max-width: 500px !important;
-  min-width: 450px !important;
+  width: 450px !important;
 }
 
 .status {

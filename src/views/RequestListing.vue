@@ -103,7 +103,7 @@ export default {
       savedCollections: [],
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
-      user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
+      userID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
     };
   },
   components: {
@@ -121,7 +121,7 @@ export default {
   methods: {
     donorLiveFetch: function() {
       var db = firebase.firestore();
-      let collect = "donorRequest/" + this.user + "/foodDonated";
+      let collect = "donorRequest/" + this.userID + "/foodDonated";
 
       db.collection(collect)
         .orderBy("timeRequested", "desc")
@@ -138,7 +138,7 @@ export default {
             data["timeRequested"] = new Date(
               doc.timeRequested.toDate().toLocaleString("en-US")
             );
-            data["donorID"] = this.user;
+            data["donorID"] = this.userID;
             this.donorCollections.push(data);
             console.log(this.donorCollections);
           });
@@ -147,7 +147,7 @@ export default {
     },
     requestLiveFetch: function() {
       var db = firebase.firestore();
-      let collect = "donorRequest/" + this.user + "/foodRequested";
+      let collect = "donorRequest/" + this.userID + "/foodRequested";
 
       db.collection(collect)
         .orderBy("timeRequested", "desc")
@@ -160,7 +160,7 @@ export default {
             console.log(doc.id);
             doc = doc.data();
             data["foodName"] = doc.foodName;
-            data["saviorID"] = this.user;
+            data["saviorID"] = this.userID;
             data["status"] = doc.status;
             data["timeRequested"] = new Date(
               doc.timeRequested.toDate().toLocaleString("en-US")
@@ -174,7 +174,7 @@ export default {
     },
     saveLiveFetch: function() {
       var db = firebase.firestore();
-      let collect = "donorRequest/" + this.user + "/foodSaved";
+      let collect = "donorRequest/" + this.userID + "/foodSaved";
 
       db.collection(collect).onSnapshot(snapshot => {
         this.savedCollections = [];
@@ -185,7 +185,7 @@ export default {
           console.log(doc.id);
           doc = doc.data();
           data["foodName"] = doc.foodName;
-          data["saviorID"] = this.user;
+          data["saviorID"] = this.userID;
           data["location"] = doc.location;
           data["quantity"] = doc.quantity;
           data["donorID"] = doc.donorID;

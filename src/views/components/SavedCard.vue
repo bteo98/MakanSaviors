@@ -8,6 +8,7 @@
             <img
               v-bind:src="imgRef"
               v-bind:alt="data['foodName']"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
@@ -145,6 +146,12 @@ export default {
           status: "unavailable"
         });
     },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
+    },
     deleteSaved() {
       var db = firebase.firestore();
 
@@ -194,8 +201,7 @@ img {
 }
 
 #explore-card {
-  max-width: 500px !important;
-  min-width: 450px !important;
+  width: 450px !important;
 }
 
 .status {
