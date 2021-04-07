@@ -145,8 +145,6 @@
 
 <script>
 import firebase from "firebase";
-// import {MultiSelectPlugin} from "@syncfusion/ej2-vue-dropdowns";
-// Vue.use(MultiSelectPlugin);
 
 var database = firebase.firestore();
 
@@ -197,6 +195,9 @@ export default {
 				});
 		},
 		createListing: function() {
+			if (this.checkExpiry(this.expiry)) {
+				alert("Your food has expired, please key in a valid expiry date.");
+			}
 			database
 				.collection("donationData")
 				.add({
@@ -232,9 +233,6 @@ export default {
 		// when create listing button pressed, push listing image to firebase storage
 		pushListingImage: function() {
 			var storageRef = firebase.storage().ref(this.UID + "/donationImages/" + this.currID);
-			// if (this.file == null) {
-			// 	this.file = require("@/assets/img/No_image_available.jpg");
-			// }
 			var uploadTask = storageRef.put(this.file);
 		},
 
@@ -245,6 +243,17 @@ export default {
 				.update({
 					imageIDs: this.allIDs,
 				});
+		},
+
+		checkExpiry: function(expiryDate) {
+			var today = new Date();
+			var yy = parseInt(expiryDate.slice(0, 4));
+			var mm = parseInt(expiryDate.slice(5, 7)) - 1;
+			var dd = parseInt(expiryDate.slice(8, 10));
+			var hh = parseInt(expiryDate.slice(11, 13));
+			var min = parseInt(expiryDate.slice(14, 16));
+			var expiry = new Date(yy, mm, dd, hh, min);
+			return expiry < today;
 		},
 	},
 	created() {
