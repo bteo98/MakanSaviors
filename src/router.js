@@ -14,7 +14,8 @@ import RequestListing from "./views/RequestListing.vue";
 import CreateAccount from "./views/CreateAccount.vue";
 import CreateListing from "./views/CreateListing.vue";
 import FoodDetail from "./views/FoodDetail.vue";
-import RequestCard from "./views/components/RequestCard.vue";
+
+import SavedCard from "./views/components/SavedCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
@@ -25,7 +26,7 @@ let router = new Router({
       path: "/noticard",
       name: "noticard",
       components: {
-        default: RequestCard,
+        default: SavedCard,
         header: MainNavbar,
         footer: MainFooter
       },

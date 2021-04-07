@@ -12,8 +12,8 @@
               <div class="md-layout">
                 <div class="md-layout-item md-small-size-100">
                   <tabs
-                    :tab-name="['Donor', 'Savior']"
-                    :tab-icon="['dashboard', 'schedule']"
+                    :tab-name="['Donor', 'Savior', 'Saved']"
+                    :tab-icon="['dashboard', 'schedule', 'schedule']"
                     plain
                     flex-column
                     nav-pills-icons
@@ -58,6 +58,24 @@
                         </ul>
                       </div>
                     </template>
+                    <template slot="tab-pane-3">
+                      <div>
+                        <ul v-if="!processing" id="itemsList">
+                          <li
+                            class="md-layout"
+                            v-for="(item, index) in savedCollections"
+                            :key="index"
+                          >
+                            <div class="md-layout" style="padding-right: 5%;">
+                              <SavedCard
+                                class="md-layout-item requestcard"
+                                :data="item"
+                              ></SavedCard>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
                   </tabs>
                 </div>
               </div>
@@ -73,6 +91,7 @@
 <script>
 import firebase from "../firebase.js";
 import RequestCard from "./components/RequestCard";
+import SavedCard from "./components/SavedCard";
 import { Tabs } from "@/components";
 
 export default {
@@ -81,6 +100,7 @@ export default {
     return {
       donorCollections: [],
       requestCollections: [],
+      savedCollections: [],
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
       user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
@@ -88,6 +108,7 @@ export default {
   },
   components: {
     RequestCard,
+    SavedCard,
     Tabs
   },
   computed: {
@@ -150,11 +171,38 @@ export default {
           });
           this.processing = false;
         });
+    },
+    saveLiveFetch: function() {
+      var db = firebase.firestore();
+      let collect = "donorRequest/" + this.user + "/foodSaved";
+
+      db.collection(collect).onSnapshot(snapshot => {
+        this.savedCollections = [];
+
+        snapshot.forEach(doc => {
+          let data = {};
+          data["foodID"] = doc.id;
+          console.log(doc.id);
+          doc = doc.data();
+          data["foodName"] = doc.foodName;
+          data["saviorID"] = this.user;
+          data["location"] = doc.location;
+          data["quantity"] = doc.quantity;
+          data["donorID"] = doc.donorID;
+          data["status"] = doc.status;
+          data["expiry"] = doc.expiry;
+
+          this.savedCollections.push(data);
+          console.log(this.savedCollections);
+        });
+        this.processing = false;
+      });
     }
   },
   mounted() {
     this.donorLiveFetch();
     this.requestLiveFetch();
+    this.saveLiveFetch();
   }
 };
 </script>

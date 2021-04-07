@@ -3,6 +3,7 @@
     <md-card-content>
       <div class="md-layout">
         <div class="md-layout-item">
+          <i class="material-icons close" v-on:click="deleteSaved">close</i>
           <div>
             <img
               v-bind:src="imgRef"
@@ -21,36 +22,23 @@
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
-              <small class="text-description">Time Requested:</small>
-              {{ data["timeRequested"].toString().slice(0, 21) }}<br />
+              <small class="text-description">Collection Locaction:</small>
+              {{ data["location"].join(", ") }}<br />
+              <small class="text-description">Quantity:</small>
+              {{ data["quantity"] }}<br />
             </div>
           </div>
           <md-button
             class="md-success first-button"
-            v-on:click="updateStatus('accepted')"
-            v-if="data.status == 'pending' && requestView == false"
-            >Accept</md-button
+            v-if="isAvailable && !expired"
+            v-on:click="request"
+            >Request</md-button
           >
-          <md-button
-            class="md-success"
-            v-on:click="updateStatus('declined')"
-            v-if="data.status == 'pending' && requestView == false"
-            >Decline</md-button
+          <badge type="rose first-button status" v-if="isAvailable && expired"
+            >expired</badge
           >
-          <badge
-            type="success first-button status"
-            v-if="data.status == 'accepted'"
-            >Accepted</badge
-          >
-          <badge
-            type="warning first-button status"
-            v-if="data.status == 'pending' && requestView == true"
-            >Pending</badge
-          >
-          <badge
-            type="rose first-button status"
-            v-if="data.status == 'declined'"
-            >Declined</badge
+          <badge type="rose first-button status" v-if="!isAvailable && !expired"
+            >unavailable</badge
           >
         </div>
       </div>
@@ -63,18 +51,19 @@ import firebase from "../../firebase";
 import { Badge } from "@/components";
 
 export default {
-  name: "explore-card",
+  name: "saved-card",
   data() {
     return {
       imgRef: "",
       firstName: "",
       lastName: "",
+      expired: false,
+      isAvailable: false,
       responsive: false
     };
   },
   props: {
-    data: { type: Object },
-    requestView: { type: Boolean }
+    data: { type: Object }
   },
   methods: {
     fetchItems: function() {
@@ -101,42 +90,15 @@ export default {
           this.firstName = item["firstName"];
           this.lastName = item["lastName"];
         });
-    },
-    updateStatus(statusMsg) {
-      var database = firebase.firestore();
-      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
-      let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
 
-      database
-        .collection(donorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
-        });
+      this.expired =
+        new Date(this.data.expiry.toDate().toLocaleString("en-US")) <=
+        new Date();
+      this.isAvailable = this.data.status == "available" ? true : false;
 
-      database
-        .collection(saviorCollect)
-        .doc(this.data.foodID)
-        .update({
-          status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
-        });
-
-      database
-        .collection("donationData")
-        .doc(this.data.foodID)
-        .update({
-          status: "unavailable"
-        })
-        .then(() => {
-          console.log("Document status updated to unavailable!");
-        });
+      console.log(this.data);
+      console.log(this.expired);
+      console.log(this.isAvailable);
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -144,15 +106,60 @@ export default {
       } else {
         this.responsive = false;
       }
+    },
+    request() {
+      var db = firebase.firestore();
+
+      let collectDonate = "donorRequest/" + this.data.donorID + "/foodDonated";
+
+      db.collection(collectDonate)
+        .doc(this.data.foodID)
+        .set({
+          listingName: this.data.foodName,
+          saviorID: this.data.saviorID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
+      let collectRequest =
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
+
+      db.collection(collectRequest)
+        .doc(this.data.foodID)
+        .set({
+          listingName: this.data.foodName,
+          donorID: this.data.donorID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
+      let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
+
+      db.collection(saveRequest)
+        .doc(this.data.foodID)
+        .delete();
+
+      db.collection("donationData")
+        .doc(this.foodID)
+        .update({
+          status: "unavailable"
+        });
+    },
+    deleteSaved() {
+      var db = firebase.firestore();
+
+      let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
+      console.log(saveRequest);
+      db.collection(saveRequest)
+        .doc(this.data.foodID)
+        .delete();
     }
   },
   components: {
     Badge
   },
-  created() {
-    this.fetchItems();
-  },
   mounted() {
+    this.fetchItems();
     this.onResponsiveInverted();
     window.addEventListener("resize", this.onResponsiveInverted);
   },
@@ -201,24 +208,15 @@ img {
 }
 
 .first-button {
-  margin-left: 35px !important;
+  margin-left: 125px !important;
 }
 
-@media screen and (min-width: 576px) {
-  .first-button {
-    margin-left: 125px !important;
-  }
+.close {
+  float: right;
 }
 
-@media screen and (min-width: 768px) {
-  .first-button {
-    margin-left: 35px !important;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .first-button {
-    margin-left: 125px !important;
-  }
+.close:hover {
+  color: #f44336;
+  cursor: pointer;
 }
 </style>

@@ -31,10 +31,9 @@
               </div>
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
-              <small>Expiry Date:</small>
-              {{ description["expiry"].toLocaleString("en-US") }}
+              <small class="text-description">Expiry Date:</small>
+              {{description["expiry"].toLocaleString("en-US")}}
 
-              {{ this.test }}
             </div>
           </div>
         </div>
@@ -57,7 +56,7 @@ export default {
       description: {},
       profile: {},
       expiryDate: "",
-      responsive: false,
+      responsive: false
     };
   },
   props: {
@@ -127,9 +126,8 @@ export default {
           console.log(this.filter);
           
       });*/
-      
-  
-    /*
+
+      /*
     },
     filterLocation: function() {
       var db = firebase.firestore();
@@ -157,7 +155,6 @@ export default {
   },
   created() {
     this.fetchItems();
-
   },
   mounted() {
     this.onResponsiveInverted();
@@ -191,7 +188,11 @@ img {
 
 #explore-card {
   max-width: 450px !important;
-  min-width: 320px !important; 
+  min-width: 320px !important;
   padding-left: 0%;
+}
+
+.text-description {
+  font-size: 15px !important;
 }
 </style>
