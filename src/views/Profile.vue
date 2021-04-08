@@ -202,6 +202,7 @@ export default {
 			type: String,
 			default: require("@/assets/img/city-profile.jpg"),
 		},
+		userID: {type: String},
 	},
 	computed: {
 		headerStyle() {
@@ -214,7 +215,7 @@ export default {
 	},
 	methods: {
 		getUID: function() {
-			this.UID = firebase.auth().currentUser.uid;
+			this.UID = this.userID;
 		},
 		getProfilePic: function() {
 			var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
