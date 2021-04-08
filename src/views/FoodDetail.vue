@@ -44,6 +44,39 @@
                       {{ data["quantity"] }}<br />
                       <small class="text-description">Expiry Date/Time:</small>
                       {{ data["expiry"].toString().slice(0, 21) }}<br />
+                      <div
+                        v-if="
+                          !isAvailable &&
+                            (userRequest == 'accepted' ||
+                              (donorStatus == 'accepted' && isDonor))
+                        "
+                        class="contact-info"
+                      >
+                        <div v-if="isDonor">
+                          <small class="text-description"
+                            >Donor's Number:</small
+                          >
+                          {{ data["phoneNumber"] }}<br />
+                          <div v-if="data['telegramHandle']">
+                            <small class="text-description"
+                              >Donor's Telegram:</small
+                            >
+                            {{ data["telegramHandle"] }}<br />
+                          </div>
+                        </div>
+                        <div v-if="!isDonor">
+                          <small class="text-description"
+                            >Savior's Number:</small
+                          >
+                          {{ data["phoneNumber"] }}<br />
+                          <div v-if="data['telegramHandle']">
+                            <small class="text-description"
+                              >Savior's Telegram:</small
+                            >
+                            {{ data["telegramHandle"] }}<br />
+                          </div>
+                        </div>
+                      </div>
                       <md-button
                         class="md-success first-button"
                         v-if="isAvailable && !expired && !isDonor"
@@ -216,6 +249,8 @@ export default {
           this.data["firstName"] = item["firstName"];
           this.data["lastName"] = item["lastName"];
           this.data["rating"] = item["totalRatings"];
+          this.data["phoneNumber"] = item["phoneNumber"];
+          this.data["telegramHandle"] = item["telegramHandle"];
           console.log(this.data);
           this.processing = false;
         });
@@ -238,7 +273,7 @@ export default {
           this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
           this.data["remarks"] = doc.remarks;
           this.isAvailable = doc.status == "available" ? true : false;
-          //this.isDonor = this.data.donorID == this.userID ? true : false;
+          this.isDonor = this.data.donorID == this.userID ? true : false;
           this.expired =
             new Date(doc.expiry.toDate().toLocaleString("en-US")) <= new Date();
           console.log(this.data);
@@ -255,6 +290,17 @@ export default {
               .onSnapshot(snapshot => {
                 console.log("collectRequest!!");
                 this.userRequest = snapshot.data().status;
+
+                db.collection("users")
+                  .doc(this.userID)
+                  .get()
+                  .then(items => {
+                    let item = items.data();
+
+                    this.data["phoneNumber"] = item["phoneNumber"];
+                    this.data["telegramHandle"] = item["telegramHandle"];
+                    console.log(this.data);
+                  });
               });
           } else if (!this.isAvailable && this.isDonor) {
             let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
@@ -423,6 +469,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contact-info {
+  color: #47a44b;
+  font-weight: 500;
+}
+
 .text-description {
   font-size: 17px;
   float: left;
