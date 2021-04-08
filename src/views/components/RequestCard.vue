@@ -16,24 +16,24 @@
               {{ data["foodName"] }}<br />
               <div class="username">
                 <div v-if="!requestView">
-                <small class="text-description">Savior Name:</small>
-                {{
-                  firstName.charAt(0).toUpperCase() +
-                    firstName.slice(1).toLowerCase() +
-                    " " +
-                    lastName.charAt(0).toUpperCase() +
-                    lastName.slice(1).toLowerCase()
-                }}<br />
+                  <small class="text-description">Savior Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
                 </div>
                 <div v-if="requestView">
-                <small class="text-description">Donor Name:</small>
-                {{
-                  firstName.charAt(0).toUpperCase() +
-                    firstName.slice(1).toLowerCase() +
-                    " " +
-                    lastName.charAt(0).toUpperCase() +
-                    lastName.slice(1).toLowerCase()
-                }}<br />
+                  <small class="text-description">Donor Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
                 </div>
               </div>
               <small class="text-description">Time Requested:</small>
