@@ -15,14 +15,26 @@
               <small class="text-description">Food Description:</small>
               {{ data["foodName"] }}<br />
               <div class="username">
-                <small class="text-description">Donor Name:</small>
-                {{
-                  firstName.charAt(0).toUpperCase() +
-                    firstName.slice(1).toLowerCase() +
-                    " " +
-                    lastName.charAt(0).toUpperCase() +
-                    lastName.slice(1).toLowerCase()
-                }}<br />
+                <div v-if="!requestView">
+                  <small class="text-description">Savior Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
+                </div>
+                <div v-if="requestView">
+                  <small class="text-description">Donor Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
+                </div>
               </div>
               <small class="text-description">Time Requested:</small>
               {{ data["timeRequested"].toString().slice(0, 21) }}<br />
@@ -113,8 +125,7 @@ export default {
 
       var database = firebase.firestore();
 
-      let id = this.requestView ? this.data.saviorID : this.data.donorID;
-
+      let id = !this.requestView ? this.data.saviorID : this.data.donorID;
       database
         .collection("users")
         .doc(id)
@@ -195,7 +206,7 @@ export default {
 </script>
 <style scoped>
 .contact-info {
-  color: #47a44b;
+  color: #4caf50 ;
   font-weight: 500;
 }
 
@@ -204,7 +215,7 @@ export default {
 }
 
 .username:hover {
-  color: #47a44b;
+  color: #4caf50 ;
 }
 
 .text-description {

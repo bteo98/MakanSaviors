@@ -1,5 +1,5 @@
 <template>
-  <md-card id="explore-card">
+  <md-card id="explore-card " style="min-width: 350px">
     <md-card-content>
       <div class="md-layout">
         <div class="md-layout-item">
@@ -32,7 +32,7 @@
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
               <small class="text-description">Expiry Date:</small>
-              {{ description["expiry"].toLocaleString("en-US") }}
+              {{ "description['expiry'].toLocaleString('en-US')" }}
             </div>
           </div>
         </div>
@@ -49,8 +49,6 @@ export default {
   name: "explore-card",
   data() {
     return {
-      //UID: "Nt2ExgrXaCcEj9SCn82pVqfZw6S2",
-      //imgID: "lIO4s2eWOluIqeIMmQky",
       imgRef: "",
       description: {},
       profile: {},
@@ -61,7 +59,6 @@ export default {
   props: {
     UID: { type: String },
     imgID: { type: String }
-    //filter: { type: Array}
   },
   methods: {
     fetchItems: function() {
@@ -102,47 +99,7 @@ export default {
           this.description = data;
           console.log(this.description);
         });
-      /*        
-      database.collection("donationData")
-        .doc(this.imgID)
-        .where("collectionLocation", "array-contains", "Central")
-        .get()
-        .then(querySnapshot => {
-          var data = {};
-          for (let [key, val] of Object.entries(querySnapshot.data())) {
-            console.log(key + " " + val);
-            data[key] = val;
-          }
-          this.filter = data;
-          console.log(this.filter)
-*/
-      /*
-          querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-            data = doc()
-          });
-          this.filter = data;
-          console.log(this.filter);
-          
-      });*/
 
-      /*
-    },
-    filterLocation: function() {
-      var db = firebase.firestore();
-      db.collection("donationData")
-        .where("collectionLocation", "array-contains", "Central")
-        .onSnapshot(snapshot => {
-          this.test = {};
-          snapshot.forEach(doc => {
-            let data = {};
-            data = doc.data();
-          });
-          this.test = data;
-          console.log(this.test);
-          this.processing = false;
-      });
-      */
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -164,6 +121,8 @@ export default {
   }
 };
 </script>
+
+
 <style scoped>
 small,
 div {
@@ -175,7 +134,7 @@ img {
   min-width: 95px;
   width: 20% !important;
   float: left;
-  padding-top: 28px;
+  padding-top: 45px;
 }
 
 .text {
@@ -193,5 +152,18 @@ img {
 
 .text-description {
   font-size: 15px !important;
+}
+
+.status {
+  font-size: small;
+  padding: 8px 10px;
+}
+
+.md-success {
+  margin: 0 5px !important;
+}
+
+.first-button {
+  margin-left: 125px !important;
 }
 </style>
