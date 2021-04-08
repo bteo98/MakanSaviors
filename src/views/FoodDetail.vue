@@ -495,7 +495,7 @@ small {
   display: inline-block;
   max-width: 70%;
   padding: 26px 0;
-  padding-left: 80px;
+  padding-left: 50px;
 }
 
 #explore-card {

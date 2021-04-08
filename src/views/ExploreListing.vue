@@ -9,7 +9,7 @@
               <div class="vertical-center header">
                 <md-button
                   class="md-success md-top-left"
-                  style="margin-top: 17px;"
+                  style="margin-top: 30px;"
                   >
                     Create Listing</md-button
                 >
@@ -76,82 +76,74 @@
               </div>
             </div>
           </div>
-            
+        
             <div class="progress-pagination">
               <div class="md-layout">
                 <div class="md-layout-item md-size-15 md-xsmall-size-30">
                   <header><strong>Filter By</strong></header>
                   <p>Location</p>
                   <div class="flex-column">
-                    <md-checkbox value="East" v-model="location"
+                    <md-checkbox value="East" v-model="locationFilter"
                       >East</md-checkbox
                     ><span>
-                      <md-checkbox value="North" v-model="location"
+                      <md-checkbox value="North" v-model="locationFilter"
                         >North</md-checkbox
                       ></span
                     >
-                    <md-checkbox value="South" v-model="location"
+                    <md-checkbox value="South" v-model="locationFilter"
                       >South</md-checkbox
                     ><span>
-                      <md-checkbox value="West" v-model="location"
+                      <md-checkbox value="West" v-model="locationFilter"
                         >West</md-checkbox
                       ></span
                     >
-                    <md-checkbox value="Central" v-model="location"
+                    <md-checkbox value="Central" v-model="locationFilter"
                       >Central</md-checkbox
                     >
                   </div>
                   <br />
                   <p>Food Preference</p>
                   <div class="flex-column">
-                    <md-checkbox value="Halal" v-model="food"
+                    <md-checkbox value="Halal" v-model="foodFilter"
                       >Halal</md-checkbox
                     >
-                    <md-checkbox value="Vegan" v-model="food"
+                    <md-checkbox value="Vegan" v-model="foodFilter"
                       >Vegan</md-checkbox
                     >
-                    <md-checkbox value="Vegetarian" v-model="food"
+                    <md-checkbox value="Vegetarian" v-model="foodFilter"
                       >Vegetarian</md-checkbox
                     >
-                    <md-checkbox value="No Eggs" v-model="food"
+                    <md-checkbox value="No Eggs" v-model="foodFilter"
                       >No Eggs</md-checkbox
                     >
-                    <md-checkbox value="No Peanuts" v-model="food"
+                    <md-checkbox value="No Peanuts" v-model="foodFilter"
                       >No Peanuts</md-checkbox
                     >
-                    <md-checkbox value="No Shellfish" v-model="food"
+                    <md-checkbox value="No Shellfish" v-model="foodFilter"
                       >No Shellfish</md-checkbox
                     >
                   </div>
-                  <md-button class="md-raised md-primary" v-on:click="refresh()"
+                  <md-button class="md-raised md-success" v-on:click="refresh()"
                     >Filter</md-button
                   >
                 </div>
-
                 <br />
-                {{ this.sortCollection }}
-                <div class="md-layout-item md-size-85 md-xsmall-size-45">
-                  <ul v-if="!processing" id="itemsList">
-                    <li
-                      class="md-layout"
-                      v-for="(imageIDs, UID, index) in collections"
-                      :key="index"
-                    >
-                      <div
-                        class="md-layout"
-                        v-for="(imageID, index) in imageIDs"
-                        :key="index"
-                        style="padding-right: 5%; "
-                      >
-                        <ExploreCard
-                          class="md-layout-item donorcard"
-                          :UID="UID"
-                          :imgID="imageID"
-                        ></ExploreCard>
+                <div class="item-listing">
+                        <ul v-if="!processing" id="itemsList">
+                          <li
+                            class="md-layout"
+                            v-for="(item, index) in collections"
+                            :key="index"
+                          >
+                            <div class="md-layout" style="padding-right: 5%;">
+                              <ExploreCard
+                                class="md-layout-item requestcard"
+                                :data="item"
+                              ></ExploreCard>
+                            </div>
+                          </li>
+                        </ul>
                       </div>
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
         </div>
@@ -168,12 +160,11 @@ export default {
   bodyClass: "explore-listing",
   data() {
     return {
-      collections: {},
       header: require("@/assets/img/city-profile.jpg"),
       processing: true,
-      location: [],
-      food: [],
-      sortCollection: {},
+      locationFilter: [],
+      foodFilter: [],
+      collections: [],
       desc: true
     };
   },
@@ -188,64 +179,43 @@ export default {
     }
   },
   methods: {
-    fetchItems: function() {
-      var database = firebase.firestore();
-
-      //To fetch all data
-      database
-        .collection("donationIDs")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            for (let [name, list] of Object.entries(doc.data())) {
-              console.log(doc.id + " => " + list);
-              this.collections[doc.id] = list;
-            }
-          });
-          this.processing = false;
-        });
-    },
-    orderDate: function() {
+    fetchItems() {
       var db = firebase.firestore();
-      if (this.desc) {
-        db.collection("donationData")
-          .orderBy("expiry", "desc")
-          .onSnapshot(snapshot => {
+
+      db.collection("donationData")
+        .onSnapshot(snapshot => {
+          this.collections = [];
+
+          snapshot.forEach(doc => {
             let data = {};
-            snapshot.forEach(doc => {
-              console.log(doc.id + "=>" + doc.data());
-              let userid = doc.data().userID;
-              data[doc.id] = userid;
-            });
-            this.sortCollection = data;
-            this.desc = false;
-            console.log(this.sortCollection);
+
+            data['foodID'] = doc.id;
+            doc = doc.data();
+            data['location'] = doc.collectionLocation;
+            data['donorID'] = doc.userID;
+            data['expiry'] = new Date(
+              doc.expiry.toDate().toLocaleString("en-US")
+            );
+            data['foodName'] = doc.listingName;
+            data['quantity'] = doc.quantity;
+            this.collections.push(data);
           });
-      } else {
-        db.collection("donationData")
-          .orderBy("expiry")
-          .onSnapshot(snapshot => {
-            let data = {};
-            snapshot.forEach(doc => {
-              console.log(doc.id + "=>" + doc.data());
-              let userid = doc.data().userID;
-              data[doc.id] = userid;
-            });
-            this.sortCollection = data;
-            this.desc = true;
-            console.log(this.sortCollection);
-          });
+         
+          this.processing = false;
+      })
     }
   },
   created() {
     this.fetchItems();
-    this.refresh();
-  }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.item-listing {
+  max-width: 85%;
+}
+
 donorcard {
   padding: 500px 500px !important;
 }

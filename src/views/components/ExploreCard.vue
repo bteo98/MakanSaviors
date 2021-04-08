@@ -1,38 +1,35 @@
 <template>
-  <md-card id="explore-card " style="min-width: 350px">
+  <md-card id="explore-card">
     <md-card-content>
       <div class="md-layout">
         <div class="md-layout-item">
-          <div>
+          <div v-if="!processing">
             <img
-              v-bind:src="this.imgRef"
-              v-bind:alt="description['listingName']"
+              v-bind:src="imgRef"
+              v-bind:alt="data['foodName']"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text">
               <small>Food Description:</small>
-              {{ description["listingName"] }}<br />
+              {{ data["foodName"] }}<br />
+              <div class="username">
               <small>Donor Name:</small>
               {{
-                profile["firstName"].charAt(0).toUpperCase() +
-                  profile["firstName"].slice(1).toLowerCase() +
+                data["firstName"].charAt(0).toUpperCase() +
+                  data["firstName"].slice(1).toLowerCase() +
                   " " +
-                  profile["lastName"].charAt(0).toUpperCase() +
-                  profile["lastName"].slice(1).toLowerCase()
+                  data["lastName"].charAt(0).toUpperCase() +
+                  data["lastName"].slice(1).toLowerCase()
               }}<br />
-              <small>Collection Location:</small>
-
-              <div
-                v-for="(loc, index) in description.collectionLocation"
-                :key="index"
-              >
-                {{ loc }}
               </div>
+              <small>Collection Location:</small>
+              {{ data["location"].join(", ") }}<br />
               <small>Quantity Avaliable:</small>
-              {{ description["quantity"] }}<br />
-              <small class="text-description">Expiry Date:</small>
-              {{ "description['expiry'].toLocaleString('en-US')" }}
+              {{ data["quantity"] }}<br />
+              <small class="text-description">Expiry Date/Time:</small>
+              {{ data["expiry"].toString().slice(0, 21) }}<br />
             </div>
           </div>
         </div>
@@ -50,56 +47,43 @@ export default {
   data() {
     return {
       imgRef: "",
-      description: {},
-      profile: {},
       expiryDate: "",
+      processing: true,
       responsive: false
     };
   },
   props: {
-    UID: { type: String },
-    imgID: { type: String }
+    data: { type: Object }
   },
   methods: {
     fetchItems: function() {
+      console.log(this.data);
       var storage = firebase.storage();
-      let imgPath = storage.ref(this.UID + "/donationImages/" + this.imgID);
+      let imgPath = storage.ref(this.data.donorID + "/donationImages/" + this.data.foodID);
 
       imgPath.getDownloadURL().then(url => {
         this.imgRef = url;
-        console.log(url);
       });
 
       var database = firebase.firestore();
 
       database
         .collection("users")
-        .doc(this.UID)
+        .doc(this.data.donorID)
         .get()
-        .then(items => {
-          var data = {};
-          for (let [key, val] of Object.entries(items.data())) {
-            data[key] = val;
-          }
-          this.profile = data;
-          console.log(this.profile);
+        .then(doc => {
+          doc = doc.data()
+          this.data["firstName"] = doc.firstName;
+          this.data["lastName"] = doc.lastName;
+          console.log(this.data["firstName"]);
+          this.processing = false;
         });
-
-      database
-        .collection("donationData")
-        .doc(this.imgID)
-        .get()
-        .then(items => {
-          var data = {};
-          for (let [key, val] of Object.entries(items.data())) {
-            console.log(key + " " + val);
-            //eval = key == "expiry" ? new Date(val.toDate()) : val;
-            data[key] = val;
-          }
-          this.description = data;
-          console.log(this.description);
-        });
-
+    },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -137,6 +121,19 @@ img {
   padding-top: 45px;
 }
 
+.username {
+  cursor: pointer;
+}
+
+.username:hover {
+  color: #4caf50 ;
+}
+
+
+img:hover {
+  cursor: pointer;
+}
+
 .text {
   display: inline-block;
   max-width: 70%;
@@ -146,7 +143,7 @@ img {
 
 #explore-card {
   max-width: 450px !important;
-  min-width: 320px !important;
+  width: 450px !important;
   padding-left: 0%;
 }
 
