@@ -32,7 +32,7 @@
               <small>Quantity Avaliable:</small>
               {{ description["quantity"] }}<br />
               <small class="text-description">Expiry Date:</small>
-              {{ description["expiry"].toLocaleString("en-US") }}
+              {{ "description['expiry'].toLocaleString('en-US')" }}
             </div>
           </div>
         </div>

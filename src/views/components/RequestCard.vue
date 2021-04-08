@@ -206,7 +206,7 @@ export default {
 </script>
 <style scoped>
 .contact-info {
-  color: #47a44b;
+  color: #4caf50 ;
   font-weight: 500;
 }
 
@@ -215,7 +215,7 @@ export default {
 }
 
 .username:hover {
-  color: #47a44b;
+  color: #4caf50 ;
 }
 
 .text-description {
