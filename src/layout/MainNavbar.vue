@@ -127,8 +127,13 @@
 								v-if="this.$store.getters.isAuth"
 								v-on:click="pushToProfile"
 							>
-								<i class="material-icons" style="font-size:20px">account_circle</i>
-								<p style="font-size:12px, margin:0px 0px 0px 5px">PROFILE</p>
+								<i
+									class="material-icons "
+									id="mod-profile-icon"
+									style="font-size:20px"
+									>account_circle</i
+								>
+								<p id="mod-profile-word">PROFILE</p>
 							</md-list-item>
 							<md-list-item
 								href="#/login"
@@ -370,3 +375,14 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+#mod-profile-word {
+	font-size: 12px;
+	margin: 0px 0px 0px 5px;
+}
+
+#mod-profile-icon {
+	font-size: 20px;
+}
+</style>
