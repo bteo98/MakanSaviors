@@ -32,7 +32,6 @@
 											></md-input>
 										</md-field>
 									</div>
-									<!-- change expiry to timestamp -->
 									<div class="md-layout-item md-size-50">
 										<md-field>
 											<label>Expiry Date & Time</label>
@@ -117,6 +116,7 @@
 										<input
 											id="listingImage"
 											type="file"
+											required
 											v-on:change="onFileChange"
 										/>
 									</div>
@@ -211,6 +211,7 @@ export default {
 					remarks: this.remarks,
 					datePosted: this.datePosted,
 					userID: this.UID,
+					status: "available",
 				})
 				.then((doc) => {
 					this.currID = doc.id;
