@@ -186,13 +186,8 @@ img {
 }
 
 #explore-card {
-<<<<<<< HEAD
-  max-width: 500px !important;
-  min-width: 450px !important; 
-=======
   max-width: 450px !important;
   min-width: 320px !important;
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
   padding-left: 0%;
 }
 

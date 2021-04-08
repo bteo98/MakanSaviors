@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
 	<div class="wrapper" style="min-width: 900px">
 		<parallax class="section header-filter" :style="headerStyle"> </parallax>
 		<div class="main main-raised" style="min-width: 800px">
@@ -122,174 +121,7 @@
 			</div>
 		</div>
 	</div>
-=======
-  <div class="wrapper">
-    <parallax class="section header-filter" :style="headerStyle"> </parallax>
-    <div class="main main-raised">
-      <div class="section">
-        <div class="container">
-          <div class="md-layout">
-            <div class="md-layout-item">
-              <div class="vertical-center header">
-                <md-button
-                  class="md-success md-top-left"
-                  style="margin-top: 17px;"
-                  ><router-link to="/CreateListing" exact>
-                    Create Listing</router-link
-                  ></md-button
-                >
-              </div>
-            </div>
-            <div class="vertical-center header">
-              <div
-                class="md-list md-top-right"
-                style="display: inline-block; float: right; margin-top: 0px;"
-              >
-                <li class="md-list-item">
-                  <a
-                    href="javascript:void(0)"
-                    class="md-list-item-router md-list-item-container md-button-clean dropdown"
-                  >
-                    <div class="md-list-item-content">
-                      <drop-down direction="down">
-                        <md-button
-                          slot="title"
-                          class="md-button md-button-link md-simple dropdown-toggle"
-                          data-toggle="dropdown"
-                        >
-                          <i class="material-icons">apps</i>
-                          {{ this.collections }}
-                          <p>Sort By</p>
-                        </md-button>
-                        <ul class="dropdown-menu dropdown-with-icons">
-                          <li>
-                            <a href="javascript:void(0)">
-                              <i class="material-icons">layers</i>
-                              <p>
-                                Donor's Rating
-                              </p>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">
-                              <i class="material-icons">content_paste</i>
-                              <p>
-                                Distance
-                              </p>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">
-                              <i class="material-icons">content_paste</i>
-                              <p>
-                                Expiry Date
-                              </p>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">
-                              <i class="material-icons">content_paste</i>
-                              <p>
-                                Quantity Avaliable
-                              </p>
-                            </a>
-                          </li>
-                        </ul>
-                      </drop-down>
-                    </div>
-                  </a>
-                </li>
-              </div>
-            </div>
 
-            <div>
-              <div>
-                <div class="md-layout md-gutter">
-                  <div class="md-layout-item md-size-15 filter">
-                    <span class="md-title">Filter By</span>
-                    <div>
-                      <p>Location</p>
-                      <div class="flex-column">
-                        <md-checkbox value="East" v-model="location"
-                          >East</md-checkbox
-                        ><span>
-                          <md-checkbox value="North" v-model="location"
-                            >North</md-checkbox
-                          ></span
-                        >
-                        <md-checkbox value="South" v-model="location"
-                          >South</md-checkbox
-                        ><span>
-                          <md-checkbox value="West" v-model="location"
-                            >West</md-checkbox
-                          ></span
-                        >
-                        <md-checkbox value="Central" v-model="location"
-                          >Central</md-checkbox
-                        >
-                      </div>
-                    </div>
-                    <div>
-                      <br />
-                      <p>Food Preference</p>
-                      <div class="flex-column">
-                        <md-checkbox value="Halal" v-model="food"
-                          >Halal</md-checkbox
-                        >
-                        <md-checkbox value="Vegan" v-model="food"
-                          >Vegan</md-checkbox
-                        >
-                        <md-checkbox value="Vegetarian" v-model="food"
-                          >Vegetarian</md-checkbox
-                        >
-                        <md-checkbox value="No Eggs" v-model="food"
-                          >No Eggs</md-checkbox
-                        >
-                        <md-checkbox value="No Peanuts" v-model="food"
-                          >No Peanuts</md-checkbox
-                        >
-                        <md-checkbox value="No Shellfish" v-model="food"
-                          >No Shellfish</md-checkbox
-                        >
-                      </div>
-                    </div>
-                    <md-button
-                      class="md-raised md-primary"
-                      v-on:click="refresh()"
-                      >Filter</md-button
-                    >
-                  </div>
-                  <div class="md-layout-item md-size-60">
-                    <ul v-if="!processing" id="itemsList">
-                      <li
-                        class="md-layout"
-                        v-for="(imageIDs, UID, index) in collections"
-                        :key="index"
-                      >
-                        <div
-                          class="md-layout"
-                          v-for="(imageID, index) in imageIDs"
-                          :key="index"
-                          style="padding-right: 5%; "
-                        >
-                          <ExploreCard
-                            class="md-layout-item donoarcard"
-                            :UID="UID"
-                            :imgID="imageID"
-                          ></ExploreCard>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
   <!--<div class="wrapper">
     <parallax class="section header-filter" :style="headerStyle"> </parallax>
     <div class="main main-raised">
@@ -503,7 +335,7 @@ export default {
 
     //to fetch the donationID and userID of the donation that meet the filter condition
     refresh: function() {
-<<<<<<< HEAD
+
 			var db = firebase.firestore();
       var newCollections = {};
       //filter location only
@@ -647,117 +479,6 @@ export default {
   }
 }
 
-
-            //var imagIDs = [];
-            /*if (doc.data().userID in newCollections) {
-              newCollections[doc.data().userID].push(doc.id)
-            }
-            else {
-              imagIDs.push(doc.id)
-              newCollections[doc.data().userID] = imagIDs 
-            }*/
-      
-      /*} if (this.location.length!=0 && this.food.length!=0) {
-=======
-      var db = firebase.firestore();
-      var newCollections = {};
-      if (this.location.length != 0) {
-        var filteredData = db
-          .collection("donationData")
-          .where("collectionLocation", "array-contains-any", this.location);
-        filteredData.onSnapshot(snapshot => {
-          snapshot.forEach(doc => {
-            console.log(doc.id + "=>" + doc.data());
-            var imagIDs = [];
-            if (doc.data().userID in newCollections) {
-              newCollections[doc.data().userID].push(doc.id);
-            } else {
-              imagIDs.push(doc.id);
-              newCollections[doc.data().userID] = imagIDs;
-            }
-          });
-          this.collections = newCollections;
-          console.log(this.collections);
-        });
-        /*} if (this.location.length!=0 && this.food.length!=0) {
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
-        var filteredData = db.collection("donationData").where("collectionLocation", "array-contains-any", this.location);
-        var filteredData2 = filteredData.where("dietaryRestriction", "array-contains-any", "Halal")
-				filteredData.onSnapshot(snapshot => {
-					snapshot.forEach(doc => {
-            console.log(doc.id + "=>" + doc.data());
-            var imagIDs = [];
-            if (doc.data().userID in newCollections) {
-              newCollections[doc.data().userID].push(doc.id)
-            }
-            else {
-              imagIDs.push(doc.id)
-              newCollections[doc.data().userID] = imagIDs 
-            }
-          });
-          this.collections = newCollections;
-					console.log(this.collections)
-        })*/
-<<<<<<< HEAD
-=======
-      } else {
-        this.fetchItems();
-        console.log(this.collections);
-      }
-    }
-  },
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
-
-  /*
-		refresh: function() {
-			var db = firebase.firestore();
-			var imagIDs = [];
-			var newCollections = {};
-			if (this.location.length!=0) {
-				var filteredData = db.collection("donationData").where("collectionLocation", "array-contains-any", this.location)
-				filteredData.onSnapshot(snapshot => {
-					snapshot.forEach(doc => {
-						console.log(doc.id + "=>" + doc.data());
-						imagIDs.push(doc.id)
-					});
-					console.log(imagIDs)
-				})
-			}
-
-			if (this.imagIDs.length!=0) {
-				for (iid in imagIDs) {
-					var getUID = db.collection("donationIDs").where("imageIDs", "array-contains", iid)
-					getUID.onSnapshot(snapshot => {
-						this.collections = {}
-						snapshot.forEach(doc => {
-							for (let [name, list] of Object.entries(doc.data())) {
-								console.log(doc.id + " => " + list);
-								if (this.collections.hasOwnProperty('doc.id')) {
-									this.collections[doc.id].push(iid);
-								} else {
-									this.collections[doc.id] = [];
-									this.collections[doc.id].push(iid);
-								}
-							}
-						});
-						console.log(this.collections);
-					});
-					this.processing = false;
-				}
-			}
-		},
-	},
-*/
-<<<<<<< HEAD
-
-  
-=======
-  created() {
-    this.fetchItems();
-    this.refresh();
-  }
-};
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
 </script>
 
 <style lang="scss" scoped>
@@ -778,12 +499,4 @@ li {
   margin: 10px;
 }
 
-<<<<<<< HEAD
-=======
-.filter {
-  width: 300px;
-  color: black;
-  float: left;
-}
->>>>>>> 7398f03cc91d77de628c04d525af9fa9eb9dec75
 </style>
