@@ -1,288 +1,295 @@
 <template>
-	<md-card id="explore-card">
-		<md-card-content>
-			<div class="md-layout">
-				<div class="md-layout-item">
-					<div>
-						<img
-							v-bind:src="this.getImage"
-							@error="onImageLoadFailure()"
-							v-on:click="pushToDetails"
-							class="rounded"
-							:class="{'responsive-image': responsive}"
-						/>
-						<div class="text text-description">
-							<small class="text-description">Food Description:</small>
-							{{ data["foodName"] }}<br />
-							<div class="username">
-								<div v-if="!requestView">
-									<small class="text-description">Savior Name:</small>
-									{{
-										firstName.charAt(0).toUpperCase() +
-											firstName.slice(1).toLowerCase() +
-											" " +
-											lastName.charAt(0).toUpperCase() +
-											lastName.slice(1).toLowerCase()
-									}}<br />
-								</div>
-								<div v-if="requestView">
-									<small class="text-description">Donor Name:</small>
-									{{
-										firstName.charAt(0).toUpperCase() +
-											firstName.slice(1).toLowerCase() +
-											" " +
-											lastName.charAt(0).toUpperCase() +
-											lastName.slice(1).toLowerCase()
-									}}<br />
-								</div>
-							</div>
-							<small class="text-description">Time Requested:</small>
-							{{ data["timeRequested"].toString().slice(0, 21) }}<br />
-							<div v-if="data.status == 'accepted'" class="contact-info">
-								<div v-if="requestView">
-									<small class="text-description">Donor's Number:</small>
-									{{ phoneNumber }}<br />
-									<div v-if="telegramHandle">
-										<small class="text-description">Donor's Telegram:</small>
-										{{ telegramHandle }}<br />
-									</div>
-								</div>
-								<div v-if="!requestView">
-									<small class="text-description">Savior's Number:</small>
-									{{ phoneNumber }}<br />
-									<div v-if="telegramHandle">
-										<small class="text-description">Savior's Telegram:</small>
-										{{ telegramHandle }}<br />
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<md-button
-						class="md-success first-button"
-						v-on:click="updateStatus('accepted')"
-						v-if="data.status == 'pending' && requestView == false"
-						>Accept</md-button
-					>
-					<md-button
-						class="md-success"
-						v-on:click="updateStatus('declined')"
-						v-if="data.status == 'pending' && requestView == false"
-						>Decline</md-button
-					>
-					<badge type="success first-button status" v-if="data.status == 'accepted'"
-						>Accepted</badge
-					>
-					<badge
-						type="warning first-button status"
-						v-if="data.status == 'pending' && requestView == true"
-						>Pending</badge
-					>
-					<badge type="rose first-button status" v-if="data.status == 'declined'"
-						>Declined</badge
-					>
-				</div>
-			</div>
-		</md-card-content>
-	</md-card>
+  <md-card id="explore-card">
+    <md-card-content>
+      <div class="md-layout">
+        <div class="md-layout-item">
+          <div>
+            <img
+              v-bind:src="this.getImage"
+              @error="onImageLoadFailure()"
+              v-on:click="pushToDetails"
+              class="rounded"
+              :class="{ 'responsive-image': responsive }"
+            />
+            <div class="text text-description">
+              <small class="text-description">Food Description:</small>
+              {{ data["foodName"] }}<br />
+              <div class="username">
+                <div v-if="!requestView">
+                  <small class="text-description">Savior Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
+                </div>
+                <div v-if="requestView">
+                  <small class="text-description">Donor Name:</small>
+                  {{
+                    firstName.charAt(0).toUpperCase() +
+                      firstName.slice(1).toLowerCase() +
+                      " " +
+                      lastName.charAt(0).toUpperCase() +
+                      lastName.slice(1).toLowerCase()
+                  }}<br />
+                </div>
+              </div>
+              <small class="text-description">Time Requested:</small>
+              {{ data["timeRequested"].toString().slice(0, 21) }}<br />
+              <div v-if="data.status == 'accepted'" class="contact-info">
+                <div v-if="requestView">
+                  <small class="text-description">Donor's Number:</small>
+                  {{ phoneNumber }}<br />
+                  <div v-if="telegramHandle">
+                    <small class="text-description">Donor's Telegram:</small>
+                    {{ telegramHandle }}<br />
+                  </div>
+                </div>
+                <div v-if="!requestView">
+                  <small class="text-description">Savior's Number:</small>
+                  {{ phoneNumber }}<br />
+                  <div v-if="telegramHandle">
+                    <small class="text-description">Savior's Telegram:</small>
+                    {{ telegramHandle }}<br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <md-button
+            class="md-success first-button"
+            v-on:click="updateStatus('accepted')"
+            v-if="data.status == 'pending' && requestView == false"
+            >Accept</md-button
+          >
+          <md-button
+            class="md-success"
+            v-on:click="updateStatus('declined')"
+            v-if="data.status == 'pending' && requestView == false"
+            >Decline</md-button
+          >
+          <badge
+            type="success first-button status"
+            v-if="data.status == 'accepted'"
+            >Accepted</badge
+          >
+          <badge
+            type="warning first-button status"
+            v-if="data.status == 'pending' && requestView == true"
+            >Pending</badge
+          >
+          <badge
+            type="rose first-button status"
+            v-if="data.status == 'declined'"
+            >Declined</badge
+          >
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
 </template>
 
 <script>
 import firebase from "../../firebase";
-import {Badge} from "@/components";
+import { Badge } from "@/components";
 
 export default {
-	name: "explore-card",
-	data() {
-		return {
-			imgRef: "",
-			firstName: "",
-			lastName: "",
-			contactNumer: "",
-			telegramHandle: "",
-			responsive: false,
-			imgErr: false,
-			unknown: require("@/assets/img/unknown.jpg"),
-		};
-	},
-	props: {
-		data: {type: Object},
-		requestView: {type: Boolean},
-	},
-	methods: {
-		fetchItems: function() {
-			// get image
-			var storage = firebase.storage();
-			let imgPath = storage.ref(this.data.donorID + "/donationImages/" + this.data.foodID);
+  name: "explore-card",
+  data() {
+    return {
+      imgRef: "",
+      firstName: "",
+      lastName: "",
+      contactNumer: "",
+      telegramHandle: "",
+      responsive: false,
+      imgErr: false,
+      unknown: require("@/assets/img/unknown.jpg")
+    };
+  },
+  props: {
+    data: { type: Object },
+    requestView: { type: Boolean }
+  },
+  methods: {
+    fetchItems: function() {
+      // get image
+      var storage = firebase.storage();
+      let imgPath = storage.ref(
+        this.data.donorID + "/donationImages/" + this.data.foodID
+      );
 
-			imgPath.getDownloadURL().then((url) => {
-				this.imgRef = url;
-			});
+      imgPath.getDownloadURL().then(url => {
+        this.imgRef = url;
+      });
 
-			var database = firebase.firestore();
+      var database = firebase.firestore();
 
-			let id = !this.requestView ? this.data.saviorID : this.data.donorID;
-			database
-				.collection("users")
-				.doc(id)
-				.get()
-				.then((items) => {
-					let item = items.data();
-					console.log(item);
-					this.firstName = item["firstName"];
-					this.lastName = item["lastName"];
-					this.phoneNumber = item["phoneNumber"];
-					this.telegramHandle = item["telegramHandle"];
-				});
-		},
-		updateStatus(statusMsg) {
-			var database = firebase.firestore();
-			let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
-			let saviorCollect = "donorRequest/" + this.data.saviorID + "/foodRequested";
+      let id = !this.requestView ? this.data.saviorID : this.data.donorID;
+      database
+        .collection("users")
+        .doc(id)
+        .get()
+        .then(items => {
+          let item = items.data();
+          console.log(item);
+          this.firstName = item["firstName"];
+          this.lastName = item["lastName"];
+          this.phoneNumber = item["phoneNumber"];
+          this.telegramHandle = item["telegramHandle"];
+        });
+    },
+    updateStatus(statusMsg) {
+      var database = firebase.firestore();
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
+      let saviorCollect =
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
 
-			database
-				.collection(donorCollect)
-				.doc(this.data.foodID)
-				.update({
-					status: statusMsg,
-				})
-				.then(() => {
-					console.log("Document status updated to false!");
-				});
+      database
+        .collection(donorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: statusMsg
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
+        });
 
-			database
-				.collection(saviorCollect)
-				.doc(this.data.foodID)
-				.update({
-					status: statusMsg,
-				})
-				.then(() => {
-					console.log("Document status updated to false!");
-				});
+      database
+        .collection(saviorCollect)
+        .doc(this.data.foodID)
+        .update({
+          status: statusMsg
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
+        });
 
-			database
-				.collection("donationData")
-				.doc(this.data.foodID)
-				.update({
-					status: "unavailable",
-				})
-				.then(() => {
-					console.log("Document status updated to unavailable!");
-				});
-		},
-		pushToDetails() {
-			let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
-			this.$router.push({
-				path: path,
-			});
-		},
-		onResponsiveInverted() {
-			if (window.innerWidth < 600) {
-				this.responsive = true;
-			} else {
-				this.responsive = false;
-			}
-		},
-	},
-	computed: {
-		getImage() {
-			if (this.imgErr) {
-				return this.unknown;
-			} else {
-				return this.imgRef;
-			}
-		},
-	},
-	components: {
-		Badge,
-	},
-	created() {
-		this.fetchItems();
-	},
-	mounted() {
-		this.onResponsiveInverted();
-		window.addEventListener("resize", this.onResponsiveInverted);
-	},
-	beforeDestroy() {
-		window.removeEventListener("resize", this.onResponsiveInverted);
-	},
+      database
+        .collection("donationData")
+        .doc(this.data.foodID)
+        .update({
+          status: "unavailable"
+        })
+        .then(() => {
+          console.log("Document status updated to unavailable!");
+        });
+    },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
+    },
+    onResponsiveInverted() {
+      if (window.innerWidth < 600) {
+        this.responsive = true;
+      } else {
+        this.responsive = false;
+      }
+    }
+  },
+  computed: {
+    getImage() {
+      if (this.imgErr) {
+        return this.unknown;
+      } else {
+        return this.imgRef;
+      }
+    }
+  },
+  components: {
+    Badge
+  },
+  created() {
+    this.fetchItems();
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResponsiveInverted);
+  }
 };
 </script>
 <style scoped>
 .contact-info {
-	color: #4caf50;
-	font-weight: 500;
+  color: #4caf50;
+  font-weight: 500;
 }
 
 .username {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .username:hover {
-	color: #4caf50;
+  color: #4caf50;
 }
 
 .text-description {
-	font-size: 15px !important;
+  font-size: 15px !important;
 }
 
 small,
 div {
-	font-size: medium;
+  font-size: medium;
 }
 
 img {
-	display: inline-block;
-	min-width: 95px;
-	width: 20% !important;
-	float: left;
-	padding-top: 45px;
+  display: inline-block;
+  min-width: 95px;
+  width: 20% !important;
+  float: left;
+  padding-top: 45px;
 }
 
 img:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .text {
-	display: inline-block;
-	max-width: 70%;
-	padding: 26px 0;
-	padding-left: 30px;
+  display: inline-block;
+  max-width: 70%;
+  padding: 26px 0;
+  padding-left: 30px;
 }
 
 #explore-card {
-	width: 450px !important;
-	max-width: 450px !important;
+  width: 450px !important;
+  max-width: 450px !important;
 }
 
 .status {
-	font-size: small;
-	padding: 8px 10px;
+  font-size: small;
+  padding: 8px 10px;
 }
 
 .md-success {
-	margin: 0 5px !important;
+  margin: 0 5px !important;
 }
 
 .first-button {
-	margin-left: 35px !important;
+  margin-left: 35px !important;
 }
 
 @media screen and (min-width: 576px) {
-	.first-button {
-		margin-left: 125px !important;
-	}
+  .first-button {
+    margin-left: 125px !important;
+  }
 }
 
 @media screen and (min-width: 768px) {
-	.first-button {
-		margin-left: 35px !important;
-	}
+  .first-button {
+    margin-left: 35px !important;
+  }
 }
 
 @media screen and (min-width: 1200px) {
-	.first-button {
-		margin-left: 125px !important;
-	}
+  .first-button {
+    margin-left: 125px !important;
+  }
 }
 </style>

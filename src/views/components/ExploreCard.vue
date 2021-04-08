@@ -15,14 +15,14 @@
               <small>Food Description:</small>
               {{ data["foodName"] }}<br />
               <div class="username">
-              <small>Donor Name:</small>
-              {{
-                data["firstName"].charAt(0).toUpperCase() +
-                  data["firstName"].slice(1).toLowerCase() +
-                  " " +
-                  data["lastName"].charAt(0).toUpperCase() +
-                  data["lastName"].slice(1).toLowerCase()
-              }}<br />
+                <small>Donor Name:</small>
+                {{
+                  data["firstName"].charAt(0).toUpperCase() +
+                    data["firstName"].slice(1).toLowerCase() +
+                    " " +
+                    data["lastName"].charAt(0).toUpperCase() +
+                    data["lastName"].slice(1).toLowerCase()
+                }}<br />
               </div>
               <small>Collection Location:</small>
               {{ data["location"].join(", ") }}<br />
@@ -59,7 +59,9 @@ export default {
     fetchItems: function() {
       console.log(this.data);
       var storage = firebase.storage();
-      let imgPath = storage.ref(this.data.donorID + "/donationImages/" + this.data.foodID);
+      let imgPath = storage.ref(
+        this.data.donorID + "/donationImages/" + this.data.foodID
+      );
 
       imgPath.getDownloadURL().then(url => {
         this.imgRef = url;
@@ -72,7 +74,7 @@ export default {
         .doc(this.data.donorID)
         .get()
         .then(doc => {
-          doc = doc.data()
+          doc = doc.data();
           this.data["firstName"] = doc.firstName;
           this.data["lastName"] = doc.lastName;
           console.log(this.data["firstName"]);
@@ -106,7 +108,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 small,
 div {
@@ -126,9 +127,8 @@ img {
 }
 
 .username:hover {
-  color: #4caf50 ;
+  color: #4caf50;
 }
-
 
 img:hover {
   cursor: pointer;
