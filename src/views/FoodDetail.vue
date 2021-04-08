@@ -44,40 +44,101 @@
                       {{ data["quantity"] }}<br />
                       <small class="text-description">Expiry Date/Time:</small>
                       {{ data["expiry"].toString().slice(0, 21) }}<br />
+                      <div
+                        v-if="
+                          !isAvailable &&
+                            (userRequest == 'accepted' ||
+                              (donorStatus == 'accepted' && isDonor))
+                        "
+                        class="contact-info"
+                      >
+                        <div v-if="isDonor">
+                          <small class="text-description"
+                            >Donor's Number:</small
+                          >
+                          {{ data["phoneNumber"] }}<br />
+                          <div v-if="data['telegramHandle']">
+                            <small class="text-description"
+                              >Donor's Telegram:</small
+                            >
+                            {{ data["telegramHandle"] }}<br />
+                          </div>
+                        </div>
+                        <div v-if="!isDonor">
+                          <small class="text-description"
+                            >Savior's Number:</small
+                          >
+                          {{ data["phoneNumber"] }}<br />
+                          <div v-if="data['telegramHandle']">
+                            <small class="text-description"
+                              >Savior's Telegram:</small
+                            >
+                            {{ data["telegramHandle"] }}<br />
+                          </div>
+                        </div>
+                      </div>
                       <md-button
                         class="md-success first-button"
-                        v-if="isAvailable && !expired"
+                        v-if="isAvailable && !expired && !isDonor"
                         v-on:click="request"
                         >Request</md-button
                       >
                       <md-button
                         class="md-success"
-                        v-if="isAvailable && !expired"
+                        v-if="isAvailable && !expired && !isDonor"
                         v-on:click="saveFood"
                         >Save</md-button
                       >
-                      <badge 
-                        type="rose first-button status" 
-                        v-if="!isAvailable && userRequest == null &&
-                        !expired"
+                      <md-button
+                        class="md-success first-button"
+                        v-if="!expired && isDonor && donorStatus == 'pending'"
+                        v-on:click="updateStatus('accepted')"
+                        >accept</md-button
+                      >
+                      <md-button
+                        class="md-success"
+                        v-if="!expired && isDonor && donorStatus == 'pending'"
+                        v-on:click="updateStatus('declined')"
+                        >decline</md-button
+                      >
+                      <badge
+                        type="rose first-button status"
+                        v-if="
+                          !isAvailable &&
+                            userRequest == null &&
+                            !expired &&
+                            !isDonor
+                        "
                         >unavailable</badge
                       >
-                      <badge 
-                        type="success first-button status" 
-                        v-if="!isAvailable && !expired && 
-                        userRequest == 'accepted'"
+                      <badge
+                        type="success first-button status"
+                        v-if="
+                          !isAvailable &&
+                            !expired &&
+                            (userRequest == 'accepted' ||
+                              (donorStatus == 'accepted' && isDonor))
+                        "
                         >accepted</badge
                       >
-                      <badge 
-                        type="rose first-button status" 
-                        v-if="!isAvailable && !expired && 
-                        userRequest == 'declined'"
+                      <badge
+                        type="rose first-button status"
+                        v-if="
+                          !isAvailable &&
+                            !expired &&
+                            (userRequest == 'declined' ||
+                              (donorStatus == 'declined' && isDonor))
+                        "
                         >declined</badge
                       >
                       <md-button
                         class="md-warning first-button cancel-status"
-                        v-if="!isAvailable && !expired && 
-                        userRequest == 'pending'"
+                        v-if="
+                          !isAvailable &&
+                            !expired &&
+                            userRequest == 'pending' &&
+                            !isDonor
+                        "
                         v-on:click="cancelRequest"
                         >Cancel Request</md-button
                       >
@@ -141,16 +202,21 @@ export default {
   bodyClass: "food-detail",
   data() {
     return {
-      donorID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
-      foodID: "r8MTer5iLadyXtjMCjCX",
       data: {},
       isAvailable: false,
       userRequest: null,
       processing: true,
+      isDonor: false,
+      saviorID: null,
+      donorStatus: null,
       expired: false,
-      header: require("@/assets/img/city-profile.jpg"),
-      user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
+      userID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2", //this.$store.getters.user.uid,
+      header: require("@/assets/img/city-profile.jpg")
     };
+  },
+  props: {
+    donorID: { type: String },
+    foodID: { type: String }
   },
   components: {
     Badge
@@ -183,16 +249,19 @@ export default {
           this.data["firstName"] = item["firstName"];
           this.data["lastName"] = item["lastName"];
           this.data["rating"] = item["totalRatings"];
+          this.data["phoneNumber"] = item["phoneNumber"];
+          this.data["telegramHandle"] = item["telegramHandle"];
           console.log(this.data);
           this.processing = false;
         });
     },
     fetchFoodData: function(db) {
-
       db.collection("donationData")
         .doc(this.foodID)
         .onSnapshot(doc => {
+          console.log("HELLO");
           doc = doc.data();
+
           this.data["foodName"] = doc.listingName;
           this.data["status"] = doc.status;
           this.data["expiry"] = new Date(
@@ -204,99 +273,164 @@ export default {
           this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
           this.data["remarks"] = doc.remarks;
           this.isAvailable = doc.status == "available" ? true : false;
+          this.isDonor = this.data.donorID == this.userID ? true : false;
           this.expired =
             new Date(doc.expiry.toDate().toLocaleString("en-US")) <= new Date();
-          
-          if (this.isAvailable == false) {
-            console.log("PENDING");
-            let collect = "donorRequest/" + this.user + "/foodRequested";
+          console.log(this.data);
+          console.log(this.isAvailable);
+          console.log(this.isDonor);
 
-            db.collection(collect)
+          if (!this.isAvailable && !this.isDonor) {
+            console.log("PENDING");
+            let collectRequest =
+              "donorRequest/" + this.userID + "/foodRequested";
+
+            db.collection(collectRequest)
               .doc(this.foodID)
               .onSnapshot(snapshot => {
-                console.log("PENDING!!");
+                console.log("collectRequest!!");
                 this.userRequest = snapshot.data().status;
+
+                db.collection("users")
+                  .doc(this.userID)
+                  .get()
+                  .then(items => {
+                    let item = items.data();
+
+                    this.data["phoneNumber"] = item["phoneNumber"];
+                    this.data["telegramHandle"] = item["telegramHandle"];
+                    console.log(this.data);
+                  });
+              });
+          } else if (!this.isAvailable && this.isDonor) {
+            let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
+            console.log("GETTING SAVIOR");
+            db.collection(collectDonate)
+              .doc(this.foodID)
+              .onSnapshot(snapshot => {
+                var data = snapshot.data();
+                console.log("collectDonate!!");
+                this.donorStatus = data.status;
+                this.saviorID = data.saviorID;
+                console.log(data.saviorID);
               });
           }
         });
     },
+    updateStatus(statusMsg) {
+      var database = firebase.firestore();
+      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
+      let saviorCollect = "donorRequest/" + this.saviorID + "/foodRequested";
+
+      database
+        .collection(donorCollect)
+        .doc(this.foodID)
+        .update({
+          status: statusMsg
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
+        });
+
+      database
+        .collection(saviorCollect)
+        .doc(this.foodID)
+        .update({
+          status: statusMsg
+        })
+        .then(() => {
+          console.log("Document status updated to false!");
+        });
+
+      database
+        .collection("donationData")
+        .doc(this.foodID)
+        .update({
+          status: "unavailable"
+        })
+        .then(() => {
+          console.log("Document status updated to unavailable!");
+        });
+    },
     saveFood() {
-      let collectSave = "donorRequest/" + this.user + "/foodSaved";
+      let collectSave = "donorRequest/" + this.userID + "/foodSaved";
       var db = firebase.firestore();
 
       db.collection(collectSave)
-          .doc(this.foodID)
-          .set({
-            foodName: this.data.foodName,
-            donorID: this.data.donorID,
-            quantity: this.data.quantity,
-            location: this.data.location,
-            status: this.data.status,
-            expiry: this.data.expiry
-          })
-          .then(() => {
-            this.$toaster.info(this.data.foodName + " has been saved!");
-          });
+        .doc(this.foodID)
+        .set({
+          foodName: this.data.foodName,
+          donorID: this.data.donorID,
+          quantity: this.data.quantity,
+          location: this.data.location,
+          status: this.data.status,
+          expiry: this.data.expiry
+        })
+        .then(() => {
+          this.$toaster.info(this.data.foodName + " has been saved!");
+        });
     },
     cancelRequest() {
       var db = firebase.firestore();
 
-      let collectDonate = "donorRequest/" + this.user + "/foodDonated";
+      let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
 
       db.collection(collectDonate)
-          .doc(this.foodID)
-          .delete();
-      
-      let collectRequest = "donorRequest/" + this.user + "/foodRequested";
+        .doc(this.foodID)
+        .delete();
+
+      let collectRequest = "donorRequest/" + this.userID + "/foodRequested";
 
       db.collection(collectRequest)
-          .doc(this.foodID)
-          .delete();
-      
+        .doc(this.foodID)
+        .delete();
+
       db.collection("donationData")
         .doc(this.foodID)
         .update({
-            status: "available" 
+          status: "available"
         })
         .then(() => {
-            this.$toaster.info("Your request for " + this.data.foodName + " has been cancelled!");
-          });
+          this.$toaster.info(
+            "Your request for " + this.data.foodName + " has been cancelled!"
+          );
+        });
     },
     request() {
       var db = firebase.firestore();
 
-      let collectDonate = "donorRequest/" + this.user + "/foodDonated";
+      let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
 
       db.collection(collectDonate)
-          .doc(this.foodID)
-          .set({
-            listingName: this.data.foodName,
-            saviorId: this.user,
-            status: "pending",
-            timeRequested: firebase.firestore.Timestamp.now()
-          });
-      
-      let collectRequest = "donorRequest/" + this.user + "/foodRequested";
+        .doc(this.foodID)
+        .set({
+          foodName: this.data.foodName,
+          saviorID: this.userID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
+      let collectRequest = "donorRequest/" + this.userID + "/foodRequested";
 
       db.collection(collectRequest)
-          .doc(this.foodID)
-          .set({
-            listingName: this.data.foodName,
-            donorID: this.data.donorID,
-            status: "pending",
-            timeRequested: firebase.firestore.Timestamp.now()
-          });
-      
-      let saveRequest = "donorRequest/" + this.user + "/foodSaved";
+        .doc(this.foodID)
+        .set({
+          foodName: this.data.foodName,
+          donorID: this.data.donorID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
+      let saveRequest = "donorRequest/" + this.userID + "/foodSaved";
 
       db.collection(saveRequest)
-          .doc(this.foodID)
-          .delete();
-      
+        .doc(this.foodID)
+        .delete();
+
       db.collection("donationData")
         .doc(this.foodID)
         .update({
-            status: "unavailable" 
+          status: "unavailable"
         });
     },
     onResponsiveInverted() {
@@ -335,6 +469,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contact-info {
+  color: #47a44b;
+  font-weight: 500;
+}
+
 .text-description {
   font-size: 17px;
   float: left;

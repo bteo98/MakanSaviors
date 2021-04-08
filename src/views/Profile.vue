@@ -63,6 +63,7 @@
                       :key="item"
                     >
                       <div class="md-layout" style="padding-right: 5%;">
+                        {{ item }}
                         <ProfileDonationCard
                           class="md-layout-item requestcard"
                           :data="item"
@@ -269,6 +270,9 @@ export default {
             .then(doc => {
               donationDict["data"] = doc.data();
               this.donations.push(donationDict);
+              this.donations.sort(function(a, b) {
+                return b.data.datePosted - a.data.datePosted;
+              });
             });
         });
       }

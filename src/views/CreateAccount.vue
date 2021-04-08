@@ -86,7 +86,7 @@
                   <div class="md-layout-item md-size-50">
                     <md-field>
                       <label>Preferred Location</label>
-                      <md-select v-model="preferredLocation" multiple required>
+                      <md-select multiple v-model="preferredLocation">
                         <md-option value="Central">Central</md-option>
                         <md-option value="East">East</md-option>
                         <md-option value="North">North</md-option>
@@ -167,7 +167,7 @@
                   <div class="md-layout-item md-size-50">
                     <md-field>
                       <label>Dietary Restriction(s)</label>
-                      <md-select v-model="dietaryRestrictions" multiple>
+                      <md-select multiple v-model="dietaryRestrictions">
                         <md-option value="None">None</md-option>
                         <md-option value="Diabetic">Diabetic</md-option>
                         <md-option value="Gluten Free">Gluten Free</md-option>
@@ -188,7 +188,7 @@
                   <div class="md-layout-item md-size-50">
                     <md-field>
                       <label>Top 3 Food Categories</label>
-                      <md-select v-model="foodCategory" multiple>
+                      <md-select multiple v-model="foodCategory">
                         <md-option value="Baking Needs">Baking Needs</md-option>
                         <md-option value="Biscuits">Biscuits</md-option>
                         <md-option value="Buffet/Bento Boxes"

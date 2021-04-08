@@ -177,7 +177,7 @@ let router = new Router({
       }
     },
     {
-      path: "/fooddetail",
+      path: "/fooddetail/:donorID/:foodID",
       name: "fooddetail",
       components: {
         default: FoodDetail,
@@ -186,7 +186,8 @@ let router = new Router({
       },
       props: {
         header: { colorOnScroll: 5 },
-        footer: { backgroundColor: "black" }
+        footer: { backgroundColor: "black" },
+        default: true
       }
     }
   ],

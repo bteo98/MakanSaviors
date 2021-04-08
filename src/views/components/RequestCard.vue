@@ -7,22 +7,43 @@
             <img
               v-bind:src="imgRef"
               v-bind:alt="data['foodName']"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
               {{ data["foodName"] }}<br />
-              <small class="text-description">Donor Name:</small>
-              {{
-                firstName.charAt(0).toUpperCase() +
-                  firstName.slice(1).toLowerCase() +
-                  " " +
-                  lastName.charAt(0).toUpperCase() +
-                  lastName.slice(1).toLowerCase()
-              }}<br />
+              <div class="username">
+                <small class="text-description">Donor Name:</small>
+                {{
+                  firstName.charAt(0).toUpperCase() +
+                    firstName.slice(1).toLowerCase() +
+                    " " +
+                    lastName.charAt(0).toUpperCase() +
+                    lastName.slice(1).toLowerCase()
+                }}<br />
+              </div>
               <small class="text-description">Time Requested:</small>
               {{ data["timeRequested"].toString().slice(0, 21) }}<br />
+              <div v-if="data.status == 'accepted'" class="contact-info">
+                <div v-if="requestView">
+                  <small class="text-description">Donor's Number:</small>
+                  {{ phoneNumber }}<br />
+                  <div v-if="telegramHandle">
+                    <small class="text-description">Donor's Telegram:</small>
+                    {{ telegramHandle }}<br />
+                  </div>
+                </div>
+                <div v-if="!requestView">
+                  <small class="text-description">Savior's Number:</small>
+                  {{ phoneNumber }}<br />
+                  <div v-if="telegramHandle">
+                    <small class="text-description">Savior's Telegram:</small>
+                    {{ telegramHandle }}<br />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <md-button
@@ -69,6 +90,8 @@ export default {
       imgRef: "",
       firstName: "",
       lastName: "",
+      contactNumer: "",
+      telegramHandle: "",
       responsive: false
     };
   },
@@ -90,23 +113,26 @@ export default {
 
       var database = firebase.firestore();
 
-      // get user info
+      let id = this.requestView ? this.data.saviorID : this.data.donorID;
+
       database
         .collection("users")
-        .doc(this.data.saviorID)
+        .doc(id)
         .get()
         .then(items => {
           let item = items.data();
-
+          console.log(item);
           this.firstName = item["firstName"];
           this.lastName = item["lastName"];
+          this.phoneNumber = item["phoneNumber"];
+          this.telegramHandle = item["telegramHandle"];
         });
     },
     updateStatus(statusMsg) {
       var database = firebase.firestore();
       let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
       let saviorCollect =
-        "donorRequest/" + this.data.donorID + "/foodRequested";
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
 
       database
         .collection(donorCollect)
@@ -138,6 +164,12 @@ export default {
           console.log("Document status updated to unavailable!");
         });
     },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
+    },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
         this.responsive = true;
@@ -162,6 +194,19 @@ export default {
 };
 </script>
 <style scoped>
+.contact-info {
+  color: #47a44b;
+  font-weight: 500;
+}
+
+.username {
+  cursor: pointer;
+}
+
+.username:hover {
+  color: #47a44b;
+}
+
 .text-description {
   font-size: 15px !important;
 }
@@ -179,6 +224,10 @@ img {
   padding-top: 45px;
 }
 
+img:hover {
+  cursor: pointer;
+}
+
 .text {
   display: inline-block;
   max-width: 70%;
@@ -187,8 +236,8 @@ img {
 }
 
 #explore-card {
-  max-width: 500px !important;
-  min-width: 450px !important;
+  width: 450px !important;
+  max-width: 450px !important;
 }
 
 .status {
@@ -201,6 +250,24 @@ img {
 }
 
 .first-button {
-  margin-left: 125px !important;
+  margin-left: 35px !important;
+}
+
+@media screen and (min-width: 576px) {
+  .first-button {
+    margin-left: 125px !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .first-button {
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .first-button {
+    margin-left: 125px !important;
+  }
 }
 </style>

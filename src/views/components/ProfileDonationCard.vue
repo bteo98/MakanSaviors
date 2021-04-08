@@ -5,8 +5,9 @@
         <div class="md-layout-item">
           <div>
             <img
-              v-bind:src="this.imgRef"
-              v-bind:alt="this.data['data'].listingName"
+              v-bind:src="this.getImage"
+              @error="onImageLoadFailure()"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
@@ -50,7 +51,9 @@ export default {
       imgRef: "",
       firstName: "",
       lastName: "",
-      responsive: false
+      responsive: false,
+      imgErr: false,
+      unknown: require("@/assets/img/unknown.jpg")
     };
   },
   props: {
@@ -101,13 +104,28 @@ export default {
       var hh = parseInt(expiryDate.slice(11, 13));
       var min = parseInt(expiryDate.slice(14, 16));
       var expiry = new Date(yy, mm, dd, hh, min);
-      console.log(expiry);
-      console.log(today);
       if (expiry < today) {
-        console.log("expired");
         return "expired";
       } else {
         return "safe";
+      }
+    },
+    onImageLoadFailure() {
+      this.imgErr = true;
+    },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.uid}/${this.data.imageID}`;
+      this.$router.push({
+        path: path
+      });
+    }
+  },
+  computed: {
+    getImage() {
+      if (this.imgErr) {
+        return this.unknown;
+      } else {
+        return this.imgRef;
       }
     }
   },

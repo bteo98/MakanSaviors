@@ -3,10 +3,12 @@
     <md-card-content>
       <div class="md-layout">
         <div class="md-layout-item">
+          <i class="material-icons close" v-on:click="deleteSaved">close</i>
           <div>
             <img
               v-bind:src="imgRef"
               v-bind:alt="data['foodName']"
+              v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
@@ -33,16 +35,12 @@
             v-on:click="request"
             >Request</md-button
           >
-          <badge
-                        type="rose first-button status"
-                        v-if="isAvailable && expired"
-                        >expired</badge
-                      >
-        <badge 
-                        type="rose first-button status" 
-                        v-if="!isAvailable && !expired"
-                        >unavailable</badge
-                      >
+          <badge type="rose first-button status" v-if="isAvailable && expired"
+            >expired</badge
+          >
+          <badge type="rose first-button status" v-if="!isAvailable && !expired"
+            >unavailable</badge
+          >
         </div>
       </div>
     </md-card-content>
@@ -93,9 +91,10 @@ export default {
           this.firstName = item["firstName"];
           this.lastName = item["lastName"];
         });
-      
-      this.expired = new Date(this.data.expiry.toDate().toLocaleString("en-US"))
-        <= new Date();
+
+      this.expired =
+        new Date(this.data.expiry.toDate().toLocaleString("en-US")) <=
+        new Date();
       this.isAvailable = this.data.status == "available" ? true : false;
 
       console.log(this.data);
@@ -115,37 +114,53 @@ export default {
       let collectDonate = "donorRequest/" + this.data.donorID + "/foodDonated";
 
       db.collection(collectDonate)
-          .doc(this.foodID)
-          .set({
-            listingName: this.data.foodName,
-            saviorId: this.user,
-            status: "pending",
-            timeRequested: firebase.firestore.Timestamp.now()
-          });
-      
-      let collectRequest = "donorRequest/" + this.data.saviorID + "/foodRequested";
+        .doc(this.data.foodID)
+        .set({
+          listingName: this.data.foodName,
+          saviorID: this.data.saviorID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
+      let collectRequest =
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
 
       db.collection(collectRequest)
-          .doc(this.foodID)
-          .set({
-            listingName: this.data.foodName,
-            donorID: this.data.donorID,
-            status: "pending",
-            timeRequested: firebase.firestore.Timestamp.now()
-          });
-      
+        .doc(this.data.foodID)
+        .set({
+          listingName: this.data.foodName,
+          donorID: this.data.donorID,
+          status: "pending",
+          timeRequested: firebase.firestore.Timestamp.now()
+        });
+
       let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
 
       db.collection(saveRequest)
-          .doc(this.foodID)
-          .delete();
-      
+        .doc(this.data.foodID)
+        .delete();
+
       db.collection("donationData")
         .doc(this.foodID)
         .update({
-            status: "unavailable" 
+          status: "unavailable"
         });
     },
+    pushToDetails() {
+      let path = `fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      this.$router.push({
+        path: path
+      });
+    },
+    deleteSaved() {
+      var db = firebase.firestore();
+
+      let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
+      console.log(saveRequest);
+      db.collection(saveRequest)
+        .doc(this.data.foodID)
+        .delete();
+    }
   },
   components: {
     Badge
@@ -186,8 +201,7 @@ img {
 }
 
 #explore-card {
-  max-width: 500px !important;
-  min-width: 450px !important;
+  width: 450px !important;
 }
 
 .status {
@@ -201,5 +215,14 @@ img {
 
 .first-button {
   margin-left: 125px !important;
+}
+
+.close {
+  float: right;
+}
+
+.close:hover {
+  color: #f44336;
+  cursor: pointer;
 }
 </style>
