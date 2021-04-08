@@ -261,7 +261,7 @@ export default {
         .onSnapshot(doc => {
           console.log("HELLO");
           doc = doc.data();
-
+          console.log(doc);
           this.data["foodName"] = doc.listingName;
           this.data["status"] = doc.status;
           this.data["expiry"] = new Date(

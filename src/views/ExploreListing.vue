@@ -89,9 +89,7 @@
 											</div>
 										<md-button class="md-raised md-primary" v-on:click="refresh()">Filter</md-button> 
                 </div>
-
                 <br>
-                {{this.collections}}
 								<div class="md-layout-item md-size-85 md-xsmall-size-45">
                   <ul v-if="!processing" id="itemsList">
 										<li
@@ -254,29 +252,6 @@ export default {
       }
     },
     
-    //order the Date in format {{userID:
-    /*
-    orderDate: function() {
-      var db = firebase.firestore();
-      db.collection("donationData")
-        .orderBy("expiry", "desc")
-        .onSnapshot(snapshot => {
-          let data = {};
-          snapshot.forEach(doc => {
-            let docID = [];
-            let userid = doc.data().userID;
-            if (userid in data) {
-              data[userid].push(doc.id);
-            } else {
-              docID.push(doc.id)
-              data[userid] = docID;
-            }
-          });
-          this.collections = data
-          console.log(this.collections);
-        });
-    }
-    */
     orderDate: function() {
       var db = firebase.firestore();
       if (this.desc) {
