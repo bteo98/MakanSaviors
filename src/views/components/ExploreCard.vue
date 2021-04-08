@@ -1,5 +1,5 @@
 <template>
-  <md-card id="explore-card">
+  <md-card id="explore-card " style="min-width: 350px">
     <md-card-content>
       <div class="md-layout">
         <div class="md-layout-item">
@@ -178,7 +178,7 @@ img {
   min-width: 95px;
   width: 20% !important;
   float: left;
-  padding-top: 28px;
+  padding-top: 45px;
 }
 
 .text {
@@ -189,12 +189,26 @@ img {
 }
 
 #explore-card {
-  max-width: 450px !important;
-  min-width: 320px !important; 
+  max-width: 500px !important;
+  min-width: 450px !important; 
   padding-left: 0%;
 }
 
 .text-description {
   font-size: 15px !important;
 }
+
+.status {
+  font-size: small;
+  padding: 8px 10px;
+}
+
+.md-success {
+  margin: 0 5px !important;
+}
+
+.first-button {
+  margin-left: 125px !important;
+}
 </style>
+
