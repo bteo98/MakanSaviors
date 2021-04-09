@@ -117,7 +117,7 @@
 													style="border-radius: 50%; height: 150px; width: 150px; padding: 5px;"
 												/>
 												<h4>
-													MakanSaviour brings people from all walks of life together, to achieve
+													MakanSaviors brings people from all walks of life together, to achieve
 													a<br />common goal - to reduce food waste and build food sharing
 													communities! <br /><br />-Claire
 												</h4>
@@ -132,7 +132,7 @@
 													style="width:150px; height:150px; border-radius: 50%; padding: 5px;"
 												/>
 												<h4>
-													Thanks to MakanSaviour, the unused food items at home did not end<br />up
+													Thanks to MakanSaviors, the unused food items at home did not end<br />up
 													in the trash and are now with someone who needs them more
 													<br /><br />-Steven
 												</h4>
