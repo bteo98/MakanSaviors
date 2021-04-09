@@ -9,8 +9,8 @@
 							<div class="profile">
 								<div class="avatar">
 									<img
-										:src="this.profilePic"
-										alt="Circle Image"
+										v-bind:src="this.getImage"
+										@error="onImageLoadFailure()"
 										class="img-raised rounded-circle img-fluid"
 									/>
 								</div>
@@ -71,7 +71,10 @@
 							What motivates me to save:
 							<p>{{ this.reasonSave }}</p>
 						</h4>
+						<br />
+						<button v-show="profileOwnership()" v-on:click="pushToModify()">Edit Profile</button>
 					</div>
+
 					<div class="profile-tabs" style="margin-top: 15px">
 						<tabs
 							:tab-name="['Donations']"
@@ -126,7 +129,7 @@ export default {
 			foodCategory: null,
 			reasonDonate: null,
 			reasonSave: null,
-			profilePic: require("@/assets/img/faces/unknown.jpg"),
+			profilePic: null,
 			preferredLocation: null,
 			joinDate: null,
 			rating: null,
@@ -135,6 +138,8 @@ export default {
 			avgRatings: null,
 			imageIDs: [],
 			donations: [],
+			imgErr: false,
+			unknown: require("@/assets/img/faces/unknown.jpg"),
 		};
 	},
 	components: {
@@ -156,6 +161,13 @@ export default {
 				profile: require("@/assets/img/faces/unknown.jpg"),
 				UID: "",
 			};
+		},
+		getImage() {
+			if (this.imgErr) {
+				return this.unknown;
+			} else {
+				return this.profilePic;
+			}
 		},
 	},
 	methods: {
@@ -247,6 +259,19 @@ export default {
 						});
 				});
 			}
+		},
+		profileOwnership: function() {
+			var currUser = firebase.auth().currentUser.uid;
+			return currUser == this.UID;
+		},
+		pushToModify() {
+			let path = `/ModifyAccount`;
+			this.$router.replace({
+				path: path,
+			});
+		},
+		onImageLoadFailure() {
+			this.imgErr = true;
 		},
 	},
 	created() {
