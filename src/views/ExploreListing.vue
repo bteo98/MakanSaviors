@@ -104,26 +104,26 @@
                 <br />
                 <p>Food Preference</p>
                 <div class="flex-column">
-                  <md-checkbox value="Halal" v-model="foodFilter"
+                  <md-checkbox value="Halal" v-model="dietaryFilter"
                     >Halal</md-checkbox
                   >
-                  <md-checkbox value="Vegan" v-model="foodFilter"
+                  <md-checkbox value="Vegan" v-model="dietaryFilter"
                     >Vegan</md-checkbox
                   >
-                  <md-checkbox value="Vegetarian" v-model="foodFilter"
+                  <md-checkbox value="Vegetarian" v-model="dietaryFilter"
                     >Vegetarian</md-checkbox
                   >
-                  <md-checkbox value="No Eggs" v-model="foodFilter"
+                  <md-checkbox value="No Eggs" v-model="dietaryFilter"
                     >No Eggs</md-checkbox
                   >
-                  <md-checkbox value="No Peanuts" v-model="foodFilter"
+                  <md-checkbox value="No Peanuts" v-model="dietaryFilter"
                     >No Peanuts</md-checkbox
                   >
-                  <md-checkbox value="No Shellfish" v-model="foodFilter"
+                  <md-checkbox value="No Shellfish" v-model="dietaryFilter"
                     >No Shellfish</md-checkbox
                   >
                 </div>
-                <md-button class="md-raised md-success" v-on:click="refresh()"
+                <md-button class="md-raised md-success" v-on:click="filter"
                   >Filter</md-button
                 >
               </div>
@@ -163,7 +163,7 @@ export default {
       header: require("@/assets/img/city-profile.jpg"),
       processing: true,
       locationFilter: [],
-      foodFilter: [],
+      dietaryFilter: [],
       collections: [],
       desc: true
     };
@@ -199,7 +199,53 @@ export default {
           data["quantity"] = doc.quantity;
           this.collections.push(data);
         });
+        console.log("initial");
+        console.log(this.collections);
+        this.processing = false;
+      });
+    },
+    filter() {
+      this.processing = true;
+      var db = firebase.firestore();
 
+      var collect = db.collection("donationData");
+
+      if (this.locationFilter.length != 0) {
+        console.log(this.locationFilter);
+        collect = collect.where(
+          "collectionLocation",
+          "array-contains-any",
+          this.locationFilter
+        );
+      }
+      if (this.dietaryFilter.length != 0) {
+        console.log(this.dietaryFilter);
+        collect = collect.where(
+          "dietaryRestrictions",
+          "array-contains-any",
+          this.dietaryFilter
+        );
+      }
+
+      collect.onSnapshot(snapshot => {
+        this.collections = [];
+
+        snapshot.forEach(doc => {
+          let data = {};
+
+          data["foodID"] = doc.id;
+          doc = doc.data();
+          data["location"] = doc.collectionLocation;
+          data["donorID"] = doc.userID;
+          data["expiry"] = new Date(
+            doc.expiry.toDate().toLocaleString("en-US")
+          );
+          data["foodName"] = doc.listingName;
+          data["quantity"] = doc.quantity;
+          this.collections.push(data);
+        });
+        console.log("filter");
+        console.log(this.collections);
         this.processing = false;
       });
     }
