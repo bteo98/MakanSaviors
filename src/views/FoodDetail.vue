@@ -22,7 +22,7 @@
                     />
                     <div class="text md-layout-item text-description">
                       <h4>
-                        <strong>{{ data["foodName"] }}</strong>
+                        <strong>{{ data["listingName"] }}</strong>
                       </h4>
                       <small class="text-description">Donor Name: </small>
                       {{
@@ -136,7 +136,7 @@
                         v-if="
                           !isAvailable &&
                             !expired &&
-                            userRequest == 'pending' &&
+                            userRequest === 'pending' &&
                             !isDonor
                         "
                         v-on:click="cancelRequest"
@@ -271,7 +271,7 @@ export default {
           console.log("HELLO");
           doc = doc.data();
 
-          this.data["foodName"] = doc.listingName;
+          this.data["listingName"] = doc.listingName;
           this.data["status"] = doc.status;
           this.data["expiry"] = new Date(
             doc.expiry.toDate().toLocaleString("en-US")
@@ -328,7 +328,7 @@ export default {
     },
     updateStatus(statusMsg) {
       var database = firebase.firestore();
-      let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
+      let donorCollect = "donorRequest/" + this.donorID + "/foodDonated";
       let saviorCollect = "donorRequest/" + this.saviorID + "/foodRequested";
 
       database
@@ -351,14 +351,16 @@ export default {
           console.log("Document status updated to false!");
         });
 
+      let newStatus = statusMsg == "accepted" ? "unavailable" : "available";
+
       database
         .collection("donationData")
         .doc(this.foodID)
         .update({
-          status: "unavailable"
+          status: newStatus
         })
         .then(() => {
-          console.log("Document status updated to unavailable!");
+          console.log("Document status updated to " + newStatus);
         });
     },
     saveFood() {
@@ -368,7 +370,7 @@ export default {
       db.collection(collectSave)
         .doc(this.foodID)
         .set({
-          foodName: this.data.foodName,
+          listingName: this.data.listingName,
           donorID: this.data.donorID,
           quantity: this.data.quantity,
           location: this.data.location,
@@ -376,13 +378,13 @@ export default {
           expiry: this.data.expiry
         })
         .then(() => {
-          this.$toaster.info(this.data.foodName + " has been saved!");
+          this.$toaster.info(this.data.listingName + " has been saved!");
         });
     },
     cancelRequest() {
       var db = firebase.firestore();
 
-      let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
+      let collectDonate = "donorRequest/" + this.donorID + "/foodDonated";
 
       db.collection(collectDonate)
         .doc(this.foodID)
@@ -401,19 +403,19 @@ export default {
         })
         .then(() => {
           this.$toaster.info(
-            "Your request for " + this.data.foodName + " has been cancelled!"
+            "Your request for " + this.data.listingName + " has been cancelled!"
           );
         });
     },
     request() {
       var db = firebase.firestore();
 
-      let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
+      let collectDonate = "donorRequest/" + this.donorID + "/foodDonated";
 
       db.collection(collectDonate)
         .doc(this.foodID)
         .set({
-          foodName: this.data.foodName,
+          listingName: this.data.listingName,
           saviorID: this.userID,
           status: "pending",
           timeRequested: firebase.firestore.Timestamp.now()
@@ -424,7 +426,7 @@ export default {
       db.collection(collectRequest)
         .doc(this.foodID)
         .set({
-          foodName: this.data.foodName,
+          listingName: this.data.listingName,
           donorID: this.data.donorID,
           status: "pending",
           timeRequested: firebase.firestore.Timestamp.now()
@@ -441,6 +443,9 @@ export default {
         .update({
           status: "unavailable"
         });
+      console.log(this.donorID);
+      console.log(this.foodID);
+      console.log(this.saviorID);
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -483,6 +488,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  padding-left: 50px;
+}
+
 .contact-info {
   color: #47a44b;
   font-weight: 500;

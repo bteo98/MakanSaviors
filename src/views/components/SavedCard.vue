@@ -7,14 +7,14 @@
           <div>
             <img
               v-bind:src="imgRef"
-              v-bind:alt="data['foodName']"
+              v-bind:alt="data['listingName']"
               v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
-              {{ data["foodName"] }}<br />
+              {{ data["listingName"] }}<br />
               <small class="text-description">Donor Name:</small>
               {{
                 firstName.charAt(0).toUpperCase() +
@@ -116,7 +116,7 @@ export default {
       db.collection(collectDonate)
         .doc(this.data.foodID)
         .set({
-          listingName: this.data.foodName,
+          listingName: this.data.listingName,
           saviorID: this.data.saviorID,
           status: "pending",
           timeRequested: firebase.firestore.Timestamp.now()
@@ -128,7 +128,7 @@ export default {
       db.collection(collectRequest)
         .doc(this.data.foodID)
         .set({
-          listingName: this.data.foodName,
+          listingName: this.data.listingName,
           donorID: this.data.donorID,
           status: "pending",
           timeRequested: firebase.firestore.Timestamp.now()

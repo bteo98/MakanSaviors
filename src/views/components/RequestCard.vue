@@ -2,18 +2,23 @@
   <md-card id="explore-card">
     <md-card-content>
       <div class="md-layout">
-        <div class="md-layout-item">
+        <div class="md-layout-item" v-if="!processing">
+          <i
+            class="material-icons close"
+            v-on:click="deleteCard"
+            v-if="data.status == 'declined'"
+            >close</i
+          >
           <div>
             <img
-              v-bind:src="this.getImage"
-              @error="onImageLoadFailure()"
+              v-bind:src="this.getImg()"
               v-on:click="pushToDetails"
               class="rounded"
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
-              {{ data["foodName"] }}<br />
+              {{ data["listingName"] }}<br />
               <div class="username">
                 <div v-if="!requestView">
                   <small class="text-description">Savior Name:</small>
@@ -75,10 +80,11 @@
             v-if="data.status == 'accepted'"
             >Accepted</badge
           >
-          <badge
-            type="warning first-button status"
+          <md-button
+            class="md-warning first-button"
+            v-on:click="cancelRequest"
             v-if="data.status == 'pending' && requestView == true"
-            >Pending</badge
+            >Cancel Request</md-button
           >
           <badge
             type="rose first-button status"
@@ -99,13 +105,13 @@ export default {
   name: "explore-card",
   data() {
     return {
-      imgRef: "",
+      imgRef: null,
       firstName: "",
       lastName: "",
       contactNumer: "",
       telegramHandle: "",
       responsive: false,
-      imgErr: false,
+      processing: true,
       unknown: require("@/assets/img/unknown.jpg")
     };
   },
@@ -121,9 +127,19 @@ export default {
         this.data.donorID + "/donationImages/" + this.data.foodID
       );
 
-      imgPath.getDownloadURL().then(url => {
-        this.imgRef = url;
-      });
+      imgPath
+        .getDownloadURL()
+        .then(url => {
+          this.imgRef = url;
+        })
+        .catch(error => {
+          switch (error.code) {
+            case "storage/object-not-found":
+              // File doesn't exist
+              console.log(error.code);
+              break;
+          }
+        });
 
       var database = firebase.firestore();
 
@@ -139,9 +155,18 @@ export default {
           this.lastName = item["lastName"];
           this.phoneNumber = item["phoneNumber"];
           this.telegramHandle = item["telegramHandle"];
+          this.processing = false;
         });
     },
+    getImg() {
+      if (this.imgRef == null) {
+        return this.unknown;
+      } else {
+        return this.imgRef;
+      }
+    },
     updateStatus(statusMsg) {
+      this.processing = true;
       var database = firebase.firestore();
       let donorCollect = "donorRequest/" + this.data.donorID + "/foodDonated";
       let saviorCollect =
@@ -167,14 +192,45 @@ export default {
           console.log("Document status updated to false!");
         });
 
+      let newStatus = statusMsg === "accepted" ? "unavailable" : "available";
+      console.log(newStatus);
       database
         .collection("donationData")
         .doc(this.data.foodID)
         .update({
-          status: "unavailable"
+          status: newStatus
         })
         .then(() => {
-          console.log("Document status updated to unavailable!");
+          console.log("Document status updated to " + newStatus);
+          this.processing = false;
+        });
+      console.log(this.data);
+    },
+    cancelRequest() {
+      var db = firebase.firestore();
+
+      let collectDonate = "donorRequest/" + this.data.donorID + "/foodDonated";
+
+      db.collection(collectDonate)
+        .doc(this.data.foodID)
+        .delete();
+
+      let collectRequest =
+        "donorRequest/" + this.data.saviorID + "/foodRequested";
+
+      db.collection(collectRequest)
+        .doc(this.data.foodID)
+        .delete();
+
+      db.collection("donationData")
+        .doc(this.data.foodID)
+        .update({
+          status: "available"
+        })
+        .then(() => {
+          this.$toaster.info(
+            "Your request for " + this.data.listingName + " has been cancelled!"
+          );
         });
     },
     pushToDetails() {
@@ -182,6 +238,18 @@ export default {
       this.$router.push({
         path: path
       });
+    },
+    deleteCard() {
+      var db = firebase.firestore();
+
+      let cardPath = this.requestView
+        ? "donorRequest/" + this.data.userID + "/foodRequested"
+        : "donorRequest/" + this.data.userID + "/foodDonated";
+      console.log(cardPath);
+      console.log(this.data.foodID);
+      db.collection(cardPath)
+        .doc(this.data.foodID)
+        .delete();
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -191,23 +259,13 @@ export default {
       }
     }
   },
-  computed: {
-    getImage() {
-      if (this.imgErr) {
-        return this.unknown;
-      } else {
-        return this.imgRef;
-      }
-    }
-  },
   components: {
     Badge
   },
-  created() {
-    this.fetchItems();
-  },
   mounted() {
     this.onResponsiveInverted();
+    console.log(this.data);
+    this.fetchItems();
     window.addEventListener("resize", this.onResponsiveInverted);
   },
   beforeDestroy() {
@@ -244,6 +302,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
+  margin-bottom: 55px;
 }
 
 img:hover {
@@ -275,21 +334,12 @@ img:hover {
   margin-left: 35px !important;
 }
 
-@media screen and (min-width: 576px) {
-  .first-button {
-    margin-left: 125px !important;
-  }
+.close {
+  float: right;
 }
 
-@media screen and (min-width: 768px) {
-  .first-button {
-    margin-left: 35px !important;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .first-button {
-    margin-left: 125px !important;
-  }
+.close:hover {
+  color: #f44336;
+  cursor: pointer;
 }
 </style>

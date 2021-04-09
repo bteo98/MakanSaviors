@@ -103,7 +103,7 @@ export default {
       savedCollections: [],
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
-      userID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2"
+      userID: "JQbHbF7EyxaiA4sejCXmn6mkg8G2"
     };
   },
   components: {
@@ -132,13 +132,14 @@ export default {
             let data = {};
             data["foodID"] = doc.id;
             doc = doc.data();
-            data["foodName"] = doc.foodName;
+            data["listingName"] = doc.listingName;
             data["saviorID"] = doc.saviorID;
             data["status"] = doc.status;
             data["timeRequested"] = new Date(
               doc.timeRequested.toDate().toLocaleString("en-US")
             );
             data["donorID"] = this.userID;
+            data["userID"] = this.userID;
             this.donorCollections.push(data);
             console.log(this.donorCollections);
           });
@@ -159,13 +160,14 @@ export default {
             data["foodID"] = doc.id;
             console.log(doc.id);
             doc = doc.data();
-            data["foodName"] = doc.foodName;
+            data["listingName"] = doc.listingName;
             data["saviorID"] = this.userID;
             data["status"] = doc.status;
             data["timeRequested"] = new Date(
               doc.timeRequested.toDate().toLocaleString("en-US")
             );
             data["donorID"] = doc.donorID;
+            data["userID"] = this.userID;
             this.requestCollections.push(data);
             console.log(this.requestCollections);
           });
@@ -184,13 +186,14 @@ export default {
           data["foodID"] = doc.id;
           console.log(doc.id);
           doc = doc.data();
-          data["foodName"] = doc.foodName;
+          data["listingName"] = doc.listingName;
           data["saviorID"] = this.userID;
           data["location"] = doc.location;
           data["quantity"] = doc.quantity;
           data["donorID"] = doc.donorID;
           data["status"] = doc.status;
           data["expiry"] = doc.expiry;
+          data["userID"] = this.userID;
 
           this.savedCollections.push(data);
           console.log(this.savedCollections);
