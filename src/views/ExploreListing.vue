@@ -29,7 +29,6 @@
                       >
                         <i class="material-icons">swap_vert</i>
                       </md-button>
-
                     </a>
                   </li>
                 </div>
@@ -87,7 +86,9 @@
                   >
                 </div>
                 <br />
-                <md-button class="md-raised md-success" v-on:click="filter(false)"
+                <md-button
+                  class="md-raised md-success"
+                  v-on:click="filter(false)"
                   >Filter</md-button
                 >
               </div>
@@ -130,6 +131,7 @@ export default {
       dietaryFilter: [],
       collections: [],
       order: "desc",
+      user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
       desc: true
     };
   },
@@ -149,7 +151,7 @@ export default {
 
       db.collection("donationData")
         .where("status", "==", "available")
-        .where("userID", "!=", "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2")
+        .orderBy("expiry", this.order)
         .onSnapshot(snapshot => {
           this.processing = true;
           this.collections = [];
@@ -167,7 +169,10 @@ export default {
             );
             data["listingName"] = doc.listingName;
             data["quantity"] = doc.quantity;
-            this.collections.push(data);
+
+            if (data.donorID != this.user && data.expiry >= new Date()) {
+              this.collections.push(data);
+            }
           });
           console.log("initial");
           console.log(this.collections);
@@ -180,8 +185,7 @@ export default {
 
       var collect = db
         .collection("donationData")
-        .where("status", "==", "available")
-        .where("userID", "!=", "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2");
+        .where("status", "==", "available");
 
       if (this.locationFilter.length != 0) {
         console.log(this.locationFilter);
@@ -203,31 +207,31 @@ export default {
         this.order = this.order == "desc" ? "asc" : "desc";
       }
       console.log(this.order);
-      collect
-        .orderBy("userID")
-        .orderBy("expiry", this.order)
-        .onSnapshot(snapshot => {
-          this.collections = [];
+      collect.orderBy("expiry", this.order).onSnapshot(snapshot => {
+        this.collections = [];
 
-          snapshot.forEach(doc => {
-            let data = {};
+        snapshot.forEach(doc => {
+          let data = {};
 
-            data["foodID"] = doc.id;
-            doc = doc.data();
-            data["location"] = doc.collectionLocation;
-            data["donorID"] = doc.userID;
-            data["expiry"] = new Date(
-              doc.expiry.toDate().toLocaleString("en-US")
-            );
-            data["listingName"] = doc.listingName;
-            data["quantity"] = doc.quantity;
-            data["dietaryRestrictions"] = doc.dietaryRestrictions;
+          data["foodID"] = doc.id;
+          doc = doc.data();
+          data["location"] = doc.collectionLocation;
+          data["donorID"] = doc.userID;
+          data["expiry"] = new Date(
+            doc.expiry.toDate().toLocaleString("en-US")
+          );
+          data["listingName"] = doc.listingName;
+          data["quantity"] = doc.quantity;
+          data["dietaryRestrictions"] = doc.dietaryRestrictions;
+
+          if (data.donorID != this.user && data.expiry >= new Date()) {
             this.collections.push(data);
-          });
-          console.log("filter");
-          console.log(this.collections);
-          this.processing = false;
+          }
         });
+        console.log("filter");
+        console.log(this.collections);
+        this.processing = false;
+      });
     },
     pushToCreateListing: function() {
       let path = `/createlisting`;
