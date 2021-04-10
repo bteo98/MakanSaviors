@@ -19,7 +19,6 @@
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
               {{ data["listingName"] }}<br />
-              <div class="username">
                 <div v-if="!requestView">
                   <small class="text-description">Savior Name:</small>
                   {{
@@ -40,7 +39,6 @@
                       lastName.slice(1).toLowerCase()
                   }}<br />
                 </div>
-              </div>
               <small class="text-description">Time Requested:</small>
               {{ data["timeRequested"].toString().slice(0, 21) }}<br />
               <div v-if="data.status == 'accepted'" class="contact-info">
@@ -279,14 +277,6 @@ export default {
   font-weight: 500;
 }
 
-.username {
-  cursor: pointer;
-}
-
-.username:hover {
-  color: #4caf50;
-}
-
 .text-description {
   font-size: 15px !important;
 }
@@ -302,7 +292,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
-  margin-bottom: 55px;
+  margin-bottom: 60px;
 }
 
 img:hover {

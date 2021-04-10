@@ -15,6 +15,7 @@
             <div class="text text-description">
               <small class="text-description">Food Description:</small>
               {{ data["listingName"] }}<br />
+              <div class="username" v-on:click="userProfile">
               <small class="text-description">Donor Name:</small>
               {{
                 firstName.charAt(0).toUpperCase() +
@@ -23,6 +24,7 @@
                   lastName.charAt(0).toUpperCase() +
                   lastName.slice(1).toLowerCase()
               }}<br />
+              </div>
               <small class="text-description">Collection Locaction:</small>
               {{ data["location"].join(", ") }}<br />
               <small class="text-description">Quantity:</small>
@@ -152,6 +154,12 @@ export default {
         path: path
       });
     },
+    userProfile() {
+      let path = `/profile/${this.data.donorID}`;
+      this.$router.replace({
+        path: path
+      });
+    },
     deleteSaved() {
       var db = firebase.firestore();
 
@@ -202,6 +210,14 @@ img {
 
 #explore-card {
   width: 450px !important;
+}
+
+.username {
+  cursor: pointer;
+}
+
+.username:hover {
+  color: #4caf50;
 }
 
 .status {

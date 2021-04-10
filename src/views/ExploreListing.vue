@@ -25,52 +25,11 @@
                     >
                       <md-button
                         class="md-icon-button md-success"
-                        v-on:click="orderDate()"
+                        v-on:click="filter(true)"
                       >
                         <i class="material-icons">swap_vert</i>
                       </md-button>
 
-                      <div class="md-list-item-content">
-                        <drop-down direction="down">
-                          <md-button
-                            slot="title"
-                            class="md-button md-button-link md-simple dropdown-toggle"
-                            data-toggle="dropdown"
-                          >
-                            <i class="material-icons">apps</i>
-                            <p>Sort By</p>
-                          </md-button>
-                          <ul class="dropdown-menu dropdown-with-icons">
-                            <li>
-                              <a href="javascript:void(0)">
-                                <i class="material-icons">layers</i>
-                                <p>
-                                  Donor's Rating
-                                </p>
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                href="javascript:void(0)"
-                                v-on:click="orderDate()"
-                              >
-                                <i class="material-icons">content_paste</i>
-                                <p>
-                                  Expiry Date
-                                </p>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="javascript:void(0)">
-                                <i class="material-icons">content_paste</i>
-                                <p>
-                                  Quantity Avaliable
-                                </p>
-                              </a>
-                            </li>
-                          </ul>
-                        </drop-down>
-                      </div>
                     </a>
                   </li>
                 </div>
@@ -128,7 +87,7 @@
                   >
                 </div>
                 <br />
-                <md-button class="md-raised md-success" v-on:click="filter"
+                <md-button class="md-raised md-success" v-on:click="filter(false)"
                   >Filter</md-button
                 >
               </div>
@@ -170,6 +129,7 @@ export default {
       locationFilter: [],
       dietaryFilter: [],
       collections: [],
+      order: "desc",
       desc: true
     };
   },
@@ -214,7 +174,7 @@ export default {
           this.processing = false;
         });
     },
-    filter() {
+    filter(reverse) {
       this.processing = true;
       var db = firebase.firestore();
 
@@ -239,29 +199,35 @@ export default {
           this.dietaryFilter
         );
       }
+      if (reverse) {
+        this.order = this.order == "desc" ? "asc" : "desc";
+      }
+      console.log(this.order);
+      collect
+        .orderBy("userID")
+        .orderBy("expiry", this.order)
+        .onSnapshot(snapshot => {
+          this.collections = [];
 
-      collect.onSnapshot(snapshot => {
-        this.collections = [];
+          snapshot.forEach(doc => {
+            let data = {};
 
-        snapshot.forEach(doc => {
-          let data = {};
-
-          data["foodID"] = doc.id;
-          doc = doc.data();
-          data["location"] = doc.collectionLocation;
-          data["donorID"] = doc.userID;
-          data["expiry"] = new Date(
-            doc.expiry.toDate().toLocaleString("en-US")
-          );
-          data["listingName"] = doc.listingName;
-          data["quantity"] = doc.quantity;
-          data["dietaryRestrictions"] = doc.dietaryRestrictions;
-          this.collections.push(data);
+            data["foodID"] = doc.id;
+            doc = doc.data();
+            data["location"] = doc.collectionLocation;
+            data["donorID"] = doc.userID;
+            data["expiry"] = new Date(
+              doc.expiry.toDate().toLocaleString("en-US")
+            );
+            data["listingName"] = doc.listingName;
+            data["quantity"] = doc.quantity;
+            data["dietaryRestrictions"] = doc.dietaryRestrictions;
+            this.collections.push(data);
+          });
+          console.log("filter");
+          console.log(this.collections);
+          this.processing = false;
         });
-        console.log("filter");
-        console.log(this.collections);
-        this.processing = false;
-      });
     },
     pushToCreateListing: function() {
       let path = `/createlisting`;

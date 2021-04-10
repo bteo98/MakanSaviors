@@ -13,8 +13,7 @@
                 <div class="md-layout md-small-size-100">
                   <div v-if="!processing">
                     <img
-                      v-bind:src="this.getImage"
-                      @error="onImageLoadFailure()"
+                      v-bind:src="this.getImg()"
                       class="rounded md-layout-item"
                       :class="{
                         'responsive-image': responsive
@@ -24,6 +23,7 @@
                       <h4>
                         <strong>{{ data["listingName"] }}</strong>
                       </h4>
+                      <div v-on:click="userProfile" class="username">
                       <small class="text-description">Donor Name: </small>
                       {{
                         data["firstName"].charAt(0).toUpperCase() +
@@ -32,6 +32,7 @@
                           data["lastName"].charAt(0).toUpperCase() +
                           data["lastName"].slice(1).toLowerCase()
                       }}<br />
+                      </div>
                       <small class="text-description"
                         >Collection Locaction:</small
                       >
@@ -209,10 +210,10 @@ export default {
       isDonor: false,
       saviorID: null,
       donorStatus: null,
+      imgRef: null,
       expired: false,
       userID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2", //this.$store.getters.user.uid,
       header: require("@/assets/img/city-profile.jpg"),
-      imgErr: false,
       unknown: require("@/assets/img/unknown.jpg")
     };
   },
@@ -245,8 +246,23 @@ export default {
       );
 
       imgPath.getDownloadURL().then(url => {
-        this.data.imgRef = url;
+        this.imgRef = url;
+      })
+      .catch(error => {
+        switch (error.code) {
+          case "storage/object-not-found":
+            // File doesn't exist
+            console.log(error.code);
+            break;
+        }
       });
+    },
+    getImg() {
+      if (this.imgRef == null) {
+        return this.unknown;
+      } else {
+        return this.imgRef;
+      }
     },
     fetchUserData(db) {
       db.collection("users")
@@ -453,15 +469,13 @@ export default {
       } else {
         this.responsive = false;
       }
-    } /*,
-    userProfile() {
-      this.$router.push({
-        name: "",
-        params: { donorID: this.donorID }
-      })
     },
-    saveFood() {
-    }*/,
+    userProfile() {
+      let path = `/profile/${this.donorID}`;
+      this.$router.replace({
+        path: path
+      });
+    },
     onImageLoadFailure() {
       this.imgErr = true;
       console.log(this.imgErr);
@@ -490,6 +504,14 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding-left: 50px;
+}
+
+.username {
+  cursor: pointer;
+}
+
+.username:hover {
+  color: #4caf50;
 }
 
 .contact-info {
