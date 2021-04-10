@@ -1,20 +1,7 @@
 <template>
-  <div class="wrapper">
-    <parallax class="section page-header header-filter" :style="headerStyle">
-      <div class="container">
-        <div class="md-layout">
-          <div
-            class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100"
-          >
-            <h1 class="title">Let us know you better!</h1>
-            <h4>
-              You are just a step away from creating your MakanSaviour account.
-            </h4>
-          </div>
-        </div>
-      </div>
-    </parallax>
-    <div class="main main-raised">
+  <div class="wrapper" style="min-width: 900px">
+    <parallax class="section header-filter" :style="headerStyle"> </parallax>
+    <div class="main main-raised" style="min-width: 800px">
       <div class="section">
         <div class="container">
           <div class="features text-center">

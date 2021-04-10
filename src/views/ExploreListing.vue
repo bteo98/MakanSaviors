@@ -25,10 +25,46 @@
                     >
                       <md-button
                         class="md-icon-button md-success"
-                        v-on:click="filter(true)"
+                        v-on:click="filter(true, orderby)"
                       >
                         <i class="material-icons">swap_vert</i>
                       </md-button>
+                      <div class="md-list-item-content">
+                        <drop-down direction="down">
+                          <md-button
+                            slot="title"
+                            class="md-button md-button-link md-simple dropdown-toggle"
+                            data-toggle="dropdown"
+                          >
+                            <i class="material-icons">apps</i>
+                            <p>Sort By</p>
+                          </md-button>
+                          <ul class="dropdown-menu dropdown-with-icons">
+                            <li>
+                              <a
+                                href="javascript:void(0)"
+                                v-on:click="filter(false, 'expiry')"
+                              >
+                                <i class="material-icons">content_paste</i>
+                                <p>
+                                  Expiry Date
+                                </p>
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                href="javascript:void(0)"
+                                v-on:click="filter(false, 'datePosted')"
+                              >
+                                <i class="material-icons">content_paste</i>
+                                <p>
+                                  Date posted
+                                </p>
+                              </a>
+                            </li>
+                          </ul>
+                        </drop-down>
+                      </div>
                     </a>
                   </li>
                 </div>
@@ -75,20 +111,54 @@
                   <md-checkbox value="Vegetarian" v-model="dietaryFilter"
                     >Vegetarian</md-checkbox
                   >
-                  <md-checkbox value="No Eggs" v-model="dietaryFilter"
+                  <md-checkbox value="Contains Dairy" v-model="dietaryNotFilter"
                     >No Dairy</md-checkbox
                   >
-                  <md-checkbox value="No Peanuts" v-model="dietaryFilter"
+                  <md-checkbox
+                    value="Contains Peanuts"
+                    v-model="dietaryNotFilter"
                     >No Peanuts</md-checkbox
                   >
-                  <md-checkbox value="No Shellfish" v-model="dietaryFilter"
+                  <md-checkbox
+                    value="Contains Shellfish"
+                    v-model="dietaryNotFilter"
                     >No Shellfish</md-checkbox
+                  >
+                </div>
+                <br />
+                <medium>Food Preference</medium>
+                <div class="flex-column">
+                  <md-checkbox value="Bento Boxes" v-model="foodCatFilter"
+                    >Bento Boxes</md-checkbox
+                  >
+                  <md-checkbox value="Canned Food" v-model="foodCatFilter"
+                    >Canned Food</md-checkbox
+                  >
+                  <md-checkbox value="Dairy" v-model="foodCatFilter"
+                    >Dairy</md-checkbox
+                  >
+                  <md-checkbox value="Drinks" v-model="foodCatFilter"
+                    >Drinks</md-checkbox
+                  >
+                  <md-checkbox value="Proteins" v-model="foodCatFilter"
+                    >Proteins</md-checkbox
+                  >
+                  <md-checkbox value="Carbohydrates" v-model="foodCatFilter"
+                    >Carbohydrates</md-checkbox
+                  >
+                  <md-checkbox
+                    value="Vegetables and Fruits"
+                    v-model="foodCatFilter"
+                    >Vegetables / Fruits</md-checkbox
+                  >
+                  <md-checkbox value="Snacks" v-model="foodCatFilter"
+                    >Snacks</md-checkbox
                   >
                 </div>
                 <br />
                 <md-button
                   class="md-raised md-success"
-                  v-on:click="filter(false)"
+                  v-on:click="filter(false, orderby)"
                   >Filter</md-button
                 >
               </div>
@@ -129,8 +199,11 @@ export default {
       processing: true,
       locationFilter: [],
       dietaryFilter: [],
+      dietaryNotFilter: [], // cannot contain
+      foodCatFilter: [],
       collections: [],
-      order: "desc",
+      order: "asc",
+      orderby: "expiry",
       user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
       desc: true
     };
@@ -167,6 +240,9 @@ export default {
             data["expiry"] = new Date(
               doc.expiry.toDate().toLocaleString("en-US")
             );
+            data["datePosted"] = new Date(
+              doc.datePosted.toDate().toLocaleString("en-US")
+            );
             data["listingName"] = doc.listingName;
             data["quantity"] = doc.quantity;
 
@@ -179,9 +255,11 @@ export default {
           this.processing = false;
         });
     },
-    filter(reverse) {
+    filter(reverse, orderby) {
       this.processing = true;
       var db = firebase.firestore();
+      this.orderby = orderby;
+      console.log(this.orderby);
 
       var collect = db
         .collection("donationData")
@@ -203,11 +281,19 @@ export default {
           this.dietaryFilter
         );
       }
+      if (this.foodCatFilter.length != 0) {
+        console.log(this.foodCatFilter);
+        collect = collect.where(
+          "foodCategory",
+          "array-contains-any",
+          this.foodCatFilter
+        );
+      }
       if (reverse) {
         this.order = this.order == "desc" ? "asc" : "desc";
       }
       console.log(this.order);
-      collect.orderBy("expiry", this.order).onSnapshot(snapshot => {
+      collect.orderBy(orderby, this.order).onSnapshot(snapshot => {
         this.collections = [];
 
         snapshot.forEach(doc => {
@@ -220,11 +306,27 @@ export default {
           data["expiry"] = new Date(
             doc.expiry.toDate().toLocaleString("en-US")
           );
+          data["datePosted"] = new Date(
+            doc.datePosted.toDate().toLocaleString("en-US")
+          );
           data["listingName"] = doc.listingName;
           data["quantity"] = doc.quantity;
           data["dietaryRestrictions"] = doc.dietaryRestrictions;
 
-          if (data.donorID != this.user && data.expiry >= new Date()) {
+          let restrictCond = true;
+
+          for (let restriction of this.dietaryNotFilter) {
+            if (data.dietaryRestrictions.includes(restriction)) {
+              restrictCond = false;
+              break;
+            }
+          }
+
+          if (
+            data.donorID != this.user &&
+            data.expiry >= new Date() &&
+            restrictCond
+          ) {
             this.collections.push(data);
           }
         });
@@ -247,6 +349,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (min-width: 1200px) {
+  .section .container {
+    max-width: 1300px;
+  }
+}
+
 .item-listing {
   max-width: 85%;
 }

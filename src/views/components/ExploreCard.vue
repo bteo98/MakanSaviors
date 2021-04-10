@@ -11,8 +11,8 @@
               :class="{ 'responsive-image': responsive }"
             />
             <div class="text">
-              <small>Food Description:</small>
-              {{ data["listingName"] }}<br />
+              <strong>{{ data["listingName"] }}</strong
+              ><br />
               <div class="username" v-on:click="pushToProfile()">
                 <small>Donor Name:</small>
                 {{
@@ -27,8 +27,10 @@
               {{ data["location"].join(", ") }}<br />
               <small>Quantity Avaliable:</small>
               {{ data["quantity"] }}<br />
-              <small class="text-description">Expiry Date/Time:</small>
+              <small class="text-description">Expiry:</small>
               {{ data["expiry"].toString().slice(0, 21) }}<br />
+              <small class="text-description">Posted:</small>
+              {{ data["datePosted"].toString().slice(0, 21) }}<br />
             </div>
           </div>
         </div>
