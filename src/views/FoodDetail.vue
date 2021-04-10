@@ -24,14 +24,14 @@
                         <strong>{{ data["listingName"] }}</strong>
                       </h4>
                       <div v-on:click="userProfile" class="username">
-                      <small class="text-description">Donor Name: </small>
-                      {{
-                        data["firstName"].charAt(0).toUpperCase() +
-                          data["firstName"].slice(1).toLowerCase() +
-                          " " +
-                          data["lastName"].charAt(0).toUpperCase() +
-                          data["lastName"].slice(1).toLowerCase()
-                      }}<br />
+                        <small class="text-description">Donor Name: </small>
+                        {{
+                          data["firstName"].charAt(0).toUpperCase() +
+                            data["firstName"].slice(1).toLowerCase() +
+                            " " +
+                            data["lastName"].charAt(0).toUpperCase() +
+                            data["lastName"].slice(1).toLowerCase()
+                        }}<br />
                       </div>
                       <small class="text-description"
                         >Collection Locaction:</small
@@ -245,17 +245,19 @@ export default {
         this.donorID + "/donationImages/" + this.foodID
       );
 
-      imgPath.getDownloadURL().then(url => {
-        this.imgRef = url;
-      })
-      .catch(error => {
-        switch (error.code) {
-          case "storage/object-not-found":
-            // File doesn't exist
-            console.log(error.code);
-            break;
-        }
-      });
+      imgPath
+        .getDownloadURL()
+        .then(url => {
+          this.imgRef = url;
+        })
+        .catch(error => {
+          switch (error.code) {
+            case "storage/object-not-found":
+              // File doesn't exist
+              console.log(error.code);
+              break;
+          }
+        });
     },
     getImg() {
       if (this.imgRef == null) {

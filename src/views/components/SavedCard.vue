@@ -16,14 +16,14 @@
               <small class="text-description">Food Description:</small>
               {{ data["listingName"] }}<br />
               <div class="username" v-on:click="userProfile">
-              <small class="text-description">Donor Name:</small>
-              {{
-                firstName.charAt(0).toUpperCase() +
-                  firstName.slice(1).toLowerCase() +
-                  " " +
-                  lastName.charAt(0).toUpperCase() +
-                  lastName.slice(1).toLowerCase()
-              }}<br />
+                <small class="text-description">Donor Name:</small>
+                {{
+                  firstName.charAt(0).toUpperCase() +
+                    firstName.slice(1).toLowerCase() +
+                    " " +
+                    lastName.charAt(0).toUpperCase() +
+                    lastName.slice(1).toLowerCase()
+                }}<br />
               </div>
               <small class="text-description">Collection Locaction:</small>
               {{ data["location"].join(", ") }}<br />
