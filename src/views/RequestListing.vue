@@ -13,7 +13,7 @@
 								<div class="md-layout-item md-small-size-100">
 									<tabs
 										:tab-name="['Donor', 'Savior', 'Saved']"
-										:tab-icon="['dashboard', 'schedule', 'schedule']"
+										:tab-icon="['call_made', 'call_received', 'favorite']"
 										plain
 										flex-column
 										nav-pills-icons

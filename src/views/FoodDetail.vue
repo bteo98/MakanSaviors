@@ -121,7 +121,7 @@
 											>
 										</div>
 										<div class="text md-layout-item diet-restriction text-description">
-											<h4 style="font-size: 20px;">Dietary Restrictions</h4>
+											<h4 style="font-size: 20px; padding-left: 5%">Dietary Restrictions</h4>
 											<ul v-if="!processing" class="md-layout" id="restriction-list">
 												<li
 													class="md-layout md-layout-item"
@@ -129,7 +129,9 @@
 													:key="index"
 												>
 													<div class="md-layout-item" style="padding-bottom: 10px;">
-														<badge type="info restrict">{{ restriction }}</badge>
+														<badge class="restriction-badge" type="info restrict">{{
+															restriction
+														}}</badge>
 													</div>
 												</li>
 											</ul>
@@ -532,5 +534,9 @@ small {
 
 .details {
 	padding-top: 40px;
+}
+
+.restriction-badge {
+	width: 180px;
 }
 </style>
