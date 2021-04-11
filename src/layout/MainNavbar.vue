@@ -142,7 +142,7 @@
 								target="_self"
 								v-if="this.$store.getters.isAuth"
 							>
-								<i class="material-icons">notifications</i>
+								<i class="material-icons">explore</i>
 								<p>Explore available listings</p>
 							</md-list-item>
 							<md-list-item
@@ -150,8 +150,8 @@
 								target="_self"
 								v-if="this.$store.getters.isAuth"
 							>
-								<i class="material-icons">notifications</i>
-								<p>Request for food</p>
+								<i class="material-icons">shopping_bag</i>
+								<p>Requests made</p>
 							</md-list-item>
 							<md-list-item
 								href="#/"

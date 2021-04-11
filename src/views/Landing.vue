@@ -220,8 +220,17 @@
 										<h4 class="card-title">
 											Alicia Toh
 										</h4>
-
-										<md-card-actions class="text-center"> </md-card-actions>
+										<md-card-actions class="text-center">
+											<md-button
+												href="https://www.linkedin.com/in/alicia-toh-43584320b/"
+												class="md-just-icon md-simple"
+											>
+												<i class="fab fa-linkedin"></i>
+											</md-button>
+											<md-button href="https://github.com/xxalicia" class="md-just-icon md-simple">
+												<i class="fab fa-github"></i>
+											</md-button>
+										</md-card-actions>
 									</md-card>
 								</div>
 							</div>
@@ -238,7 +247,17 @@
 										<h4 class="card-title">
 											Tan Zhi Qi
 										</h4>
-										<md-card-actions class="text-center"> </md-card-actions>
+										<md-card-actions class="text-center">
+											<md-button
+												href="https://www.linkedin.com/in/zhi-qi-tan-658378153/"
+												class="md-just-icon md-simple"
+											>
+												<i class="fab fa-linkedin"></i>
+											</md-button>
+											<md-button href="https://github.com/zhiqitan" class="md-just-icon md-simple">
+												<i class="fab fa-github"></i>
+											</md-button>
+										</md-card-actions>
 									</md-card>
 								</div>
 							</div>
