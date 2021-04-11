@@ -75,19 +75,43 @@
 					</div>
 
 					<div class="profile-tabs mx-auto" style="margin-top: 15px">
-						<div>
-							<ul id="itemsList">
-								<li class="md-layout" v-for="item in this.donations" :key="item">
-									<div class="md-layout" style="padding-right: 5%; margin-left:2%">
-										<ProfileDonationCard
-											class="md-layout-item requestcard mx-auto"
-											:data="item"
-											:requestView="false"
-										></ProfileDonationCard>
-									</div>
-								</li>
-							</ul>
-						</div>
+						<tabs
+							:tab-name="['Donations', 'Saved Listings']"
+							:tab-icon="['food_bank', 'favorite']"
+							plain
+							nav-pills-icons
+							color-button="success"
+						>
+							<template slot="tab-pane-1">
+								<div>
+									<ul id="itemsList">
+										<li class="md-layout" v-for="item in this.donations" :key="item">
+											<div class="md-layout" style="padding-right: 5%; margin-left:2%">
+												<ProfileDonationCard
+													class="md-layout-item requestcard mx-auto"
+													:data="item"
+													:requestView="false"
+												></ProfileDonationCard>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</template>
+							<template slot="tab-pane-2">
+								<div>
+									<ul id="itemsList">
+										<li class="md-layout" v-for="(item, index) in savedCollections" :key="index">
+											<div class="md-layout" style="padding-right: 5%;">
+												<SavedCard
+													class="md-layout-item requestcard mx-auto"
+													:data="item"
+												></SavedCard>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</template>
+						</tabs>
 					</div>
 				</div>
 			</div>
@@ -96,9 +120,10 @@
 </template>
 
 <script>
-// import {Tabs} from "@/components";
+import {Tabs} from "@/components";
 import firebase from "firebase";
 import ProfileDonationCard from "./components/ProfileDonationCard";
+import SavedCard from "./components/SavedCard";
 import {Badge} from "@/components";
 
 var database = firebase.firestore();
@@ -122,14 +147,16 @@ export default {
 			joinDate: null,
 			imageIDs: [],
 			donations: [],
+			savedCollections: [],
 			imgErr: false,
 			unknown: require("@/assets/img/faces/unknown.jpg"),
 		};
 	},
 	components: {
 		ProfileDonationCard,
-		// Tabs,
+		Tabs,
 		Badge,
+		SavedCard,
 	},
 	props: {
 		header: {
@@ -247,11 +274,38 @@ export default {
 		onImageLoadFailure() {
 			this.imgErr = true;
 		},
+		saveLiveFetch: function() {
+			var db = firebase.firestore();
+			let collect = "donorRequest/" + this.UID + "/foodSaved";
+
+			db.collection(collect).onSnapshot((snapshot) => {
+				this.savedCollections = [];
+
+				snapshot.forEach((doc) => {
+					let data = {};
+					data["foodID"] = doc.id;
+					console.log(doc.id);
+					doc = doc.data();
+					data["listingName"] = doc.listingName;
+					data["saviorID"] = this.userID;
+					data["location"] = doc.location;
+					data["quantity"] = doc.quantity;
+					data["donorID"] = doc.donorID;
+					data["status"] = doc.status;
+					data["expiry"] = doc.expiry;
+					data["userID"] = this.userID;
+
+					this.savedCollections.push(data);
+					console.log(this.savedCollections);
+				});
+			});
+		},
 	},
 	created() {
 		this.getUID();
 		this.getProfilePic();
 		this.getUserData();
+		this.saveLiveFetch();
 	},
 };
 </script>
@@ -309,5 +363,9 @@ li {
 
 .profile-badges {
 	width: 200px;
+}
+
+.md-list-item-button {
+	width: 100px !important;
 }
 </style>
