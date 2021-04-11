@@ -130,14 +130,12 @@
 										<md-field>
 											<label>Dietary Restriction(s)</label>
 											<md-select multiple v-model="dietaryRestrictions">
-												<md-option value="None">None</md-option>
-												<md-option value="Diabetic">Diabetic</md-option>
-												<md-option value="Gluten Free">Gluten Free</md-option>
 												<md-option value="Halal">Halal</md-option>
-												<md-option value="Kosher">Kosher</md-option>
-												<md-option value="Lactose Intolerance">Lactose Intolerance</md-option>
-												<md-option value="Peanut Allergy">Peanut Allergies</md-option>
 												<md-option value="Vegetarian">Vegetarian</md-option>
+												<md-option value="Vegan">Vegan</md-option>
+												<md-option value="Dairy Allergy">Lactose Intolerance</md-option>
+												<md-option value="Peanut Allergy">Peanut Allergies</md-option>
+												<md-option value="Shellfish Allergy">Shellfish Allergies</md-option>
 												<md-option value="Others">Others</md-option>
 											</md-select>
 										</md-field>
@@ -146,19 +144,15 @@
 									<div class="md-layout-item md-size-50">
 										<md-field>
 											<label>Top 3 Food Categories</label>
-											<md-select multiple v-model="foodCategory">
-												<md-option value="Baking Needs">Baking Needs</md-option>
-												<md-option value="Biscuits">Biscuits</md-option>
-												<md-option value="Buffet/Bento Boxes">Buffet/Bento Boxes</md-option>
+											<md-select v-model="foodCategory" required multiple>
+												<md-option value="Bento Boxes">Bento Boxes</md-option>
 												<md-option value="Canned Food">Canned Food</md-option>
-												<md-option value="Dairy, Chilled, Eggs">Dairy, Chilled, Eggs</md-option>
+												<md-option value="Dairy">Dairy</md-option>
 												<md-option value="Drinks">Drinks</md-option>
-												<md-option value="Frozen Food">Frozen Food</md-option>
-												<md-option value="Fruits">Fruits</md-option>
-												<md-option value="Meat, Seafood">Meat, Seafood</md-option>
-												<md-option value="Rice, Noodles">Rice, Noodles</md-option>
-												<md-option value="Seasonings">Seasonings</md-option>
-												<md-option value="Vegetables">Vegetables</md-option>
+												<md-option value="Proteins">Proteins</md-option>
+												<md-option value="Carbohydrates">Carbohydrates</md-option>
+												<md-option value="Vegetables and Fruits">Vegetables/Fruits</md-option>
+												<md-option value="Snacks">Snacks</md-option>
 												<md-option value="Others">Others</md-option>
 											</md-select>
 										</md-field>
