@@ -4,6 +4,7 @@
 			<div class="md-layout">
 				<div class="md-layout-item">
 					<i class="material-icons close" v-on:click="confirmDelete">delete_outline</i>
+					<i class="material-icons close" v-on:click="pushToModifyListing">edit</i>
 					<div>
 						<img
 							v-bind:src="this.getImage"
@@ -127,8 +128,9 @@ export default {
 					document.location.reload();
 				});
 		},
-		deleteListing2() {
-			var db = firebase.firestore();
+		pushToModifyListing() {
+			let listingID = this.data.imageID;
+			this.$router.push({name: "modifylisting", params: {listingID}});
 		},
 	},
 	computed: {
