@@ -307,6 +307,18 @@ export default {
 		this.getUserData();
 		this.saveLiveFetch();
 	},
+	mounted() {
+		window.onpopstate = (event) => {
+			console.log(this.$route.path);
+			if (this.$route.path == "/login" || this.$route.path == "/createaccount") {
+				let path = `/profile/${this.userID}`;
+				console.log(path);
+				this.$router.push({
+					path: path,
+				});
+			}
+		};
+	},
 };
 </script>
 
