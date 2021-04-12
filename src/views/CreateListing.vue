@@ -27,7 +27,6 @@
 											id="listingpic"
 											type="file"
 											v-on:change="onFileChange"
-											required
 										/>
 									</div>
 								</div>

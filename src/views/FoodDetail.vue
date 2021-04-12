@@ -513,7 +513,7 @@ export default {
   mounted() {
     var db = firebase.firestore();
     var storage = firebase.storage();
-    
+
     this.onResponsiveInverted();
     this.fetchImgData(storage);
     var self = this;

@@ -102,11 +102,11 @@ export default {
       requestCollections: [],
       savedCollections: [],
       processing: true,
-      header: require("@/assets/img/city-profile.jpg"),
+      header: require("@/assets/img/city-profile.jpg")
     };
   },
-  props() {
-    userID: { type:String }   
+  props: {
+    userID: { type: String }
   },
   components: {
     RequestCard,

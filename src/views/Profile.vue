@@ -413,7 +413,6 @@ li {
 }
 
 #restriction-list {
-	// width: 50%;
 	margin: 0 auto;
 }
 </style>

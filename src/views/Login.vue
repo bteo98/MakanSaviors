@@ -108,10 +108,9 @@ export default {
             this.errors.push(error);
           });
       }
-    },
+    }
   },
-  created: function() {
-  },
+  created: function() {},
   computed: {
     headerStyle() {
       return {
