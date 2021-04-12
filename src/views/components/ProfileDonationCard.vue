@@ -3,7 +3,7 @@
 		<md-card-content>
 			<div class="md-layout">
 				<div class="md-layout-item">
-					<i class="material-icons close" v-on:click="deleteListing">delete_outline</i>
+					<i class="material-icons close" v-on:click="confirmDelete">delete_outline</i>
 					<div>
 						<img
 							v-bind:src="this.getImage"
@@ -107,13 +107,28 @@ export default {
 				path: path,
 			});
 		},
+		confirmDelete() {
+			if (confirm("Are you sure you want to delete this listing?")) {
+				this.deleteListing();
+			} else {
+			}
+		},
 		deleteListing() {
 			var db = firebase.firestore();
 
-			let saveRequest = "donorRequest/" + this.UID + "/foodSaved";
-			db.collection(saveRequest)
-				.doc(this.data.foodID)
+			db.collection("donationData")
+				.doc(this.data.imageID)
 				.delete();
+
+			db.collection("donationIDs")
+				.doc(this.data.uid)
+				.update({imageIDs: firebase.firestore.FieldValue.arrayRemove(this.data.imageID)})
+				.then(() => {
+					document.location.reload();
+				});
+		},
+		deleteListing2() {
+			var db = firebase.firestore();
 		},
 	},
 	computed: {
