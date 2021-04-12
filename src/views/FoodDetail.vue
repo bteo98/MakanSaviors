@@ -154,7 +154,9 @@
                         Dietary Restrictions
                       </h4>
                       <ul
-                        v-if="!processing"
+                        v-if="
+                          !processing && data.dietaryRestrictions.length > 0
+                        "
                         class="md-layout"
                         id="restriction-list"
                       >
@@ -176,6 +178,13 @@
                           </div>
                         </li>
                       </ul>
+                      <badge
+                        class="restriction-badge"
+                        type="info restrict"
+                        v-if="data.dietaryRestrictions.length == 0"
+                        style="margin-left: 10px;"
+                        >None</badge
+                      >
                     </div>
                   </div>
                 </div>
@@ -525,6 +534,7 @@ export default {
 .text-description {
   font-size: 17px;
   float: left;
+  width: 50%;
 }
 
 img {
@@ -579,6 +589,7 @@ small {
 
 .diet-restriction {
   max-width: 340px;
+  width: 25%;
 }
 
 .details {

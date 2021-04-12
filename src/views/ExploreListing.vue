@@ -204,7 +204,7 @@ export default {
       collections: [],
       order: "asc",
       orderby: "expiry",
-      user: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2",
+      user: this.$store.getters.user.uid,
       desc: true
     };
   },
