@@ -27,6 +27,7 @@
 											id="listingpic"
 											type="file"
 											v-on:change="onFileChange"
+											required
 										/>
 									</div>
 								</div>
@@ -280,7 +281,9 @@ export default {
 			};
 		},
 		checkRequiredFields() {
-			if (this.listingName == "") {
+			if (this.file == null) {
+				alert("Please upload an image of your listing");
+			} else if (this.listingName == "") {
 				alert("Please enter a name for your listing");
 			} else if (this.quantity == "") {
 				alert("Please enter a quantity for your listing");
