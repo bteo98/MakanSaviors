@@ -309,7 +309,7 @@ export default {
     onImageLoadFailure() {
       this.imgErr = true;
     },
-    saveLiveFetch: function() {
+    saveLiveFetch() {
       var db = firebase.firestore();
       let collect = "donorRequest/" + this.UID + "/foodSaved";
 
@@ -334,6 +334,21 @@ export default {
           console.log(this.savedCollections);
         });
       });
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/profile/${this.userID}`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   created() {
@@ -343,19 +358,7 @@ export default {
     this.saveLiveFetch();
   },
   mounted() {
-    window.onpopstate = event => {
-      console.log(this.$route.path);
-      if (
-        this.$route.path == "/login" ||
-        this.$route.path == "/createaccount"
-      ) {
-        let path = `/profile/${this.userID}`;
-        console.log(path);
-        this.$router.push({
-          path: path
-        });
-      }
-    };
+    this.checkPath();
   }
 };
 </script>

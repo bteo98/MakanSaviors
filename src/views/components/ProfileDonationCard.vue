@@ -81,7 +81,6 @@ export default {
           this.lastName = item["lastName"];
         });
     },
-
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
         this.responsive = true;
@@ -135,8 +134,8 @@ export default {
         });
     },
     pushToModifyListing() {
-      let listingID = this.data.imageID;
-      this.$router.push({ name: "modifylisting", params: { listingID } });
+      let path = `/modifylisting/${this.data.imageID}`;
+      this.$router.push({ path: path });
     }
   },
   computed: {

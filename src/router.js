@@ -152,7 +152,7 @@ let router = new Router({
       }
     },
     {
-      path: "/modifylisting",
+      path: "/modifylisting/:listingID",
       name: "modifylisting",
       components: {
         default: ModifyListing,

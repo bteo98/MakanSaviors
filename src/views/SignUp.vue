@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" style="height: 100vh;">
     <div class="section page-header header-filter" :style="headerStyle">
       <div class="container">
         <div class="md-layout">
@@ -8,7 +8,7 @@
           >
             <login-card header-color="green">
               <h4 slot="title" class="card-title">
-                Create your MakanSaviour Account!
+                Sign Up
               </h4>
 
               <md-field class="md-form-group" slot="inputs">

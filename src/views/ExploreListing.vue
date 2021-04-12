@@ -340,10 +340,26 @@ export default {
       this.$router.push({
         path: path
       });
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/explorelisting`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   mounted() {
     this.fetchItems();
+    this.checkPath();
   }
 };
 </script>

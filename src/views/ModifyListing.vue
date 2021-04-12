@@ -316,10 +316,28 @@ export default {
     },
     onImageLoadFailure() {
       this.imgErr = true;
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/modifylisting`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   created() {
     this.getListingDetails();
+  },
+  mounted() {
+    this.checkPath();
   }
 };
 </script>

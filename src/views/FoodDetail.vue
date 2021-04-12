@@ -271,6 +271,7 @@ export default {
         });
     },
     getImg() {
+      console.log(this.imgRef);
       if (this.imgRef == null) {
         return this.unknown;
       } else {
@@ -492,6 +493,21 @@ export default {
       this.imgErr = true;
       console.log(this.imgErr);
       console.log("error occured");
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/fooddetail/${this.donorID}/${this.foodID}`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   mounted() {
@@ -505,6 +521,7 @@ export default {
       self.fetchFoodData(db);
       self.fetchUserData(db);
     }, 500);
+    this.checkPath();
     window.addEventListener("resize", this.onResponsiveInverted);
   },
   beforeDestroy() {
@@ -534,13 +551,13 @@ export default {
 .text-description {
   font-size: 17px;
   float: left;
-  width: 50%;
+  max-width: 50%;
 }
 
 img {
   display: inline-block;
   min-width: 200px;
-  width: 25% !important;
+  max-width: 25% !important;
   float: left;
   padding-top: 25px;
 }
@@ -588,8 +605,7 @@ small {
 }
 
 .diet-restriction {
-  max-width: 340px;
-  width: 25%;
+  max-width: 24%;
 }
 
 .details {

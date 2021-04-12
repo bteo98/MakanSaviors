@@ -103,7 +103,7 @@ export default {
       savedCollections: [],
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
-      userID: "JQbHbF7EyxaiA4sejCXmn6mkg8G2"
+      userID: this.$store.getters.user.uid
     };
   },
   components: {
@@ -200,12 +200,28 @@ export default {
         });
         this.processing = false;
       });
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/requestlisting`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   mounted() {
     this.donorLiveFetch();
     this.requestLiveFetch();
     this.saveLiveFetch();
+    this.checkPath();
   }
 };
 </script>

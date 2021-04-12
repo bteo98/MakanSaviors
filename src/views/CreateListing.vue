@@ -271,7 +271,6 @@ export default {
       };
       reader.readAsDataURL(this.file);
     },
-
     // when create listing button pressed, push listing image to firebase storage
     pushListingImage: function() {
       var storageRef = firebase
@@ -279,7 +278,6 @@ export default {
         .ref(this.UID + "/donationImages/" + this.currID);
       var uploadTask = storageRef.put(this.file);
     },
-
     updateImageIDs: function() {
       database
         .collection("donationIDs")
@@ -288,7 +286,6 @@ export default {
           imageIDs: this.allIDs
         });
     },
-
     checkExpiry: function(expiryDate) {
       var today = new Date();
       var yy = parseInt(expiryDate.slice(0, 4));
@@ -302,11 +299,29 @@ export default {
     },
     onImageLoadFailure() {
       this.imgErr = true;
+    },
+    checkPath() {
+      window.onpopstate = event => {
+        console.log(this.$route.path);
+        if (
+          this.$route.path == "/login" ||
+          this.$route.path == "/createaccount"
+        ) {
+          let path = `/createlisting`;
+          console.log(path);
+          this.$router.push({
+            path: path
+          });
+        }
+      };
     }
   },
   created() {
     this.getUID();
     this.getAllIDs();
+  },
+  mounted() {
+    this.checkPath();
   }
 };
 </script>
