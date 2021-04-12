@@ -28,7 +28,14 @@ const store = new Vuex.Store({
 
       return state.user == null ? false : true;
     },
-    user: state => state.user
+    user(state) {
+      firebase.auth().onAuthStateChanged(function(user) {
+        console.log(user);
+        state.user = user;
+      });
+
+      return state.user;
+    }
   }
 });
 

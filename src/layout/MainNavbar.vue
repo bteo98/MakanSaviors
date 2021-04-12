@@ -29,100 +29,6 @@
               <!-- Here you can add your items from the section-start of your toolbar -->
             </mobile-menu>
             <md-list>
-              <!-- <li class="md-list-item" v-if="!showDownload">
-                <a
-                  href="javascript:void(0)"
-                  class="md-list-item-router md-list-item-container md-button-clean dropdown"
-                >
-                  <div class="md-list-item-content">
-                    <drop-down direction="down">
-                      <md-button
-                        slot="title"
-                        class="md-button md-button-link md-white md-simple dropdown-toggle"
-                        data-toggle="dropdown"
-                      >
-                        <i class="material-icons">apps</i>
-                        <p>Components</p>
-                      </md-button>
-                      <ul class="dropdown-menu dropdown-with-icons">
-                        <li>
-                          <a href="#/">
-                            <i class="material-icons">layers</i>
-                            <p>All Components</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://demos.creative-tim.com/vue-material-kit/documentation/"
-                          >
-                            <i class="material-icons">content_paste</i>
-                            <p>Documentation</p>
-                          </a>
-                        </li>
-                      </ul>
-                    </drop-down>
-                  </div>
-                </a>
-              </li> -->
-
-              <!-- <md-list-item
-                href="https://demos.creative-tim.com/vue-material-kit/documentation/"
-                target="_self"
-                v-if="showDownload"
-              >
-                <i class="material-icons">content_paste</i>
-                <p>Documentation</p>
-              </md-list-item>
-
-              <md-list-item
-                href="javascript:void(0)"
-                @click="scrollToElement()"
-                v-if="showDownload"
-              >
-                <i class="material-icons">cloud_download</i>
-                <p>Download</p>
-              </md-list-item> -->
-
-              <!-- <li class="md-list-item" v-else>
-                <a
-                  href="javascript:void(0)"
-                  class="md-list-item-router md-list-item-container md-button-clean dropdown"
-                >
-                  <div class="md-list-item-content">
-                    <drop-down direction="down">
-                      <md-button
-                        slot="title"
-                        class="md-button md-button-link md-white md-simple dropdown-toggle"
-                        data-toggle="dropdown"
-                      >
-                        <i class="material-icons">view_carousel</i>
-                        <p>Examples</p>
-                      </md-button>
-                      <ul class="dropdown-menu dropdown-with-icons">
-                        <li>
-                          <a href="#/landing">
-                            <i class="material-icons">view_day</i>
-                            <p>Landing Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/login">
-                            <i class="material-icons">fingerprint</i>
-                            <p>Login Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/profile">
-                            <i class="material-icons">account_circle</i>
-                            <p>Profile Page</p>
-                          </a>
-                        </li>
-                      </ul>
-                    </drop-down>
-                  </div>
-                </a>
-              </li> -->
-
               <md-list-item
                 v-if="this.$store.getters.isAuth"
                 v-on:click="pushToProfile"
@@ -136,48 +42,58 @@
                 <p id="mod-profile-word">PROFILE</p>
               </md-list-item>
               <md-list-item
-                href="#/login"
-                target="_self"
+                v-on:click="pushToLogin"
                 v-if="!this.$store.getters.isAuth"
               >
-                <i class="material-icons">login</i>
-                <p>Login</p>
+                <i
+                  class="material-icons"
+                  id="mod-profile-icon"
+                  style="font-size:20px"
+                  >login</i
+                >
+                <p id="mod-profile-word">LOGIN</p>
               </md-list-item>
               <md-list-item
-                href="#/signup"
-                target="_self"
+                v-on:click="pushToSignUp"
                 v-if="!this.$store.getters.isAuth"
               >
-                <i class="material-icons">signup</i>
-                <p>Sign Up</p>
+                <p id="mod-profile-word">SIGN UP</p>
               </md-list-item>
               <md-list-item
                 v-on:click="pushToExplore"
                 v-if="this.$store.getters.isAuth"
               >
-                <i 
+                <i
                   class="material-icons"
                   id="mod-profile-icon"
-                  style="font-size:20px">explore</i>
+                  style="font-size:20px"
+                  >explore</i
+                >
                 <p id="mod-profile-word">EXPLORE LISTINGS</p>
               </md-list-item>
               <md-list-item
                 v-on:click="pushToRequest"
                 v-if="this.$store.getters.isAuth"
               >
-                <i class="material-icons"
+                <i
+                  class="material-icons"
                   id="mod-profile-icon"
-                  style="font-size:20px">shopping_bag</i>
+                  style="font-size:20px"
+                  >shopping_bag</i
+                >
                 <p id="mod-profile-word">REQUESTS</p>
               </md-list-item>
               <md-list-item
-                href="#/"
-                target="_self"
                 v-if="this.$store.getters.isAuth"
                 v-on:click="logout"
               >
-                <i class="material-icons">logout</i>
-                <p>Logout</p>
+                <i
+                  class="material-icons"
+                  id="mod-profile-icon"
+                  style="font-size:20px"
+                  >logout</i
+                >
+                <p id="mod-profile-word">LOGOUT</p>
               </md-list-item>
             </md-list>
           </div>
@@ -232,13 +148,20 @@ export default {
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false
+      toggledClass: false,
+      user: firebase.auth().currentUser.id
     };
   },
   computed: {
     showDownload() {
       const excludedRoutes = ["login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
+    }
+  },
+  watch: {
+    user(newVal, oldVal) {
+      console.log(newVal, oldVal);
+      this.notify();
     }
   },
   methods: {
@@ -293,20 +216,19 @@ export default {
         .then(() => {
           this.$store.commit("change", false);
           console.log("Sign Out Successfully");
+          this.$router.push({ path: "/" });
         })
         .catch(error => {
           console.log("ERROR Signing Out");
         });
     },
     notify() {
-      setTimeout(() => {
-        if (this.$store.getters.isAuth) {
-          var db = firebase.firestore();
-          console.log("notify");
-          this.donorNotify(db);
-          this.saviorNotify(db);
-        }
-      }, 2000);
+      if (this.$store.getters.isAuth) {
+        var db = firebase.firestore();
+        console.log("notify");
+        this.donorNotify(db);
+        this.saviorNotify(db);
+      }
     },
     donorNotify(db) {
       let donorCollect =
@@ -329,7 +251,9 @@ export default {
                   doc = doc.data();
 
                   let msg =
-                    doc.firstName + " has requested for your " + data.foodName;
+                    doc.firstName +
+                    " has requested for your " +
+                    data.listingName;
 
                   this.$toaster.info(msg);
                 });
@@ -361,7 +285,7 @@ export default {
                     " has " +
                     data.status +
                     " your request for " +
-                    data.foodName;
+                    data.listingName;
 
                   if (data.status === "accepted") {
                     this.$toaster.success(msg);
@@ -390,11 +314,25 @@ export default {
       this.$router.push({
         path: path
       });
+    },
+    pushToLogin() {
+      let path = `/login`;
+      this.$router.push({
+        path: path
+      });
+    },
+    pushToSignUp() {
+      let path = `/signup`;
+      this.$router.push({
+        path: path
+      });
     }
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
-    this.notify();
+    if (this.$store.getters.isAuth) {
+      this.notify();
+    }
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);

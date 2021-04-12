@@ -209,7 +209,7 @@ export default {
   },
   props: {
     user: { type: String }
-  }, 
+  },
   components: {
     ExploreCard
   },
@@ -316,7 +316,7 @@ export default {
           data["quantity"] = doc.quantity;
           data["dietaryRestrictions"] = doc.dietaryRestrictions;
           data["userID"] = this.user;
-          
+
           let restrictCond = true;
 
           for (let restriction of this.dietaryNotFilter) {

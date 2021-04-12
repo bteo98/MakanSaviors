@@ -38,10 +38,11 @@
               <h4 style="font-size: 20px; text-align: center">
                 Food Categories
               </h4>
-              <ul 
-                class="md-layout" 
+              <ul
+                class="md-layout"
                 v-if="this.foodCategory.length != 0"
-                id="restriction-list">
+                id="restriction-list"
+              >
                 <li
                   class="md-layout"
                   v-for="categories in this.foodCategory"
@@ -60,8 +61,8 @@
                 id="restriction-list"
                 type="info restrict"
                 style="margin: 0 140px;"
-                    >none</badge
-                  >
+                >none</badge
+              >
             </div>
             <div
               class="text md-layout-item diet-restriction text-description mr-auto"
@@ -88,8 +89,8 @@
                 id="restriction-list"
                 type="info restrict"
                 style="margin: 0 140px;"
-                    >none</badge
-                  >
+                >none</badge
+              >
             </div>
           </div>
           <div class="description text-center">
