@@ -86,7 +86,7 @@
 								<div>
 									<ul id="itemsList">
 										<li class="md-layout" v-for="item in this.donations" :key="item">
-											<div class="md-layout" style="padding-right: 5%; margin-left:2%">
+											<div class="md-layout" style="padding-right: 5%; margin-left:2%;">
 												<ProfileDonationCard
 													class="md-layout-item requestcard mx-auto"
 													:data="item"
@@ -101,7 +101,7 @@
 								<div>
 									<ul id="itemsList">
 										<li class="md-layout" v-for="(item, index) in savedCollections" :key="index">
-											<div class="md-layout" style="padding-right: 5%;">
+											<div class="md-layout" style="padding-right: 5%;margin-left:2%;">
 												<SavedCard
 													class="md-layout-item requestcard mx-auto"
 													:data="item"

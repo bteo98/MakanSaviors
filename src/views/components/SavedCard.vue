@@ -3,7 +3,7 @@
 		<md-card-content>
 			<div class="md-layout">
 				<div class="md-layout-item">
-					<i class="material-icons close" v-on:click="deleteSaved">close</i>
+					<i class="material-icons close" v-on:click="deleteSaved">delete_outline</i>
 					<div>
 						<img
 							v-bind:src="imgRef"
@@ -81,7 +81,8 @@ export default {
 			// get user info
 			database
 				.collection("users")
-				.doc(this.data.saviorID)
+				// .doc(this.data.saviorID)
+				.doc(this.data.donorID)
 				.get()
 				.then((items) => {
 					let item = items.data();
