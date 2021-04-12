@@ -128,7 +128,7 @@
                 v-on:click="pushToProfile"
               >
                 <i
-                  class="material-icons "
+                  class="material-icons"
                   id="mod-profile-icon"
                   style="font-size:20px"
                   >account_circle</i
@@ -152,20 +152,23 @@
                 <p>Sign Up</p>
               </md-list-item>
               <md-list-item
-                href="#/explorelisting"
-                target="_self"
+                v-on:click="pushToExplore"
                 v-if="this.$store.getters.isAuth"
               >
-                <i class="material-icons">explore</i>
-                <p>Explore available listings</p>
+                <i 
+                  class="material-icons"
+                  id="mod-profile-icon"
+                  style="font-size:20px">explore</i>
+                <p id="mod-profile-word">EXPLORE LISTINGS</p>
               </md-list-item>
               <md-list-item
-                href="#/requestlisting"
-                target="_self"
+                v-on:click="pushToRequest"
                 v-if="this.$store.getters.isAuth"
               >
-                <i class="material-icons">shopping_bag</i>
-                <p>Requests made</p>
+                <i class="material-icons"
+                  id="mod-profile-icon"
+                  style="font-size:20px">shopping_bag</i>
+                <p id="mod-profile-word">REQUESTS</p>
               </md-list-item>
               <md-list-item
                 href="#/"
@@ -372,6 +375,18 @@ export default {
     },
     pushToProfile() {
       let path = `/profile/${this.$store.getters.user.uid}`;
+      this.$router.push({
+        path: path
+      });
+    },
+    pushToExplore() {
+      let path = `/explorelisting/${this.$store.getters.user.uid}`;
+      this.$router.push({
+        path: path
+      });
+    },
+    pushToRequest() {
+      let path = `/requestlisting/${this.$store.getters.user.uid}`;
       this.$router.push({
         path: path
       });

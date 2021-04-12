@@ -103,8 +103,10 @@ export default {
       savedCollections: [],
       processing: true,
       header: require("@/assets/img/city-profile.jpg"),
-      userID: this.$store.getters.user.uid
     };
+  },
+  props() {
+    userID: { type:String }   
   },
   components: {
     RequestCard,

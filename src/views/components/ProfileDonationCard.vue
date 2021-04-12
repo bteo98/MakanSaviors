@@ -106,7 +106,7 @@ export default {
       this.imgErr = true;
     },
     pushToDetails() {
-      let path = `/fooddetail/${this.data.uid}/${this.data.imageID}`;
+      let path = `/fooddetail/${this.data.userID}/${this.data.uid}/${this.data.imageID}`;
       this.$router.push({
         path: path
       });

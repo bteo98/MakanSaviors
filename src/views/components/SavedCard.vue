@@ -154,7 +154,7 @@ export default {
         });
     },
     pushToDetails() {
-      let path = `/fooddetail/${this.data.donorID}/${this.data.foodID}`;
+      let path = `/fooddetail/${this.data.userID}/${this.data.donorID}/${this.data.foodID}`;
       this.$router.push({
         path: path
       });
