@@ -223,12 +223,12 @@ export default {
       donorStatus: null,
       imgRef: null,
       expired: false,
-      userID: "r7e0ww5hcAPlEnLBfg4g8T8CTPJ2", //this.$store.getters.user.uid,
       header: require("@/assets/img/city-profile.jpg"),
       unknown: require("@/assets/img/unknown.jpg")
     };
   },
   props: {
+    userID: { type: String },
     donorID: { type: String },
     foodID: { type: String }
   },
@@ -513,7 +513,7 @@ export default {
   mounted() {
     var db = firebase.firestore();
     var storage = firebase.storage();
-
+    
     this.onResponsiveInverted();
     this.fetchImgData(storage);
     var self = this;
@@ -551,7 +551,6 @@ export default {
 .text-description {
   font-size: 17px;
   float: left;
-  max-width: 50%;
 }
 
 img {

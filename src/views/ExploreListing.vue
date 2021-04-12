@@ -204,10 +204,12 @@ export default {
       collections: [],
       order: "asc",
       orderby: "expiry",
-      user: this.$store.getters.user.uid,
       desc: true
     };
   },
+  props: {
+    user: { type: String }
+  }, 
   components: {
     ExploreCard
   },
@@ -245,6 +247,7 @@ export default {
             );
             data["listingName"] = doc.listingName;
             data["quantity"] = doc.quantity;
+            data["userID"] = this.user;
 
             if (data.donorID != this.user && data.expiry >= new Date()) {
               this.collections.push(data);
@@ -312,7 +315,8 @@ export default {
           data["listingName"] = doc.listingName;
           data["quantity"] = doc.quantity;
           data["dietaryRestrictions"] = doc.dietaryRestrictions;
-
+          data["userID"] = this.user;
+          
           let restrictCond = true;
 
           for (let restriction of this.dietaryNotFilter) {

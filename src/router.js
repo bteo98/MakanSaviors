@@ -16,26 +16,12 @@ import CreateListing from "./views/CreateListing.vue";
 import FoodDetail from "./views/FoodDetail.vue";
 import ModifyAccount from "./views/ModifyAccount.vue";
 import ModifyListing from "./views/ModifyListing.vue";
-import SavedCard from "./views/components/SavedCard.vue";
 import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
 
 let router = new Router({
   routes: [
-    {
-      path: "/noticard",
-      name: "noticard",
-      components: {
-        default: SavedCard,
-        header: MainNavbar,
-        footer: MainFooter
-      },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
     {
       path: "/index",
       name: "index",
@@ -178,7 +164,7 @@ let router = new Router({
       }
     },
     {
-      path: "/explorelisting",
+      path: "/explorelisting/:user",
       name: "explorelisting",
       components: {
         default: ExploreListing,
@@ -187,11 +173,12 @@ let router = new Router({
       },
       props: {
         header: { colorOnScroll: 5 },
-        footer: { backgroundColor: "black" }
+        footer: { backgroundColor: "black" },
+        default: true
       }
     },
     {
-      path: "/requestlisting",
+      path: "/requestlisting/:userID",
       name: "requestlisting",
       components: {
         default: RequestListing,
@@ -200,11 +187,12 @@ let router = new Router({
       },
       props: {
         header: { colorOnScroll: 5 },
-        footer: { backgroundColor: "black" }
+        footer: { backgroundColor: "black" },
+        default: true
       }
     },
     {
-      path: "/fooddetail/:donorID/:foodID",
+      path: "/fooddetail/:userID/:donorID/:foodID",
       name: "fooddetail",
       components: {
         default: FoodDetail,
