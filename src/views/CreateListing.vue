@@ -166,7 +166,6 @@ export default {
 			dietaryRestrictions: null,
 			foodCategory: null,
 			remarks: null,
-			profile: null,
 			file: null,
 			currID: null,
 			allIDs: null,

@@ -266,7 +266,7 @@ export default {
 			return currUser == this.UID;
 		},
 		pushToModify() {
-			let path = `/ModifyAccount`;
+			let path = `/modifyaccount`;
 			this.$router.push({
 				path: path,
 			});
