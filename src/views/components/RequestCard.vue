@@ -15,9 +15,8 @@
 						/>
 						<div class="text text-description">
 							<div class="listingName" v-on:click="pushToDetails">
-								<small class="text-description">Food Description:</small>
+								<strong>{{ data["listingName"] }}</strong>
 							</div>
-							{{ data["listingName"] }}<br />
 							<div class="username">
 								<div v-if="!requestView">
 									<small class="text-description" v-on:click="pushToSaviorProfile()"

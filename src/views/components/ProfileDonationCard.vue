@@ -15,8 +15,7 @@
 						/>
 						<div class="text text-description">
 							<div class="listing-name" v-on:click="pushToDetails">
-								<small class="text-description">Food Description:</small>
-								{{ this.data["data"].listingName }}<br />
+								<strong>{{ this.data["data"].listingName }}</strong>
 							</div>
 							<small class="text-description">Donor Name:</small>
 							{{
