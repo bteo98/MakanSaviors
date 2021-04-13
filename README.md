@@ -35,7 +35,7 @@ npm run lint
 
 ## Website
 
-[MakanSaviors](makansaviors.web.app)
+[MakanSaviors](https://makansaviors.web.app/#/)
 
 ## Contributors
 
