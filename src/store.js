@@ -10,19 +10,14 @@ const store = new Vuex.Store({
   },
   mutations: {
     change(state) {
-      console.log("AUTHENICATED");
-      console.log(state.user);
       firebase.auth().onAuthStateChanged(function(user) {
-        console.log(user);
         state.user = user;
       });
-      console.log(state.user);
     }
   },
   getters: {
     isAuth(state) {
       firebase.auth().onAuthStateChanged(function(user) {
-        console.log(user);
         state.user = user;
       });
 
@@ -30,7 +25,6 @@ const store = new Vuex.Store({
     },
     user(state) {
       firebase.auth().onAuthStateChanged(function(user) {
-        console.log(user);
         state.user = user;
       });
 
