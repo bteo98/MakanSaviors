@@ -248,7 +248,7 @@ export default {
       let cardPath = this.requestView
         ? "donorRequest/" + this.data.userID + "/foodRequested"
         : "donorRequest/" + this.data.userID + "/foodDonated";
- 
+
       db.collection(cardPath)
         .doc(this.data.foodID)
         .delete();

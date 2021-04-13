@@ -305,7 +305,6 @@ export default {
     },
     checkPath() {
       window.onpopstate = event => {
-
         if (
           this.$route.path == "/login" ||
           this.$route.path == "/createaccount"

@@ -166,7 +166,7 @@ export default {
       var db = firebase.firestore();
 
       let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
-  
+
       db.collection(saveRequest)
         .doc(this.data.foodID)
         .delete();
