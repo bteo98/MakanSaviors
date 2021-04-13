@@ -225,9 +225,14 @@ export default {
 		},
 		getProfilePic: function() {
 			var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
-			storageRef.getDownloadURL().then((url) => {
-				this.profilePic = url;
-			});
+			storageRef
+				.getDownloadURL()
+				.then((url) => {
+					this.profilePic = url;
+				})
+				.catch((error) => {
+					this.profilePic = require("@/assets/img/faces/unknown.jpg");
+				});
 		},
 		getUserData: function() {
 			database
@@ -337,6 +342,7 @@ export default {
 				});
 			});
 		},
+		// occurs when u try to navigate back from login or create account
 		checkPath() {
 			window.onpopstate = (event) => {
 				if (this.$route.path == "/login" || this.$route.path == "/createaccount") {
