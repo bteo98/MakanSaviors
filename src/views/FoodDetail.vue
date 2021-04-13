@@ -239,7 +239,7 @@ export default {
       donorStatus: null,
       imgRef: null,
       expired: false,
-      header: require("@/assets/img/fruits4.jpg"),
+      header: require("@/assets/img/food4.jpg"),
       unknown: require("@/assets/img/unknown.jpg")
     };
   },
