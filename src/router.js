@@ -220,7 +220,7 @@ let router = new Router({
 // 	if (to.matched.some((record) => record.meta.authRequired)) {
 // 		firebase.auth().onAuthStateChanged((user) => {
 // 			if (user) {
-// 			
+//
 // 				next();
 // 			} else {
 // 				alert("You must be logged in to see this page");
@@ -235,7 +235,6 @@ let router = new Router({
 // });
 
 router.beforeEach((to, from, next) => {
-
   if (to.name == "profile" && from.name == null) {
     next();
   }
