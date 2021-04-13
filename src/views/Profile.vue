@@ -112,7 +112,32 @@
 						</md-button>
 					</div>
 
-					<div class="profile-tabs mx-auto" style="margin-top: 15px">
+					<div class="profile-tabs mx-auto" style="margin-top: 15px" v-if="!profileOwnership()">
+						<tabs
+							:tab-name="['Donations']"
+							:tab-icon="['food_bank']"
+							plain
+							nav-pills-icons
+							color-button="success"
+						>
+							<template slot="tab-pane-1">
+								<div>
+									<ul id="itemsList">
+										<li class="md-layout" v-for="item in this.donations" :key="item">
+											<div class="md-layout" style="padding-right: 5%; margin-left:2%;">
+												<ProfileDonationCard
+													class="md-layout-item requestcard mx-auto"
+													:data="item"
+													:requestView="false"
+												></ProfileDonationCard>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</template>
+						</tabs>
+					</div>
+					<div class="profile-tabs mx-auto" style="margin-top: 15px" v-if="profileOwnership()">
 						<tabs
 							:tab-name="['Donations', 'Saved Listings']"
 							:tab-icon="['food_bank', 'favorite']"
