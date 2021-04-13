@@ -235,8 +235,13 @@ let router = new Router({
 // });
 
 router.beforeEach((to, from, next) => {
+	if (to.name == "profile" && from.name == null) {
+		alert("YOU ARE GETTING SCAMMED");
+		next();
+	}
+
 	//check for requiredAuth guard
-	if (to.matched.some((record) => record.meta.authRequired)) {
+	else if (to.matched.some((record) => record.meta.authRequired)) {
 		if (!firebase.auth().currentUser) {
 			alert("You must be logged in to see this page");
 			next({
