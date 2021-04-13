@@ -12,6 +12,7 @@ At Makansavior, individuals have the opportunity to offer their excess food at h
   - [Table of Contents](#table-of-contents)
   - [Build Setup](#build-setup)
   - [Video](#video)
+  - [Website](#website)
   - [Contributors](#contributors)
 
 ## Build Setup

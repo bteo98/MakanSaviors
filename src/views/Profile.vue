@@ -15,15 +15,19 @@
 									/>
 								</div>
 								<div class="name">
-									<h3 class="title">
+									<h3 class="title" style="margin-bottom: 10px">
 										{{ this.sentenceCase(this.firstName) }}
 										{{ this.sentenceCase(this.lastName) }}
-										<p>
-											Join Date: {{ this.joinDate }}
-											<br />
-											Region: {{ this.preferredLocation }}
-										</p>
 									</h3>
+									<p style="font-size: 16px">
+										Join Date: {{ this.joinDate }}
+										<br />
+										Region:
+										{{ this.preferredLocation }}
+										<span v-if="this.preferredLocation == ''" style="color: #949494"
+											>Input your region by editing your profile</span
+										>
+									</p>
 								</div>
 							</div>
 						</div>
@@ -88,13 +92,19 @@
 					</div>
 					<div class="description text-center">
 						<h4>
-							What inspires me to donate:
-							<p>{{ this.reasonDonate }}</p>
+							What inspires me to donate food:
+							<p style="font-size: 16px">{{ this.reasonDonate }}</p>
+							<p v-if="this.reasonDonate == null" style="color: #949494; font-size: 16px">
+								Input what inspires you to donate by editing your profile
+							</p>
 						</h4>
 						<br />
 						<h4>
-							What motivates me to save:
+							What motivates me to save food:
 							<p>{{ this.reasonSave }}</p>
+							<p v-if="this.reasonSave == null" style="color: #949494; font-size: 16px">
+								Input what inspires you to save by editing your profile
+							</p>
 						</h4>
 						<br />
 						<md-button class="md-success" v-show="profileOwnership()" v-on:click="pushToModify()">

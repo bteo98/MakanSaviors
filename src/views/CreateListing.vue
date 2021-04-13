@@ -19,7 +19,7 @@
 											v-bind:src="this.getImage"
 											@error="onImageLoadFailure()"
 											class="img-raised rounded img-fluid"
-											style="max-width: 35%"
+											style="width: 50%"
 										/>
 										<br /><br />
 										<input
@@ -290,8 +290,8 @@ export default {
 				alert("Please enter an expiry date for your listing");
 			} else if (this.collectionLocation == "") {
 				alert("Please enter a collection location for your listing");
-			} else if (this.phoneNumber == "") {
-				alert("Please enter a phone number for your listing");
+			} else if (this.phoneNumber == "" || this.phoneNumber.toString().length != 8) {
+				alert("Please enter a valid phone number for your listing");
 			} else if (this.foodCategory == "") {
 				alert("Please enter a food category for your listing");
 			} else {
