@@ -64,7 +64,6 @@ export default {
       let imgPath = storage.ref(
         this.data.donorID + "/donationImages/" + this.data.foodID
       );
-      console.log(this.data.listingName);
 
       imgPath
         .getDownloadURL()
@@ -75,7 +74,6 @@ export default {
           switch (error.code) {
             case "storage/object-not-found":
               // File doesn't exist
-              console.log(error.code);
               break;
           }
         });
@@ -95,7 +93,6 @@ export default {
         });
     },
     pushToDetails() {
-      console.log(this.data);
       let path = `/fooddetail/${this.data.userID}/${this.data.donorID}/${this.data.foodID}`;
       this.$router.push({
         path: path

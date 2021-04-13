@@ -143,7 +143,6 @@ export default {
             data["donorID"] = this.userID;
             data["userID"] = this.userID;
             this.donorCollections.push(data);
-            console.log(this.donorCollections);
           });
           this.processing = false;
         });
@@ -160,7 +159,6 @@ export default {
           snapshot.forEach(doc => {
             let data = {};
             data["foodID"] = doc.id;
-            console.log(doc.id);
             doc = doc.data();
             data["listingName"] = doc.listingName;
             data["saviorID"] = this.userID;
@@ -171,7 +169,6 @@ export default {
             data["donorID"] = doc.donorID;
             data["userID"] = this.userID;
             this.requestCollections.push(data);
-            console.log(this.requestCollections);
           });
           this.processing = false;
         });
@@ -186,7 +183,6 @@ export default {
         snapshot.forEach(doc => {
           let data = {};
           data["foodID"] = doc.id;
-          console.log(doc.id);
           doc = doc.data();
           data["listingName"] = doc.listingName;
           data["saviorID"] = this.userID;
@@ -198,20 +194,18 @@ export default {
           data["userID"] = this.userID;
 
           this.savedCollections.push(data);
-          console.log(this.savedCollections);
         });
         this.processing = false;
       });
     },
     checkPath() {
       window.onpopstate = event => {
-        console.log(this.$route.path);
         if (
           this.$route.path == "/login" ||
           this.$route.path == "/createaccount"
         ) {
           let path = `/requestlisting`;
-          console.log(path);
+
           this.$router.push({
             path: path
           });

@@ -21,198 +21,198 @@ import ExploreCard from "./views/components/ExploreCard.vue";
 Vue.use(Router);
 
 let router = new Router({
-	routes: [
-		{
-			path: "/index",
-			name: "index",
-			components: {
-				default: Index,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-				footer: {backgroundColor: "black"},
-			},
-		},
-		{
-			path: "/",
-			name: "landing",
-			components: {
-				default: Landing,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 5},
-				footer: {backgroundColor: "black"},
-			},
-		},
-		{
-			path: "/login",
-			name: "login",
-			components: {
-				default: Login,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/resetpassword",
-			name: "resetpassword",
-			components: {
-				default: ResetPassword,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/signup",
-			name: "signup",
-			components: {
-				default: SignUp,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/createaccount",
-			name: "createaccount",
-			components: {
-				default: CreateAccount,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/modifyaccount",
-			name: "modifyaccount",
-			components: {
-				default: ModifyAccount,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/profile/:userID",
-			name: "profile",
-			components: {
-				default: Profile,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			meta: {
-				authRequired: true,
-			},
-			props: {
-				header: {colorOnScroll: 200},
-				footer: {backgroundColor: "black"},
-				default: true,
-			},
-		},
-		{
-			path: "/createlisting",
-			name: "createlisting",
-			components: {
-				default: CreateListing,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-			},
-		},
-		{
-			path: "/modifylisting/:listingID",
-			name: "modifylisting",
-			components: {
-				default: ModifyListing,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-				default: true,
-			},
-		},
-		{
-			path: "/card",
-			name: "card",
-			components: {
-				default: ExploreCard,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-				footer: {backgroundColor: "black"},
-			},
-		},
-		{
-			path: "/explorelisting/:user",
-			name: "explorelisting",
-			components: {
-				default: ExploreListing,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 5},
-				footer: {backgroundColor: "black"},
-				default: true,
-			},
-		},
-		{
-			path: "/requestlisting/:userID",
-			name: "requestlisting",
-			components: {
-				default: RequestListing,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 5},
-				footer: {backgroundColor: "black"},
-				default: true,
-			},
-		},
-		{
-			path: "/fooddetail/:userID/:donorID/:foodID",
-			name: "fooddetail",
-			components: {
-				default: FoodDetail,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 5},
-				footer: {backgroundColor: "black"},
-				default: true,
-			},
-		},
-	],
-	scrollBehavior: (to) => {
-		if (to.hash) {
-			return {selector: to.hash};
-		} else {
-			return {x: 0, y: 0};
-		}
-	},
+  routes: [
+    {
+      path: "/index",
+      name: "index",
+      components: {
+        default: Index,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/",
+      name: "landing",
+      components: {
+        default: Landing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 5 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/login",
+      name: "login",
+      components: {
+        default: Login,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/resetpassword",
+      name: "resetpassword",
+      components: {
+        default: ResetPassword,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      components: {
+        default: SignUp,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/createaccount",
+      name: "createaccount",
+      components: {
+        default: CreateAccount,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/modifyaccount",
+      name: "modifyaccount",
+      components: {
+        default: ModifyAccount,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/profile/:userID",
+      name: "profile",
+      components: {
+        default: Profile,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      meta: {
+        authRequired: true
+      },
+      props: {
+        header: { colorOnScroll: 200 },
+        footer: { backgroundColor: "black" },
+        default: true
+      }
+    },
+    {
+      path: "/createlisting",
+      name: "createlisting",
+      components: {
+        default: CreateListing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/modifylisting/:listingID",
+      name: "modifylisting",
+      components: {
+        default: ModifyListing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        default: true
+      }
+    },
+    {
+      path: "/card",
+      name: "card",
+      components: {
+        default: ExploreCard,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/explorelisting/:user",
+      name: "explorelisting",
+      components: {
+        default: ExploreListing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 5 },
+        footer: { backgroundColor: "black" },
+        default: true
+      }
+    },
+    {
+      path: "/requestlisting/:userID",
+      name: "requestlisting",
+      components: {
+        default: RequestListing,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 5 },
+        footer: { backgroundColor: "black" },
+        default: true
+      }
+    },
+    {
+      path: "/fooddetail/:userID/:donorID/:foodID",
+      name: "fooddetail",
+      components: {
+        default: FoodDetail,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 5 },
+        footer: { backgroundColor: "black" },
+        default: true
+      }
+    }
+  ],
+  scrollBehavior: to => {
+    if (to.hash) {
+      return { selector: to.hash };
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 });
 
 // Navigation Guard
@@ -235,23 +235,23 @@ let router = new Router({
 // });
 
 router.beforeEach((to, from, next) => {
-	console.log("navigating from " + from.name + " to " + to.name);
-	if (to.name == "profile" && from.name == null) {
-		next();
-	}
-	//check for requiredAuth guard
-	else if (to.matched.some((record) => record.meta.authRequired)) {
-		if (!firebase.auth().currentUser) {
-			alert("Access Denied. Please Login In.");
-			next({
-				path: "/",
-			});
-		} else {
-			next();
-		}
-	} else {
-		next();
-	}
+  console.log("navigating from " + from.name + " to " + to.name);
+  if (to.name == "profile" && from.name == null) {
+    next();
+  }
+  //check for requiredAuth guard
+  else if (to.matched.some(record => record.meta.authRequired)) {
+    if (!firebase.auth().currentUser) {
+      alert("Access Denied. Please Login In.");
+      next({
+        path: "/"
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

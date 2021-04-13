@@ -142,7 +142,6 @@ export default {
             }
             //item=doc.data()
             this.itemList.push(item);
-            console.log(doc.data());
           });
         });
     }

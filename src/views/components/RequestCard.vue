@@ -149,7 +149,6 @@ export default {
           switch (error.code) {
             case "storage/object-not-found":
               // File doesn't exist
-              console.log(error.code);
               break;
           }
         });
@@ -163,7 +162,6 @@ export default {
         .get()
         .then(items => {
           let item = items.data();
-          console.log(item);
           this.firstName = item["firstName"];
           this.lastName = item["lastName"];
           this.phoneNumber = item["phoneNumber"];
@@ -190,9 +188,6 @@ export default {
         .doc(this.data.foodID)
         .update({
           status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
         });
 
       database
@@ -200,13 +195,10 @@ export default {
         .doc(this.data.foodID)
         .update({
           status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
         });
 
       let newStatus = statusMsg === "accepted" ? "unavailable" : "available";
-      console.log(newStatus);
+
       database
         .collection("donationData")
         .doc(this.data.foodID)
@@ -214,10 +206,8 @@ export default {
           status: newStatus
         })
         .then(() => {
-          console.log("Document status updated to " + newStatus);
           this.processing = false;
         });
-      console.log(this.data);
     },
     cancelRequest() {
       var db = firebase.firestore();
@@ -258,8 +248,7 @@ export default {
       let cardPath = this.requestView
         ? "donorRequest/" + this.data.userID + "/foodRequested"
         : "donorRequest/" + this.data.userID + "/foodDonated";
-      console.log(cardPath);
-      console.log(this.data.foodID);
+ 
       db.collection(cardPath)
         .doc(this.data.foodID)
         .delete();
@@ -289,7 +278,6 @@ export default {
   },
   mounted() {
     this.onResponsiveInverted();
-    console.log(this.data);
     this.fetchItems();
     window.addEventListener("resize", this.onResponsiveInverted);
   },

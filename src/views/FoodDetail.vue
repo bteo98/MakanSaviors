@@ -50,11 +50,11 @@
                         </div>
                       </div>
                       <small class="text-description"
-                        >Collection Locaction:</small
+                        >Collection Location:</small
                       >
                       {{ data["location"].join(", ") }}<br />
                       <small class="text-description"
-                        >Quantity Avaliable:</small
+                        >Quantity Available:</small
                       >
                       {{ data["quantity"] }}<br />
                       <small class="text-description">Expiry Date/Time:</small>
@@ -281,7 +281,6 @@ export default {
           switch (error.code) {
             case "storage/object-not-found":
               // File doesn't exist
-              console.log(error.code);
               break;
           }
         });
@@ -304,7 +303,6 @@ export default {
           this.data["lastName"] = item["lastName"];
           this.data["phoneNumber"] = item["phoneNumber"];
           this.data["telegramHandle"] = item["telegramHandle"];
-          console.log(this.data);
           this.processing = false;
         });
     },
@@ -312,7 +310,6 @@ export default {
       db.collection("donationData")
         .doc(this.foodID)
         .onSnapshot(doc => {
-          console.log("HELLO");
           doc = doc.data();
 
           this.data["listingName"] = doc.listingName;
@@ -329,19 +326,14 @@ export default {
           this.isDonor = this.data.donorID == this.userID ? true : false;
           this.expired =
             new Date(doc.expiry.toDate().toLocaleString("en-US")) <= new Date();
-          console.log(this.data);
-          console.log(this.isAvailable);
-          console.log(this.isDonor);
 
           if (!this.isAvailable && !this.isDonor) {
-            console.log("PENDING");
             let collectRequest =
               "donorRequest/" + this.userID + "/foodRequested";
 
             db.collection(collectRequest)
               .doc(this.foodID)
               .onSnapshot(snapshot => {
-                console.log("collectRequest!!");
                 this.userRequest = snapshot.data().status;
 
                 db.collection("users")
@@ -352,20 +344,17 @@ export default {
 
                     this.data["phoneNumber"] = item["phoneNumber"];
                     this.data["telegramHandle"] = item["telegramHandle"];
-                    console.log(this.data);
                   });
               });
           } else if (!this.isAvailable && this.isDonor) {
             let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
-            console.log("GETTING SAVIOR");
             db.collection(collectDonate)
               .doc(this.foodID)
               .onSnapshot(snapshot => {
                 var data = snapshot.data();
-                console.log("collectDonate!!");
+
                 this.donorStatus = data.status;
                 this.saviorID = data.saviorID;
-                console.log(data.saviorID);
               });
           }
         });
@@ -380,9 +369,6 @@ export default {
         .doc(this.foodID)
         .update({
           status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
         });
 
       database
@@ -390,9 +376,6 @@ export default {
         .doc(this.foodID)
         .update({
           status: statusMsg
-        })
-        .then(() => {
-          console.log("Document status updated to false!");
         });
 
       let newStatus = statusMsg == "accepted" ? "unavailable" : "available";
@@ -402,9 +385,6 @@ export default {
         .doc(this.foodID)
         .update({
           status: newStatus
-        })
-        .then(() => {
-          console.log("Document status updated to " + newStatus);
         });
     },
     saveFood() {
@@ -487,9 +467,6 @@ export default {
         .update({
           status: "unavailable"
         });
-      console.log(this.donorID);
-      console.log(this.foodID);
-      console.log(this.saviorID);
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -506,18 +483,14 @@ export default {
     },
     onImageLoadFailure() {
       this.imgErr = true;
-      console.log(this.imgErr);
-      console.log("error occured");
     },
     checkPath() {
       window.onpopstate = event => {
-        console.log(this.$route.path);
         if (
           this.$route.path == "/login" ||
           this.$route.path == "/createaccount"
         ) {
           let path = `/fooddetail/${this.donorID}/${this.foodID}`;
-          console.log(path);
           this.$router.push({
             path: path
           });

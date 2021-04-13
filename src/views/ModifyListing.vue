@@ -322,13 +322,11 @@ export default {
     },
     checkPath() {
       window.onpopstate = event => {
-        console.log(this.$route.path);
         if (
           this.$route.path == "/login" ||
           this.$route.path == "/createaccount"
         ) {
           let path = `/modifylisting`;
-          console.log(path);
           this.$router.push({
             path: path
           });

@@ -104,10 +104,6 @@ export default {
         new Date(this.data.expiry.toDate().toLocaleString("en-US")) <=
         new Date();
       this.isAvailable = this.data.status == "available" ? true : false;
-
-      console.log(this.data);
-      console.log(this.expired);
-      console.log(this.isAvailable);
     },
     onResponsiveInverted() {
       if (window.innerWidth < 600) {
@@ -170,7 +166,7 @@ export default {
       var db = firebase.firestore();
 
       let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";
-      console.log(saveRequest);
+  
       db.collection(saveRequest)
         .doc(this.data.foodID)
         .delete();

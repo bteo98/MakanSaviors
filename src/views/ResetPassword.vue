@@ -79,7 +79,6 @@ export default {
     resetPassword() {
       var auth = firebase.auth();
       var emailAddress = this.email;
-      console.log(this.email);
       this.errors = [];
       self = this;
 

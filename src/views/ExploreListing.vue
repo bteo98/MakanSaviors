@@ -238,7 +238,7 @@ export default {
         .onSnapshot(snapshot => {
           this.processing = true;
           this.collections = [];
-          console.log(this.collections);
+      
           snapshot.forEach(doc => {
             this.processing = true;
             let data = {};
@@ -261,8 +261,7 @@ export default {
               this.collections.push(data);
             }
           });
-          console.log("initial");
-          console.log(this.collections);
+
           this.processing = false;
         });
     },
@@ -270,14 +269,12 @@ export default {
       this.processing = true;
       var db = firebase.firestore();
       this.orderby = orderby;
-      console.log(this.orderby);
 
       var collect = db
         .collection("donationData")
         .where("status", "==", "available");
 
       if (this.locationFilter.length != 0) {
-        console.log(this.locationFilter);
         collect = collect.where(
           "collectionLocation",
           "array-contains-any",
@@ -285,7 +282,6 @@ export default {
         );
       }
       if (this.dietaryFilter.length != 0) {
-        console.log(this.dietaryFilter);
         collect = collect.where(
           "dietaryRestrictions",
           "array-contains-any",
@@ -293,7 +289,6 @@ export default {
         );
       }
       if (this.foodCatFilter.length != 0) {
-        console.log(this.foodCatFilter);
         collect = collect.where(
           "foodCategory",
           "array-contains-any",
@@ -303,7 +298,6 @@ export default {
       if (reverse) {
         this.order = this.order == "desc" ? "asc" : "desc";
       }
-      console.log(this.order);
       collect.orderBy(orderby, this.order).onSnapshot(snapshot => {
         this.collections = [];
 
@@ -342,8 +336,7 @@ export default {
             this.collections.push(data);
           }
         });
-        console.log("filter");
-        console.log(this.collections);
+
         this.processing = false;
       });
     },
@@ -355,13 +348,11 @@ export default {
     },
     checkPath() {
       window.onpopstate = event => {
-        console.log(this.$route.path);
         if (
           this.$route.path == "/login" ||
           this.$route.path == "/createaccount"
         ) {
           let path = `/explorelisting`;
-          console.log(path);
           this.$router.push({
             path: path
           });

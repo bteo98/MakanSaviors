@@ -208,18 +208,12 @@ export default {
         .signOut()
         .then(() => {
           this.$store.commit("change", false);
-          console.log("Sign Out Successfully");
           this.$router.push({ path: "/" });
-        })
-        .catch(error => {
-          console.log("ERROR Signing Out");
         });
     },
     notify() {
-      console.log("notify");
       if (this.$store.getters.isAuth) {
         var db = firebase.firestore();
-        console.log("notify");
         this.donorNotify(db);
         this.saviorNotify(db);
       }
@@ -234,7 +228,6 @@ export default {
         .limit(3)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            console.log(change.type);
             let data = change.doc.data();
 
             if (change.type === "added") {
@@ -264,7 +257,6 @@ export default {
         .limit(3)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
-            console.log(change.type);
             let data = change.doc.data();
 
             if (change.type === "modified") {
