@@ -23,15 +23,31 @@
                       <h4>
                         <strong>{{ data["listingName"] }}</strong>
                       </h4>
-                      <div v-on:click="userProfile" class="username">
-                        <small class="text-description">Donor Name: </small>
-                        {{
-                          data["firstName"].charAt(0).toUpperCase() +
-                            data["firstName"].slice(1).toLowerCase() +
-                            " " +
-                            data["lastName"].charAt(0).toUpperCase() +
-                            data["lastName"].slice(1).toLowerCase()
-                        }}<br />
+                      <div v-if="isDonor">
+                        <div v-on:click="userProfile" class="username">
+                          <small class="text-description"
+                            >Savior's Name:
+                          </small>
+                          {{
+                            data["firstName"].charAt(0).toUpperCase() +
+                              data["firstName"].slice(1).toLowerCase() +
+                              " " +
+                              data["lastName"].charAt(0).toUpperCase() +
+                              data["lastName"].slice(1).toLowerCase()
+                          }}<br />
+                        </div>
+                      </div>
+                      <div v-if="!isDonor">
+                        <div v-on:click="userProfile" class="username">
+                          <small class="text-description">Donor's Name: </small>
+                          {{
+                            data["firstName"].charAt(0).toUpperCase() +
+                              data["firstName"].slice(1).toLowerCase() +
+                              " " +
+                              data["lastName"].charAt(0).toUpperCase() +
+                              data["lastName"].slice(1).toLowerCase()
+                          }}<br />
+                        </div>
                       </div>
                       <small class="text-description"
                         >Collection Locaction:</small
@@ -51,7 +67,7 @@
                         "
                         class="contact-info"
                       >
-                        <div v-if="isDonor">
+                        <div v-if="!isDonor">
                           <small class="text-description"
                             >Donor's Number:</small
                           >
@@ -63,7 +79,7 @@
                             {{ data["telegramHandle"] }}<br />
                           </div>
                         </div>
-                        <div v-if="!isDonor">
+                        <div v-if="isDonor">
                           <small class="text-description"
                             >Savior's Number:</small
                           >
@@ -271,7 +287,6 @@ export default {
         });
     },
     getImg() {
-      console.log(this.imgRef);
       if (this.imgRef == null) {
         return this.unknown;
       } else {

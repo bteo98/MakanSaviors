@@ -148,20 +148,13 @@ export default {
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false,
-      user: firebase.auth().currentUser.id
+      toggledClass: false
     };
   },
   computed: {
     showDownload() {
       const excludedRoutes = ["login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
-    }
-  },
-  watch: {
-    user(newVal, oldVal) {
-      console.log(newVal, oldVal);
-      this.notify();
     }
   },
   methods: {
@@ -223,6 +216,7 @@ export default {
         });
     },
     notify() {
+      console.log("notify");
       if (this.$store.getters.isAuth) {
         var db = firebase.firestore();
         console.log("notify");
@@ -330,9 +324,10 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
-    if (this.$store.getters.isAuth) {
-      this.notify();
-    }
+    var self = this;
+    setTimeout(function() {
+      self.notify();
+    }, 4000);
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
