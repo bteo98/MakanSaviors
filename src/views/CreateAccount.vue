@@ -5,7 +5,7 @@
 			<div class="section">
 				<div class="container">
 					<div class="features text-center">
-						<h1 class="info-title">Welcome to MakanSaviour!</h1>
+						<h1 class="info-title">Welcome to MakanSaviors!</h1>
 						<div class="md-layout">
 							<div class="md-layout-item md-medium-size-33 md-small-size-100 mx-auto">
 								<div class="info">
