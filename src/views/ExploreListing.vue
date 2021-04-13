@@ -238,7 +238,7 @@ export default {
         .onSnapshot(snapshot => {
           this.processing = true;
           this.collections = [];
-      
+
           snapshot.forEach(doc => {
             this.processing = true;
             let data = {};
