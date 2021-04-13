@@ -20,7 +20,7 @@
               </md-field>
 
               <p slot="description" class="description">
-                New to MakanSaviour?
+                New to MakanSaviors?
                 <a href="#/signup">Sign Up</a>
               </p>
 
