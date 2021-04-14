@@ -216,7 +216,6 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	console.log("from " + from.name + " to " + to.name);
 	if (to.name == "profile" && (from.name == "profile" || from.name == "createaccount")) {
 		next();
 		location.reload();
