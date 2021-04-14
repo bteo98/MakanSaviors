@@ -279,6 +279,7 @@ export default {
 					this.data["location"] = doc.collectionLocation; // array
 					this.data["dietaryRestrictions"] = doc.dietaryRestrictions; // array
 					this.data["remarks"] = doc.remarks;
+					this.data["foodCategory"] = doc.foodCategory;
 					this.isAvailable = doc.status == "available" ? true : false;
 					this.isDonor = this.data.donorID == this.userID ? true : false;
 					this.expired = new Date(doc.expiry.toDate().toLocaleString("en-US")) <= new Date();
@@ -341,6 +342,48 @@ export default {
 				.update({
 					status: newStatus,
 				});
+
+			if (statusMsg == "accepted") {
+				let made = null;
+				let donorDates = null;
+				let requestDates = null;
+				let request = null;
+
+				var donorDoc = database.collection("users").doc(this.donorID);
+				donorDoc.get().then((doc) => {
+					doc = doc.data();
+					donorDates = doc.donationDates;
+					made = doc.donationMade;
+
+					donorDates.push(firebase.firestore.Timestamp.now());
+					this.data.foodCategory.forEach((cat) => {
+						made[cat] += 1;
+					});
+
+					donorDoc.update({
+						donationDates: donorDates,
+						donationMade: made,
+					});
+				});
+
+				var saviorDoc = database.collection("users").doc(this.saviorID);
+
+				saviorDoc.get().then((doc) => {
+					doc = doc.data();
+					requestDates = doc.requestDates;
+					request = doc.donationRequested;
+
+					requestDates.push(firebase.firestore.Timestamp.now());
+					this.data.foodCategory.forEach((cat) => {
+						request[cat] += 1;
+					});
+
+					saviorDoc.update({
+						donationRequested: request,
+						requestDates: requestDates,
+					});
+				});
+			}
 		},
 		saveFood() {
 			let collectSave = "donorRequest/" + this.userID + "/foodSaved";
@@ -355,6 +398,7 @@ export default {
 					location: this.data.location,
 					status: this.data.status,
 					expiry: this.data.expiry,
+					foodCategory: this.data.foodCategory,
 				})
 				.then(() => {
 					this.$toaster.info(this.data.listingName + " has been saved!");
@@ -396,6 +440,7 @@ export default {
 					saviorID: this.userID,
 					status: "pending",
 					timeRequested: firebase.firestore.Timestamp.now(),
+					foodCategory: this.data.foodCategory,
 				});
 
 			let collectRequest = "donorRequest/" + this.userID + "/foodRequested";
@@ -407,6 +452,7 @@ export default {
 					donorID: this.data.donorID,
 					status: "pending",
 					timeRequested: firebase.firestore.Timestamp.now(),
+					foodCategory: this.data.foodCategory,
 				});
 
 			let saveRequest = "donorRequest/" + this.userID + "/foodSaved";
