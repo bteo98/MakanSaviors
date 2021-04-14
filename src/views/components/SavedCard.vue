@@ -230,7 +230,7 @@ img:hover {
 }
 
 .first-button {
-	margin-left: 125px !important;
+	margin-left: 30px !important;
 }
 
 .close {

@@ -139,7 +139,7 @@
 					</div>
 					<div class="profile-tabs mx-auto" style="margin-top: 15px" v-if="profileOwnership()">
 						<tabs
-							:tab-name="['Donations', 'Saved Listings']"
+							:tab-name="['Donations', 'Bookmarks']"
 							:tab-icon="['food_bank', 'favorite']"
 							plain
 							nav-pills-icons
@@ -165,10 +165,7 @@
 									<ul id="itemsList">
 										<li class="md-layout" v-for="(item, index) in savedCollections" :key="index">
 											<div class="md-layout" style="padding-right: 5%;margin-left:2%;">
-												<SavedCard
-													class="md-layout-item requestcard mx-auto"
-													:data="item"
-												></SavedCard>
+												<SavedCard class="md-layout-item mx-auto" :data="item"></SavedCard>
 											</div>
 										</li>
 									</ul>
@@ -460,4 +457,8 @@ li {
 #restriction-list {
 	margin: 0 auto;
 }
+
+// .savedcard {
+// 	padding: 500px 500px !important;
+// }
 </style>
