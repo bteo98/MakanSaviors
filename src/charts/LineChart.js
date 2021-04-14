@@ -31,7 +31,7 @@ export default {
       options: {
         title: {
           display: true,
-          text: "Amount of Food Saved",
+          text: "Monthly Amount of Food Saved",
           fontColor: "white"
         },
         legend: {
@@ -125,11 +125,5 @@ export default {
   mounted() {
     this.setBackgroundColor();
     this.fetchData();
-
-    // let self = this;
-    // setTimeout(function() {
-    //    this.renderChart(this.datacollection, this.options);
-    //}, 1000);
-    //  console.log(this.datacollection);
   }
 };
