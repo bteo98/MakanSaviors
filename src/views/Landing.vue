@@ -10,13 +10,6 @@
 							Singapore.
 						</h4>
 					</div>
-					<img
-						class="header-image"
-						:src="logo"
-						alt="Sharing Care"
-						style="float: right; margin: 0px 0px 100px 100px;"
-						width="300"
-					/>
 				</div>
 			</div>
 		</parallax>
@@ -275,7 +268,7 @@ export default {
 	props: {
 		header: {
 			type: String,
-			default: require("@/assets/img/food9.jpg"),
+			default: require("@/assets/img/food6.jpg"),
 		},
 		claire: {
 			type: String,

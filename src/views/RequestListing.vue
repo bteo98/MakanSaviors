@@ -12,14 +12,13 @@
 							<div class="md-layout">
 								<div class="md-layout-item md-small-size-100">
 									<tabs
-										:tab-name="['As Donor', 'As Savior', 'Saved']"
-										:tab-icon="['call_made', 'call_received', 'favorite']"
+										:tab-name="['As Donor', 'As Savior']"
+										:tab-icon="['call_made', 'call_received']"
 										plain
 										flex-column
 										nav-pills-icons
 										color-button="success"
 									>
-										<!-- here you can add your content for tab-content -->
 										<template slot="tab-pane-1">
 											<div>
 												<ul v-if="!processing" id="itemsList">
@@ -58,24 +57,6 @@
 												</ul>
 											</div>
 										</template>
-										<template slot="tab-pane-3">
-											<div>
-												<ul v-if="!processing" id="itemsList">
-													<li
-														class="md-layout"
-														v-for="(item, index) in savedCollections"
-														:key="index"
-													>
-														<div class="md-layout" style="padding-right: 5%;">
-															<SavedCard
-																class="md-layout-item requestcard mx-auto"
-																:data="item"
-															></SavedCard>
-														</div>
-													</li>
-												</ul>
-											</div>
-										</template>
 									</tabs>
 								</div>
 							</div>
@@ -91,7 +72,6 @@
 <script>
 import firebase from "../firebase.js";
 import RequestCard from "./components/RequestCard";
-import SavedCard from "./components/SavedCard";
 import {Tabs} from "@/components";
 
 export default {
@@ -110,7 +90,6 @@ export default {
 	},
 	components: {
 		RequestCard,
-		SavedCard,
 		Tabs,
 	},
 	computed: {
@@ -169,31 +148,7 @@ export default {
 					this.processing = false;
 				});
 		},
-		saveLiveFetch: function() {
-			var db = firebase.firestore();
-			let collect = "donorRequest/" + this.userID + "/foodSaved";
 
-			db.collection(collect).onSnapshot((snapshot) => {
-				this.savedCollections = [];
-
-				snapshot.forEach((doc) => {
-					let data = {};
-					data["foodID"] = doc.id;
-					doc = doc.data();
-					data["listingName"] = doc.listingName;
-					data["saviorID"] = this.userID;
-					data["location"] = doc.location;
-					data["quantity"] = doc.quantity;
-					data["donorID"] = doc.donorID;
-					data["status"] = doc.status;
-					data["expiry"] = doc.expiry;
-					data["userID"] = this.userID;
-
-					this.savedCollections.push(data);
-				});
-				this.processing = false;
-			});
-		},
 		checkPath() {
 			window.onpopstate = (event) => {
 				if (this.$route.path == "/login" || this.$route.path == "/createaccount") {

@@ -21,7 +21,7 @@
 							<div class="listing-name" v-on:click="pushToDetails">
 								<strong>{{ this.data["data"].listingName }}</strong>
 							</div>
-							<small class="text-description">Donor Name:</small>
+							<small class="text-description">Donor's Name:</small>
 							{{
 								firstName.charAt(0).toUpperCase() +
 									firstName.slice(1).toLowerCase() +
