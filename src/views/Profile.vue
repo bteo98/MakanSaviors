@@ -392,7 +392,10 @@ export default {
 		this.getUserData();
 		this.getProfilePic();
 		this.saveLiveFetch();
-	}
+	},
+	mounted() {
+		this.checkPath();
+	},
 };
 </script>
 

@@ -216,15 +216,13 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	if (to.name == "profile" && from.name == "profile") {
+	if (to.name == "profile" && (from.name == "profile" || from.name == "createaccount")) {
 		next();
 		location.reload();
 	}
 	if (to.name == "profile" && from.name == null) {
 		next();
-	}
-	//check for requiredAuth guard
-	else if (to.matched.some((record) => record.meta.authRequired)) {
+	} else if (to.matched.some((record) => record.meta.authRequired)) {
 		if (!firebase.auth().currentUser) {
 			alert("Access Denied. Please Login In.");
 			next({
