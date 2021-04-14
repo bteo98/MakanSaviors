@@ -239,7 +239,7 @@ export default {
 		// when create account button pressed, push profile pic to firebase storage
 		pushProfilePic: function() {
 			var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
-			storageRef.put(this.file).then(() => this.pushToProfile());
+			storageRef.put(this.file).then(() => this.pushToExploreListing());
 		},
 		createIDCollection: function() {
 			database
@@ -300,6 +300,30 @@ export default {
 								reasonDonate: this.reasonDonate,
 								reasonSave: this.reasonSave,
 								joinDate: this.joinDate,
+								donationDates: [],
+								requestDates: [],
+								donationMade: {
+									"Bento Boxes": 0,
+									"Canned Food": 0,
+									"Dairy": 0,
+									"Drinks": 0,
+									"Proteins": 0,
+									"Carbohydrates": 0,
+									"Vegetables and Fruits": 0,
+									"Snacks": 0,
+									"Others": 0
+								}, 
+								donationRequested: {
+									"Bento Boxes": 0,
+									"Canned Food": 0,
+									"Dairy": 0,
+									"Drinks": 0,
+									"Proteins": 0,
+									"Carbohydrates": 0,
+									"Vegetables and Fruits": 0,
+									"Snacks": 0,
+									"Others": 0
+								} 
 							})
 							.then(() => {
 								this.createIDCollection();
@@ -311,13 +335,12 @@ export default {
 					});
 			}
 		},
-		pushToProfile() {
+		pushToExploreListing() {
 			let path = `/profile/${this.UID}`;
 			this.$router.push({
 				path: path,
 			});
 		},
-
 		initReCaptcha: function() {
 			setTimeout(() => {
 				let vm = this;

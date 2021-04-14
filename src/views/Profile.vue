@@ -163,7 +163,7 @@
 							<template slot="tab-pane-2" v-if="profileOwnership()">
 								<div>
 									<ul id="itemsList">
-										<li class="md-layout" v-for="(item, index) in savedCollections" :key="index">
+										<li class="md-layout" v-for="(item) in savedCollections" :key="item.foodID">
 											<div class="md-layout" style="padding-right: 5%;margin-left:2%;">
 												<SavedCard
 													class="md-layout-item requestcard mx-auto"
@@ -360,6 +360,7 @@ export default {
 					data["donorID"] = doc.donorID;
 					data["status"] = doc.status;
 					data["expiry"] = doc.expiry;
+					data["foodCategory"] = doc.foodCategory;
 					data["userID"] = this.userID;
 
 					this.savedCollections.push(data);
@@ -379,7 +380,7 @@ export default {
 		},
 	},
 	beforeRouteEnter(to, from, next) {
-		if (from.name == "login") {
+		if (from.name == "login" || from.name == "createaccount") {
 			next();
 			location.reload();
 		} else {
@@ -391,10 +392,7 @@ export default {
 		this.getUserData();
 		this.getProfilePic();
 		this.saveLiveFetch();
-	},
-	mounted() {
-		this.beforeRouteEnter();
-	},
+	}
 };
 </script>
 

@@ -192,6 +192,54 @@ export default {
 				.then(() => {
 					this.processing = false;
 				});
+			
+			if (statusMsg == "accepted") {
+				let made = null;
+				let donorDates = null;
+				let requestDates = null;
+				let request = null;
+
+				var donorDoc = database
+				.collection("users")
+				.doc(this.data.donorID);
+				donorDoc.get()
+					.then(doc => {
+					doc = doc.data();
+					donorDates = doc.donationDates;
+					made = doc.donationMade;
+			
+					donorDates.push(firebase.firestore.Timestamp.now());
+					this.data.foodCategory.forEach(cat => {
+						made[cat] += 1;
+					});
+			
+					donorDoc.update({
+						donationDates: donorDates,
+						donationMade: made
+					})
+        		})
+
+				var saviorDoc = database
+				.collection("users")
+				.doc(this.data.saviorID);
+
+				saviorDoc.get()
+					.then(doc => {
+					doc = doc.data();
+					requestDates = doc.requestDates;
+					request = doc.donationRequested;
+
+					requestDates.push(firebase.firestore.Timestamp.now());
+					this.data.foodCategory.forEach(cat => {
+						request[cat] += 1;
+					});
+				
+					saviorDoc.update({
+						donationRequested: request,
+						requestDates: requestDates
+					})
+				})
+			}
 		},
 		cancelRequest() {
 			var db = firebase.firestore();

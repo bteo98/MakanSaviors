@@ -114,6 +114,7 @@ export default {
 					saviorID: this.data.saviorID,
 					status: "pending",
 					timeRequested: firebase.firestore.Timestamp.now(),
+					foodCategory: this.data.foodCategory
 				});
 
 			let collectRequest = "donorRequest/" + this.data.saviorID + "/foodRequested";
@@ -125,6 +126,7 @@ export default {
 					donorID: this.data.donorID,
 					status: "pending",
 					timeRequested: firebase.firestore.Timestamp.now(),
+					foodCategory: this.data.foodCategory
 				});
 
 			let saveRequest = "donorRequest/" + this.data.saviorID + "/foodSaved";

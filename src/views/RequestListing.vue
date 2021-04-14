@@ -20,12 +20,12 @@
 										color-button="success"
 									>
 										<template slot="tab-pane-1">
-											<div>
-												<ul v-if="!processing" id="itemsList">
+											<div v-if="!this.processing">
+												<ul id="itemsList">
 													<li
 														class="md-layout"
-														v-for="(item, index) in donorCollections"
-														:key="index"
+														v-for="(item) in donorCollections"
+														:key="item.foodID"
 													>
 														<div class="md-layout" style="padding-right: 5%;">
 															<RequestCard
@@ -39,12 +39,12 @@
 											</div>
 										</template>
 										<template slot="tab-pane-2">
-											<div>
-												<ul v-if="!processing" id="itemsList">
+											<div v-if="!this.processing">
+												<ul id="itemsList">
 													<li
 														class="md-layout"
-														v-for="(item, index) in requestCollections"
-														:key="index"
+														v-for="(item) in requestCollections"
+														:key="item.foodID"
 													>
 														<div class="md-layout" style="padding-right: 5%;">
 															<RequestCard
@@ -107,9 +107,11 @@ export default {
 			db.collection(collect)
 				.orderBy("timeRequested", "desc")
 				.onSnapshot((snapshot) => {
+					this.processing = true;
 					this.donorCollections = [];
 
 					snapshot.forEach((doc) => {
+						this.processing = true;
 						let data = {};
 						data["foodID"] = doc.id;
 						doc = doc.data();
@@ -119,6 +121,8 @@ export default {
 						data["timeRequested"] = new Date(doc.timeRequested.toDate().toLocaleString("en-US"));
 						data["donorID"] = this.userID;
 						data["userID"] = this.userID;
+						data["foodCategory"] = doc.foodCategory;
+
 						this.donorCollections.push(data);
 					});
 					this.processing = false;
@@ -131,9 +135,11 @@ export default {
 			db.collection(collect)
 				.orderBy("timeRequested", "desc")
 				.onSnapshot((snapshot) => {
+					this.processing = true;
 					this.requestCollections = [];
 
 					snapshot.forEach((doc) => {
+						this.processing = true;
 						let data = {};
 						data["foodID"] = doc.id;
 						doc = doc.data();
@@ -143,6 +149,8 @@ export default {
 						data["timeRequested"] = new Date(doc.timeRequested.toDate().toLocaleString("en-US"));
 						data["donorID"] = doc.donorID;
 						data["userID"] = this.userID;
+						data["foodCategory"] = doc.foodCategory;
+
 						this.requestCollections.push(data);
 					});
 					this.processing = false;
