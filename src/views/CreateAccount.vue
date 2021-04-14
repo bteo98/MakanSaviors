@@ -342,8 +342,8 @@ export default {
                 reasonDonate: this.reasonDonate,
                 reasonSave: this.reasonSave,
                 joinDate: this.joinDate,
-                donationDates: [],
-                requestDates: [],
+                donationDates: {},
+                requestDates: {},
                 donationMade: {
                   "Bento Boxes": 0,
                   "Canned Food": 0,

@@ -147,6 +147,14 @@
             </md-button>
           </div>
 
+          <div class="container">
+            <div class="Chart__list">
+              <div class="Chart">
+                <line-chart :UID="this.userID"></line-chart>
+              </div>
+            </div>
+          </div>
+
           <div
             class="profile-tabs mx-auto"
             style="margin-top: 15px"
@@ -252,6 +260,7 @@ import firebase from "firebase";
 import ProfileDonationCard from "./components/ProfileDonationCard";
 import SavedCard from "./components/SavedCard";
 import { Badge } from "@/components";
+import LineChart from "../charts/LineChart";
 
 var database = firebase.firestore();
 
@@ -283,7 +292,8 @@ export default {
     ProfileDonationCard,
     Tabs,
     Badge,
-    SavedCard
+    SavedCard,
+    LineChart
   },
   props: {
     header: {
@@ -529,6 +539,13 @@ li {
 
 #restriction-list {
   margin: 0 auto;
+}
+
+.Chart {
+  background: #212733;
+  border-radius: 15px;
+  box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
+  margin: 25px 0;
 }
 
 // .savedcard {

@@ -59,7 +59,6 @@
 
 <script>
 import { LoginCard } from "@/components";
-import { isMobile } from "mobile-device-detect";
 import firebase from "../firebase.js";
 
 export default {

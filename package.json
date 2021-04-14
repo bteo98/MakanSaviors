@@ -12,6 +12,7 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run dev"
   },
   "dependencies": {
+    "chart.js": "^2.9.4",
     "core-js": "3.5.0",
     "firebase": "^8.3.0",
     "md-time-picker": "^1.1.1",

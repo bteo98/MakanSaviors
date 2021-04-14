@@ -214,6 +214,10 @@ export default {
         let donorDates = null;
         let requestDates = null;
         let request = null;
+        let date = firebase.firestore.Timestamp.now();
+        date = new Date(date.toDate().toLocaleString("en-US"));
+        date = date.toString();
+        date = date.slice(4, 8) + " " + date.slice(11, 15);
 
         var donorDoc = database.collection("users").doc(this.data.donorID);
         donorDoc.get().then(doc => {
@@ -221,7 +225,8 @@ export default {
           donorDates = doc.donationDates;
           made = doc.donationMade;
 
-          donorDates.push(firebase.firestore.Timestamp.now());
+          donorDates[date] = date in donorDates ? donorDates[date] + 1 : 1;
+
           this.data.foodCategory.forEach(cat => {
             made[cat] += 1;
           });
@@ -238,6 +243,8 @@ export default {
           doc = doc.data();
           requestDates = doc.requestDates;
           request = doc.donationRequested;
+          requestDates[date] =
+            date in requestDates ? requestDates[date] + 1 : 1;
 
           requestDates.push(firebase.firestore.Timestamp.now());
           this.data.foodCategory.forEach(cat => {
