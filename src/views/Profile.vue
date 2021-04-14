@@ -393,7 +393,7 @@ export default {
 		this.saveLiveFetch();
 	},
 	mounted() {
-		this.beforeRouteEnter();
+		this.checkPath();
 	},
 };
 </script>
