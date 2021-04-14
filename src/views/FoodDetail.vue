@@ -387,54 +387,48 @@ export default {
         .update({
           status: newStatus
         });
-      
+
       if (statusMsg == "accepted") {
-				let made = null;
-				let donorDates = null;
-				let requestDates = null;
-				let request = null;
+        let made = null;
+        let donorDates = null;
+        let requestDates = null;
+        let request = null;
 
-				var donorDoc = database
-				.collection("users")
-				.doc(this.donorID);
-				donorDoc.get()
-					.then(doc => {
-					doc = doc.data();
-					donorDates = doc.donationDates;
-					made = doc.donationMade;
-			
-					donorDates.push(firebase.firestore.Timestamp.now());
-					this.data.foodCategory.forEach(cat => {
-						made[cat] += 1;
-					});
-			
-					donorDoc.update({
-						donationDates: donorDates,
-						donationMade: made
-					})
-        		})
+        var donorDoc = database.collection("users").doc(this.donorID);
+        donorDoc.get().then(doc => {
+          doc = doc.data();
+          donorDates = doc.donationDates;
+          made = doc.donationMade;
 
-				var saviorDoc = database
-				.collection("users")
-				.doc(this.saviorID);
+          donorDates.push(firebase.firestore.Timestamp.now());
+          this.data.foodCategory.forEach(cat => {
+            made[cat] += 1;
+          });
 
-				saviorDoc.get()
-					.then(doc => {
-					doc = doc.data();
-					requestDates = doc.requestDates;
-					request = doc.donationRequested;
+          donorDoc.update({
+            donationDates: donorDates,
+            donationMade: made
+          });
+        });
 
-					requestDates.push(firebase.firestore.Timestamp.now());
-					this.data.foodCategory.forEach(cat => {
-						request[cat] += 1;
-					});
-				
-					saviorDoc.update({
-						donationRequested: request,
-						requestDates: requestDates
-					})
-				})
-			}
+        var saviorDoc = database.collection("users").doc(this.saviorID);
+
+        saviorDoc.get().then(doc => {
+          doc = doc.data();
+          requestDates = doc.requestDates;
+          request = doc.donationRequested;
+
+          requestDates.push(firebase.firestore.Timestamp.now());
+          this.data.foodCategory.forEach(cat => {
+            request[cat] += 1;
+          });
+
+          saviorDoc.update({
+            donationRequested: request,
+            requestDates: requestDates
+          });
+        });
+      }
     },
     saveFood() {
       let collectSave = "donorRequest/" + this.userID + "/foodSaved";
