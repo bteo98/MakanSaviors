@@ -356,7 +356,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
-  margin-bottom: 60px;
+  margin-bottom: 95px;
 }
 
 img:hover {
@@ -371,7 +371,7 @@ img:hover {
 }
 
 #explore-card {
-  width: 450px !important;
+  min-width: 430px !important;
   max-width: 450px !important;
 }
 

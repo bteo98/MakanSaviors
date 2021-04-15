@@ -19,7 +19,7 @@
                     nav-pills-icons
                     color-button="success"
                   >
-                    <template slot="tab-pane-1">
+                    <template slot="tab-pane-1" style="padding-left: 10px">
                       <div v-if="!this.processing">
                         <ul id="itemsList">
                           <li

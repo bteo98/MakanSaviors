@@ -278,42 +278,43 @@ import FoodWasteChart from "../charts/FoodWasteChart.vue";
 import TotalListingsChart from "../charts/TotalListingsChart.vue";
 
 export default {
-	bodyClass: "landing-page",
-	props: {
-		header: {
-			type: String,
-			default: require("@/assets/img/food6.jpg"),
-		},
-		claire: {
-			type: String,
-			default: require("@/assets/img/faces/claire.jpg"),
-		},
-		elizabeth: {
-			type: String,
-			default: require("@/assets/img/faces/elizabeth.jpg"),
-		},
-		steven: {
-			type: String,
-			default: require("@/assets/img/faces/steven.jpg"),
-		},
-		teamImg1: {
-			type: String,
-			default: require("@/assets/img/faces/card-profile1-square.jpg"),
-		},
-		teamImg2: {
-			type: String,
-			default: require("@/assets/img/faces/marc.jpg"),
-		},
-		teamImg3: {
-			type: String,
-			default: require("@/assets/img/faces/kendall.jpg"),
-		},
-		teamImg4: {
-			type: String,
-			default: require("@/assets/img/faces/christian.jpg"),
-		},
-	},
+  bodyClass: "landing-page",
+  props: {
+    header: {
+      type: String,
+      default: require("@/assets/img/food6.jpg")
+    },
+    claire: {
+      type: String,
+      default: require("@/assets/img/faces/claire.jpg")
+    },
+    elizabeth: {
+      type: String,
+      default: require("@/assets/img/faces/elizabeth.jpg")
+    },
+    steven: {
+      type: String,
+      default: require("@/assets/img/faces/steven.jpg")
+    },
+    teamImg1: {
+      type: String,
+      default: require("@/assets/img/faces/card-profile1-square.jpg")
+    },
+    teamImg2: {
+      type: String,
+      default: require("@/assets/img/faces/marc.jpg")
+    },
+    teamImg3: {
+      type: String,
+      default: require("@/assets/img/faces/kendall.jpg")
+    },
+    teamImg4: {
+      type: String,
+      default: require("@/assets/img/faces/christian.jpg")
+    }
+  },
 
+<<<<<<< HEAD
 	data() {
 		return {
 			reviews: [],
@@ -332,6 +333,26 @@ export default {
 			};
 		},
 	},
+=======
+  data() {
+    return {
+      reviews: [],
+      carousel: require("@/assets/img/food7.jpg"),
+      logo: require("@/assets/img/logo.png")
+    };
+  },
+  components: {
+    LandingLineChart,
+    BarChart
+  },
+  computed: {
+    headerStyle() {
+      return {
+        backgroundImage: `url(${this.header})`
+      };
+    }
+  }
+>>>>>>> 14e697dac5259008b08480ffa081a5a62c420c8b
 };
 </script>
 
