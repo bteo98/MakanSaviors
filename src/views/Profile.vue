@@ -101,7 +101,7 @@
 						<br />
 						<h4>
 							What motivates me to save food:
-							<p>{{ this.reasonSave }}</p>
+							<p style="font-size: 16px">{{ this.reasonSave }}</p>
 							<p v-if="this.reasonSave == null" style="color: #949494; font-size: 16px">
 								Input what inspires you to save by editing your profile
 							</p>
@@ -111,14 +111,6 @@
 							Edit Profile
 						</md-button>
 					</div>
-
-					<!-- <div class="container">
-            <div class="Chart__list">
-              <div class="Chart">
-                <line-chart :UID="this.userID"></line-chart>
-              </div>
-            </div>
-          </div> -->
 
 					<div class="profile-tabs mx-auto" style="margin-top: 15px" v-if="!profileOwnership()">
 						<tabs
@@ -154,13 +146,20 @@
 							color-button="success"
 						>
 							<template slot="tab-pane-1" v-if="profileOwnership()">
-								<div class="container">
+								<div class="container" style="width: 101%;">
 									<div class="Chart__list">
 										<div class="Chart">
-											<line-chart :UID="this.userID" style="width:900px; height:400px"></line-chart>
+											<line-chart :UID="this.userID"></line-chart>
 										</div>
 									</div>
 								</div>
+													 <div class="container" style="width: 101%;">
+            <div class="Chart__list">
+              <div class="Chart">
+                <radar-chart :UID="this.userID"></radar-chart>
+              </div>
+            </div>
+          </div> 
 							</template>
 							<template slot="tab-pane-2">
 								<div>
@@ -205,7 +204,8 @@ import firebase from "firebase";
 import ProfileDonationCard from "./components/ProfileDonationCard";
 import SavedCard from "./components/SavedCard";
 import {Badge} from "@/components";
-import LineChart from "../charts/LineChart";
+import LineChart from "../charts/ProfileLineChart";
+import RadarChart from "../charts/ProfileRadarChart";
 
 var database = firebase.firestore();
 
@@ -239,6 +239,7 @@ export default {
 		Badge,
 		SavedCard,
 		LineChart,
+		RadarChart
 	},
 	props: {
 		header: {
@@ -482,7 +483,6 @@ li {
 }
 
 .Chart {
-	background: #212733;
 	border-radius: 15px;
 	box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
 	margin: 25px 0;

@@ -1,8 +1,8 @@
-import {Line} from "vue-chartjs";
+import { Radar } from "vue-chartjs";
 import firebase from "../firebase";
 
 export default {
-	extends: Line,
+	extends: Radar,
 	data: function() {
 		return {
 			datacollection: {
@@ -11,55 +11,51 @@ export default {
 					{
 						data: [],
 						label: "Donation",
-						borderColor: "#FC2525",
-						pointBackgroundColor: "white",
-						borderWidth: 1,
-						pointBorderColor: "white",
-						backgroundColor: null,
+						fill: true,
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgb(255, 99, 132)',
+						pointBackgroundColor: 'rgb(255, 99, 132)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(255, 99, 132)'
 					},
 					{
 						data: [],
 						label: "Request",
-						borderColor: "#05CBE1",
-						pointBackgroundColor: "white",
-						pointBorderColor: "white",
-						borderWidth: 1,
-						backgroundColor: null,
+						fill: true,
+						backgroundColor: 'rgba(54, 162, 235, 0.2)',
+						borderColor: 'rgb(54, 162, 235)',
+						pointBackgroundColor: 'rgb(54, 162, 235)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(54, 162, 235)'
 					},
 				],
 			},
 			options: {
 				title: {
 					display: true,
-					text: "Monthly Amount of Food Saved",
-					fontColor: "white",
+					text: "Monthly Amount of Food Saved"
 				},
-				legend: {
-					labels: {
-						fontColor: "white",
-					},
+				elements: {
+					line: {
+					  borderWidth: 1
+					}
 				},
-				scales: {
-					yAxes: [
-						{
-							ticks: {
-								fontColor: "white",
-								beginAtZero: true,
-								callback: function(value) {
-									if (value % 1 === 0) {
-										return value;
-									}
-								},
-							},
-						},
-					],
-					xAxes: [
-						{
-							ticks: {
-								fontColor: "white",
-							},
-						},
-					],
+				scale: {
+					ticks: {
+						beginAtZero: true,
+						callback: function(tick) {
+							return tick.toFixed(0);
+						}
+					}
+				},
+				tooltips: {
+					callbacks: {
+						title: function (tooltipItem, data) {
+							return data.labels[tooltipItem[0].index];
+						}
+					}
 				},
 				responsive: true,
 				maintainAspectRatio: false,
@@ -72,7 +68,7 @@ export default {
 	methods: {
 		fetchData() {
 			var db = firebase.firestore();
-
+			
 			db.collection("users")
 				.doc(this.UID)
 				.onSnapshot((snapshot) => {
@@ -80,21 +76,21 @@ export default {
 					let dataset = this.datacollection.datasets;
 					let label = this.datacollection.labels;
 
-					let donatedates = Object.entries(doc.donationDates);
-					donatedates.sort(function(x, y) {
-						return new Date(x[0]) - new Date(y[0]);
+					let made = Object.entries(doc.donationMade);
+					made.sort(function(x, y) {
+						return x[0].localeCompare(y[0]);
 					});
 
-					let requestdates = Object.entries(doc.requestDates);
-					requestdates.sort(function(x, y) {
-						return new Date(x[0]) - new Date(y[0]);
+					let request = Object.entries(doc.donationRequested);
+					request.sort(function(x, y) {
+						return x[0].localeCompare(y[0]);
 					});
 
-					for (let [date, count] of donatedates) {
-						label.push(date);
+					for (let [item, count] of made) {
+						label.push(item);
 						dataset[0].data.push(count);
 					}
-					for (let [date, count] of requestdates) {
+					for (let [item, count] of request) {
 						dataset[1].data.push(count);
 					}
 					this.renderChart(this.datacollection, this.options);
