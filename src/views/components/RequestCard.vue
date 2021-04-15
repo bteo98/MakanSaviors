@@ -371,7 +371,7 @@ img:hover {
 }
 
 #explore-card {
-  width: 450px !important;
+  min-width: 430px !important;
   max-width: 450px !important;
 }
 
