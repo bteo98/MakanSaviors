@@ -72,7 +72,7 @@
 								Amount of Food Waste <br />
 								Generated in Singapore
 							</h2>
-							<bar-chart></bar-chart>
+							<landing-line-chart></landing-line-chart>
 						</div>
 					</div>
 					<p class="text-right">Data taken from nea.gov.sg</p>
@@ -274,7 +274,7 @@
 </template>
 
 <script>
-import BarChart from "../charts/BarChart";
+import LandingLineChart from "../charts/LandingLineChart";
 
 export default {
 	bodyClass: "landing-page",
@@ -321,7 +321,7 @@ export default {
 		};
 	},
 	components: {
-		BarChart,
+		LandingLineChart,
 	},
 	computed: {
 		headerStyle() {
