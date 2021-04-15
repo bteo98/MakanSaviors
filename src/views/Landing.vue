@@ -68,11 +68,14 @@
 					</div>
 					<div class="md-layout">
 						<div class="md-layout-item">
-							<h2 class="title text-center">Amount of Food Waste Generated in Singapore</h2>
+							<h2 class="title text-center">
+								Amount of Food Waste <br />
+								Generated in Singapore
+							</h2>
 							<bar-chart></bar-chart>
 						</div>
 					</div>
-					<p class="text-right">Data taken from data.gov.sg</p>
+					<p class="text-right">Data taken from nea.gov.sg</p>
 				</div>
 			</div>
 
