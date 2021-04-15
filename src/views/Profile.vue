@@ -112,14 +112,6 @@
 						</md-button>
 					</div>
 
-					<!-- <div class="container">
-            <div class="Chart__list">
-              <div class="Chart">
-                <line-chart :UID="this.userID"></line-chart>
-              </div>
-            </div>
-          </div> -->
-
 					<div class="profile-tabs mx-auto" style="margin-top: 15px" v-if="!profileOwnership()">
 						<tabs
 							:tab-name="['Donations']"
