@@ -10,18 +10,25 @@ export default {
         datasets: [
           {
             label: "Amount of food waste (tonnes)",
-            borderWidth: 0.5,
-            borderColor: "blue",
-            backgroundColor: "rgba(204, 229, 255, 0.3)",
-            fill: true,
+            borderColor: "#FC2525",
+            pointBackgroundColor: "#FC2525",
+            borderWidth: 1,
+            pointBorderColor: "#FC2525",
+            backgroundColor: null,
             data: []
           }
         ]
       },
       options: {
+        title: {
+          display: true,
+          text: "Monthly Amount of Food Saved",
+          fontColor: "#212733"
+        },
         legend: {
-          fontColor: "Black",
-          fontSize: 20
+          labels: {
+            fontColor: "#212733"
+          }
         },
         responsive: true,
         maintainAspectRatio: false,
@@ -30,7 +37,21 @@ export default {
             {
               ticks: {
                 min: 400000,
-                max: 900000
+                max: 900000,
+                fontColor: "#212733",
+                beginAtZero: true,
+                callback: function(value) {
+                  if (value % 1 === 0) {
+                    return value;
+                  }
+                }
+              }
+            }
+          ],
+          xAxes: [
+            {
+              ticks: {
+                fontColor: "#212733"
               }
             }
           ]
@@ -52,9 +73,21 @@ export default {
         .then(() => {
           this.renderChart(this.datacollection, this.options);
         });
+    },
+    setBackgroundColor() {
+      let gradient1 = this.$refs.canvas
+        .getContext("2d")
+        .createLinearGradient(0, 0, 0, 450);
+      gradient1.addColorStop(0, "rgba(255, 0,0, 0.5)");
+      gradient1.addColorStop(0.5, "rgba(255, 0, 0, 0.25)");
+      gradient1.addColorStop(1, "rgba(255, 0, 0, 0)");
+
+      let dataset = this.datacollection.datasets;
+      dataset[0].backgroundColor = gradient1;
     }
   },
   mounted() {
+    this.setBackgroundColor();
     this.fetchItems();
   }
 };

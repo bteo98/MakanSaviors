@@ -89,7 +89,13 @@
                 Amount of Food Waste <br />
                 Generated in Singapore
               </h2>
-              <landing-line-chart></landing-line-chart>
+               <div class="container" style="width: 101%;">
+                  <div class="Chart__list">
+                    <div class="Chart">
+                      <landing-line-chart></landing-line-chart>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
           <p class="text-right">Data taken from nea.gov.sg</p>
@@ -417,6 +423,12 @@ export default {
 .carousel-background {
   min-height: 380px !important;
   max-height: 425px !important;
+}
+
+.Chart {
+  border-radius: 15px;
+  box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
+  margin: 25px 0;
 }
 
 @media screen and (max-width: 992px) {
