@@ -33,6 +33,13 @@ export default {
                 max: 100
               }
             }
+          ],
+          xAxes: [
+            {
+              ticks: {
+                fontSize: 11
+              }
+            }
           ]
         }
       }
@@ -53,9 +60,12 @@ export default {
         })
         .then(() => {
           Object.entries(dct).forEach(([key, value]) => {
-            numbers.push(value);
             cat.push(key);
           });
+          cat = cat.sort();
+          for (let i = 0; i < cat.length; i++) {
+            numbers.push(dct[cat[i]]);
+          }
           this.datacollection.labels = cat;
           this.datacollection.datasets[0].data = numbers;
           this.renderChart(this.datacollection, this.options);

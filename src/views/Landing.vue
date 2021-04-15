@@ -76,29 +76,14 @@
           </div>
           <div class="md-layout">
             <div class="md-layout-item">
-              <h2 class="title text-center">
-                Number of Listings <br />
-                On MakanSaviors
-              </h2>
-              <bar-chart></bar-chart>
+              <FoodWasteChart></FoodWasteChart>
             </div>
           </div>
           <div class="md-layout">
             <div class="md-layout-item">
-              <h2 class="title text-center">
-                Amount of Food Waste <br />
-                Generated in Singapore
-              </h2>
-               <div class="container" style="width: 101%;">
-                  <div class="Chart__list">
-                    <div class="Chart">
-                      <landing-line-chart></landing-line-chart>
-                    </div>
-                  </div>
-                </div>
+              <TotalListingsChart></TotalListingsChart>
             </div>
           </div>
-          <p class="text-right">Data taken from nea.gov.sg</p>
         </div>
       </div>
 
@@ -323,8 +308,8 @@
 </template>
 
 <script>
-import LandingLineChart from "../charts/LandingLineChart";
-import BarChart from "../charts/BarChart";
+import FoodWasteChart from "../charts/FoodWasteChart.vue";
+import TotalListingsChart from "../charts/TotalListingsChart.vue";
 
 export default {
   bodyClass: "landing-page",
@@ -371,8 +356,8 @@ export default {
     };
   },
   components: {
-    LandingLineChart,
-    BarChart
+    FoodWasteChart,
+    TotalListingsChart
   },
   computed: {
     headerStyle() {

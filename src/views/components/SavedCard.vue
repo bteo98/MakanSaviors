@@ -38,6 +38,7 @@
           </div>
           <md-button
             class="md-success first-button"
+            style="margin-left: 125px !important"
             v-if="isAvailable && !expired"
             v-on:click="request"
             >Request</md-button
