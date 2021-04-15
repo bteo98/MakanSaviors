@@ -9,19 +9,11 @@ export default {
 				labels: [],
 				datasets: [
 					{
-						label: "Amount of food waste ('000 tonnes)",
-						backgroundColor: [
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-							"#add8e6",
-						],
+						label: "Number of Listing on MakanSaviors",
+						borderWidth: 1,
+						borderColor: "black",
+						backgroundColor: "rgba(50, 153, 76, 0.7)",
+						fill: true,
 						data: [],
 					},
 				],
@@ -38,7 +30,7 @@ export default {
 						{
 							ticks: {
 								min: 0,
-								max: 900,
+								max: 100,
 							},
 						},
 					],
@@ -49,16 +41,23 @@ export default {
 	methods: {
 		fetchItems() {
 			var db = firebase.firestore();
+			var dct = {};
+			var cat = [];
+			var numbers = [];
 			db.collection("overallData")
-				.doc("country")
+				.doc("website")
 				.get()
 				.then((doc) => {
 					var data = doc.data();
-					this.datacollection.labels = data["year"];
-					// var disposed = doc.data()["disposed"]
-					this.datacollection.datasets[0].data = data["generated"];
+					dct = data["numListings"];
 				})
 				.then(() => {
+					Object.entries(dct).forEach(([key, value]) => {
+						numbers.push(value);
+						cat.push(key);
+					});
+					this.datacollection.labels = cat;
+					this.datacollection.datasets[0].data = numbers;
 					this.renderChart(this.datacollection, this.options);
 				});
 		},

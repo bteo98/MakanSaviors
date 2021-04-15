@@ -69,6 +69,15 @@
 					<div class="md-layout">
 						<div class="md-layout-item">
 							<h2 class="title text-center">
+								Number of Listings <br />
+								On MakanSaviors
+							</h2>
+							<bar-chart></bar-chart>
+						</div>
+					</div>
+					<div class="md-layout">
+						<div class="md-layout-item">
+							<h2 class="title text-center">
 								Amount of Food Waste <br />
 								Generated in Singapore
 							</h2>
@@ -275,6 +284,7 @@
 
 <script>
 import LandingLineChart from "../charts/LandingLineChart";
+import BarChart from "../charts/BarChart";
 
 export default {
 	bodyClass: "landing-page",
@@ -322,6 +332,7 @@ export default {
 	},
 	components: {
 		LandingLineChart,
+		BarChart,
 	},
 	computed: {
 		headerStyle() {
