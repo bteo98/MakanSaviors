@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import firebase from "firebase";
-import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import SignUp from "./views/SignUp.vue";
@@ -16,25 +15,11 @@ import CreateListing from "./views/CreateListing.vue";
 import FoodDetail from "./views/FoodDetail.vue";
 import ModifyAccount from "./views/ModifyAccount.vue";
 import ModifyListing from "./views/ModifyListing.vue";
-import ExploreCard from "./views/components/ExploreCard.vue";
 
 Vue.use(Router);
 
 let router = new Router({
 	routes: [
-		{
-			path: "/index",
-			name: "index",
-			components: {
-				default: Index,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-				footer: {backgroundColor: "black"},
-			},
-		},
 		{
 			path: "/",
 			name: "landing",
@@ -148,19 +133,6 @@ let router = new Router({
 			props: {
 				header: {colorOnScroll: 400},
 				default: true,
-			},
-		},
-		{
-			path: "/card",
-			name: "card",
-			components: {
-				default: ExploreCard,
-				header: MainNavbar,
-				footer: MainFooter,
-			},
-			props: {
-				header: {colorOnScroll: 400},
-				footer: {backgroundColor: "black"},
 			},
 		},
 		{
