@@ -5,4 +5,4 @@ import Badge from "./Badge.vue";
 import LoginCard from "./cards/LoginCard.vue";
 import Tabs from "./Tabs.vue";
 
-export {DropDown, Parallax, Pagination, Badge, LoginCard, Tabs};
+export { DropDown, Parallax, Pagination, Badge, LoginCard, Tabs };

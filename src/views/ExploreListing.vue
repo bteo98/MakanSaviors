@@ -270,75 +270,84 @@ export default {
       var db = firebase.firestore();
       this.orderby = orderby;
 
-      var collect = db
-        .collection("donationData")
-        .where("status", "==", "available");
-
-      if (this.locationFilter.length != 0) {
-        collect = collect.where(
-          "collectionLocation",
-          "array-contains-any",
-          this.locationFilter
-        );
-      }
-      if (this.dietaryFilter.length != 0) {
-        collect = collect.where(
-          "dietaryRestrictions",
-          "array-contains-any",
-          this.dietaryFilter
-        );
-      }
-      if (this.foodCatFilter.length != 0) {
-        collect = collect.where(
-          "foodCategory",
-          "array-contains-any",
-          this.foodCatFilter
-        );
-      }
       if (reverse) {
         this.order = this.order == "desc" ? "asc" : "desc";
       }
-      collect.orderBy(orderby, this.order).onSnapshot(snapshot => {
-        this.collections = [];
+      var collect = db
+        .collection("donationData")
+        .where("status", "==", "available")
+        .orderBy(orderby, this.order)
+        .onSnapshot(snapshot => {
+          this.collections = [];
 
-        snapshot.forEach(doc => {
-          let data = {};
+          snapshot.forEach(doc => {
+            let data = {};
 
-          data["foodID"] = doc.id;
-          doc = doc.data();
-          data["location"] = doc.collectionLocation;
-          data["donorID"] = doc.userID;
-          data["expiry"] = new Date(
-            doc.expiry.toDate().toLocaleString("en-US")
-          );
-          data["datePosted"] = new Date(
-            doc.datePosted.toDate().toLocaleString("en-US")
-          );
-          data["listingName"] = doc.listingName;
-          data["quantity"] = doc.quantity;
-          data["dietaryRestrictions"] = doc.dietaryRestrictions;
-          data["userID"] = this.user;
+            data["foodID"] = doc.id;
+            doc = doc.data();
+            data["location"] = doc.collectionLocation;
+            data["donorID"] = doc.userID;
+            data["expiry"] = new Date(
+              doc.expiry.toDate().toLocaleString("en-US")
+            );
+            data["datePosted"] = new Date(
+              doc.datePosted.toDate().toLocaleString("en-US")
+            );
+            data["listingName"] = doc.listingName;
+            data["quantity"] = doc.quantity;
+            data["dietaryRestrictions"] = doc.dietaryRestrictions;
+            data["userID"] = this.user;
 
-          let restrictCond = true;
+            let restrictCond = true;
 
-          for (let restriction of this.dietaryNotFilter) {
-            if (data.dietaryRestrictions.includes(restriction)) {
-              restrictCond = false;
-              break;
+            if (this.locationFilter.length != 0) {
+              restrictCond = this.arrayContainsAny(
+                doc.collectionLocation,
+                this.locationFilter,
+                true
+              );
             }
-          }
+            if (this.dietaryFilter.length != 0) {
+              restrictCond = this.arrayContainsAny(
+                doc.dietaryRestrictions,
+                this.dietaryFilter,
+                true
+              );
+            }
+            if (this.foodCatFilter.length != 0) {
+              restrictCond = this.arrayContainsAny(
+                doc.foodCategory,
+                this.foodCatFilter,
+                true
+              );
+            }
+            if (this.dietaryNotFilter.length != 0) {
+              restrictCond = this.arrayContainsAny(
+                doc.dietaryRestrictions,
+                this.dietaryNotFilter,
+                true
+              );
+            }
 
-          if (
-            data.donorID != this.user &&
-            data.expiry >= new Date() &&
-            restrictCond
-          ) {
-            this.collections.push(data);
-          }
+            if (
+              data.donorID != this.user &&
+              data.expiry >= new Date() &&
+              restrictCond
+            ) {
+              this.collections.push(data);
+            }
+          });
+
+          this.processing = false;
         });
-
-        this.processing = false;
-      });
+    },
+    arrayContainsAny(foodRestrictions, filterRestrictions, pos) {
+      for (let restriction of filterRestrictions) {
+        if (foodRestrictions.includes(restriction)) {
+          return pos ? true : false;
+        }
+      }
+      return pos ? false : true;
     },
     pushToCreateListing: function() {
       let path = `/createlisting`;
