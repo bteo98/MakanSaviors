@@ -390,7 +390,7 @@ export default {
 		// occurs when u try to navigate back from login or create account
 		checkPath() {
 			window.onpopstate = (event) => {
-				if (this.$route.path == "/login" || this.$route.path == "/createaccount") {
+				if (this.$route.path == "/login") {
 					let path = `/profile/${this.userID}`;
 					this.$router.push({
 						path: path,

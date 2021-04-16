@@ -227,7 +227,6 @@ export default {
 		getUID: function() {
 			this.UID = firebase.auth().currentUser.uid;
 		},
-		// when file changes, create image on site
 		onFileChange: function(e) {
 			this.file = e.target.files[0];
 			var reader = new FileReader();
@@ -236,11 +235,11 @@ export default {
 			};
 			reader.readAsDataURL(this.file);
 		},
-		// when create account button pressed, push profile pic to firebase storage
 		pushProfilePic: function() {
 			var storageRef = firebase.storage().ref(this.UID + "/profilePicture");
 			storageRef.put(this.file).then(() => this.pushToExploreListing());
 		},
+
 		createIDCollection: function() {
 			database
 				.collection("donationIDs")
@@ -339,7 +338,7 @@ export default {
 			}
 		},
 		pushToExploreListing() {
-			let path = `/profile/${this.UID}`;
+			let path = `/explorelisting/${this.UID}`;
 			this.$router.push({
 				path: path,
 			});
