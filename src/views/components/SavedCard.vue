@@ -38,7 +38,6 @@
           </div>
           <md-button
             class="md-success first-button"
-            style="margin-left: 125px !important"
             v-if="isAvailable && !expired"
             v-on:click="request"
             >Request</md-button
@@ -209,6 +208,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
+  margin-bottom: 55px !important;
 }
 
 img:hover {
