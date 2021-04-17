@@ -98,6 +98,7 @@
                         v-model="phoneNumber"
                         type="number"
                         required
+                        :min="0"
                       ></md-input>
                     </md-field>
                   </div>
