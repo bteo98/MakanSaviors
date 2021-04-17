@@ -201,7 +201,6 @@ export default {
 				.get()
 				.then((doc) => {
 					this.allIDs = doc.data().imageIDs;
-					console.log(this.allIDs);
 				});
 		},
 		createListing: function() {
@@ -227,7 +226,6 @@ export default {
 					.then((doc) => {
 						this.currID = doc.id;
 						this.allIDs.push(this.currID);
-						console.log(this.allIDs);
 						this.updateImageIDs();
 						this.pushListingImage();
 					});
