@@ -13,6 +13,7 @@ At Makansavior, individuals have the opportunity to offer their excess food at h
   - [Build Setup](#build-setup)
   - [Video](#video)
   - [Website](#website)
+  - [Questions or Feedback](#questions-or-feedback)
   - [Contributors](#contributors)
 
 ## Build Setup
@@ -36,6 +37,9 @@ npm run lint
 ## Website
 
 [MakanSaviors](https://makansaviors.web.app/#/)
+
+## Questions or Feedback
+If you have any questions or feedback, do [contact us](mailto:makansaviors@gmail.com)
 
 ## Contributors
 
