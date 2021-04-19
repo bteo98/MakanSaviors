@@ -144,6 +144,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
+  margin-bottom: 55px !important;
 }
 
 .username {
@@ -190,6 +191,6 @@ img:hover {
 }
 
 .first-button {
-  margin-left: 125px !important;
+  margin-left: 35px !important;
 }
 </style>

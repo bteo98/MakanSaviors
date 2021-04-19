@@ -356,7 +356,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
-  margin-bottom: 95px;
+  margin-bottom: 95px !important;
 }
 
 img:hover {
