@@ -336,26 +336,31 @@ export default {
               .doc(this.foodID)
               .onSnapshot(snapshot => {
                 this.userRequest = snapshot.data().status;
-
-                db.collection("users")
-                  .doc(this.userID)
-                  .get()
-                  .then(items => {
-                    let item = items.data();
-
-                    this.data["phoneNumber"] = item["phoneNumber"];
-                    this.data["telegramHandle"] = item["telegramHandle"];
-                  });
               });
           } else if (!this.isAvailable && this.isDonor) {
             let collectDonate = "donorRequest/" + this.userID + "/foodDonated";
             db.collection(collectDonate)
               .doc(this.foodID)
               .onSnapshot(snapshot => {
+                this.processing = true;
                 var data = snapshot.data();
 
                 this.donorStatus = data.status;
                 this.saviorID = data.saviorID;
+
+                db.collection("users")
+                  .doc(this.saviorID)
+                  .get()
+                  .then(items => {
+                    let item = items.data();
+
+                    this.data["firstName"] = item["firstName"];
+                    this.data["lastName"] = item["lastName"];
+                    this.data["phoneNumber"] = item["phoneNumber"];
+                    this.data["telegramHandle"] = item["telegramHandle"];
+
+                    this.processing = false;
+                  });
               });
           }
         });
