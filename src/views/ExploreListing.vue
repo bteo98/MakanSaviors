@@ -273,8 +273,7 @@ export default {
       if (reverse) {
         this.order = this.order == "desc" ? "asc" : "desc";
       }
-      var collect = db
-        .collection("donationData")
+      db.collection("donationData")
         .where("status", "==", "available")
         .orderBy(orderby, this.order)
         .onSnapshot(snapshot => {
@@ -339,7 +338,16 @@ export default {
           });
 
           this.processing = false;
+          this.scrollTop();
         });
+    },
+    scrollTop: function() {
+      this.intervalId = setInterval(() => {
+        if (window.pageYOffset === 0) {
+          clearInterval(this.intervalId);
+        }
+        window.scroll(0, window.pageYOffset - 50);
+      }, 15);
     },
     arrayContainsAny(foodRestrictions, filterRestrictions, pos) {
       for (let restriction of filterRestrictions) {
