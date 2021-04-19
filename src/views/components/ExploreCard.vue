@@ -144,7 +144,7 @@ img {
   width: 20% !important;
   float: left;
   padding-top: 45px;
-  margin-bottom: 55px !important;
+  margin-bottom: 60px !important;
 }
 
 .username {
