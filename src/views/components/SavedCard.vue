@@ -144,7 +144,7 @@ export default {
         .delete();
 
       db.collection("donationData")
-        .doc(this.foodID)
+        .doc(this.data.foodID)
         .update({
           status: "unavailable"
         });
