@@ -23,7 +23,7 @@
                       <h4>
                         <strong>{{ data["listingName"] }}</strong>
                       </h4>
-                      <div v-if="isDonor">
+                      <div v-if="isDonor && donorStatus != null">
                         <div v-on:click="userProfile" class="username">
                           <small class="text-description"
                             >Savior's Name:
@@ -37,7 +37,7 @@
                           }}<br />
                         </div>
                       </div>
-                      <div v-if="!isDonor">
+                      <div v-if="!isDonor || (isDonor && donorStatus == null)">
                         <div v-on:click="userProfile" class="username">
                           <small class="text-description">Donor's Name: </small>
                           {{
