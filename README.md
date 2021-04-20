@@ -11,6 +11,7 @@ At Makansavior, individuals have the opportunity to offer their excess food at h
 - [MakanSaviors](#makansaviors)
   - [Table of Contents](#table-of-contents)
   - [Build Setup](#build-setup)
+  - [Features](#features)
   - [Video](#video)
   - [Website](#website)
   - [Questions or Feedback](#questions-or-feedback)
@@ -31,6 +32,14 @@ npm run build
 # Lints and fixes files
 npm run lint
 ```
+
+## Features
+
+- Authentication
+- Live Collections of Food Listings
+- Live Notification Alerts
+- Personalized Usage Statistics
+- Password Reset
 
 ## Video
 
