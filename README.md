@@ -11,6 +11,7 @@ At Makansavior, individuals have the opportunity to offer their excess food at h
 - [MakanSaviors](#makansaviors)
   - [Table of Contents](#table-of-contents)
   - [Build Setup](#build-setup)
+  - [Features](#features)
   - [Video](#video)
   - [Website](#website)
   - [Questions or Feedback](#questions-or-feedback)
@@ -32,13 +33,24 @@ npm run build
 npm run lint
 ```
 
+## Features
+
+- Authentication
+- Live Collections of Food Listings
+- Live Notification Alerts
+- Personalized Usage Statistics
+- Password Reset
+
 ## Video
+
+[Product Overview Video](https://www.youtube.com/watch?v=0_j7MQEA3Io)
 
 ## Website
 
 [MakanSaviors](https://makansaviors.web.app/#/)
 
 ## Questions or Feedback
+
 If you have any questions or feedback, do [contact us](mailto:makansaviors@gmail.com)
 
 ## Contributors
