@@ -25,7 +25,7 @@
 
         <div class="md-collapse">
           <div class="md-collapse-wrapper">
-            
+            <mobile-menu nav-mobile-section-start="false"> </mobile-menu>
             <md-list>
               <md-list-item
                 v-if="this.$store.getters.isAuth"
